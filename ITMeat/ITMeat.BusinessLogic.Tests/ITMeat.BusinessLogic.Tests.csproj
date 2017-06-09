@@ -11,4 +11,8 @@
     <PackageReference Include="Quartz" Version="3.0.0-alpha2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ITMeat.BusinessLogic\ITMeat.BusinessLogic.csproj" />
+  </ItemGroup>
+
 </Project>

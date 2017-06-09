@@ -1,7 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Quartz\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ITMeat.DataAccess\ITMeat.DataAccess.csproj" />
+  </ItemGroup>
 
 </Project>
