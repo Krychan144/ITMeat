@@ -1,4 +1,6 @@
-﻿using AngleSharp;
+﻿using System;
+using System.Linq;
+using AngleSharp;
 using ITMeat.BusinessLogic.Configuration.Implementations;
 using ITMeat.BusinessLogic.Configuration.Interfaces;
 using ITMeat.DataAccess.Context;
@@ -38,19 +40,32 @@ namespace ITMeat.WEB
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IMigrationHelper migrationHelper)
         {
-            loggerFactory.AddConsole();
+            var debugValue = Configuration.GetSection("Logging:Loglevel:Default").Value;
+            var logLevel = (LogLevel)Enum.Parse(typeof(LogLevel), debugValue);
+
+            //I'm gonna leave it as string array becase we might want to add some log modules later
+            string[] logOnlyThese = { }; // or reverse string[] dontlong = {"ObjectResultExecutor", "JsonResultExecutor"};
+
+            loggerFactory.AddDebug((category, _logLevel) => !logOnlyThese.Any(category.Contains) && _logLevel >= logLevel);
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+
             app.UseStaticFiles();
             app.UseSession();
-            app.Run(async (context) =>
+            app.UseMvc(routes =>
             {
-                await context.Response.WriteAsync("Jestem głodny tak w dużym stopniu :D !");
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
-
             migrationHelper.Migrate();
         }
     }
