@@ -1,0 +1,81 @@
+﻿body {
+    padding-top: 5px;
+    padding-bottom: 20px;
+    background-color: #E2FFBF;
+    color: #61B300;
+    display: block;
+    height: 100%;
+}
+
+.main {
+    min-height: 100%;
+    padding-bottom: 60px;
+    background-image: url("../images/indeximage.png");
+    background-size:contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+html, body {
+    height: 100%;
+}
+
+body > .grid {
+     height: 100%;
+}
+
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/*Header*/
+.ui.top.attached.tabular.menu {
+    color: #61B300;
+    font-size: 20px;
+}
+/*
+    index
+    #8BFF00 - jaskrawy zielony
+    #61B300 - ciemniejszy zielony
+    #E2FFBF - prawie biały
+    #C5FF80 - wypłoiwały zielony
+*/
+.logo {
+    margin-right: 10px;
+    width: 50px;
+    height: 50px;
+    position: relative;
+    left: 10px;
+}
+
+/* footer*/
+.cat_2 {
+    list-style-type: none;
+    color: #61B300;
+    font-size: 15px;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-weight: 700;
+}
+
+.cat_1 {
+    list-style-type: none;
+    color: #4A4A4A;
+    text-transform: lowercase;
+    font-size: 15px;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-weight: 700;
+}
+.ui.inverted.vertical.footer.segment {
+    margin-top: 10px;
+    color: #61B300;
+    width: 100%;
+    background-color: #C5FF80;
+    position: absolute;
+}

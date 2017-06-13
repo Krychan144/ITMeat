@@ -1,5 +1,64 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = "_MasterLayout";
 }
+@section CSS
+{
+    <environment names="Development">
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    </environment>
+}
+@section Pre_Body
+{
+    @*body*@
+    <div class="ui top attached tabular menu">
+        <a class="ui logo icon image" href="/">
+            <img class="logo" src="~/images/logo.png" alt="Logo" />
+        </a>
+        <a class="item" asp-controller="Home" asp-action="Index">
+            ITMeat
+        </a>
+        <div class="right menu">
+            <div class="item">
+                Register
+            </div>
+        </div>
+    </div>
+}
+@section Post_Body
+{
+    @*footer*@
+    <div class="ui inverted vertical footer segment ">
+        <div class="container">
+            <ul>
+                <li class="cat_2">
+                    <i class="food icon"></i>
+                    ITMeat created by Krystian Podgórski, 2017
+                </li>
+                <li class="cat_1">
+                    <i class="icon mail "></i>
+                    <a  class="ui item cat_1">About</a>
+                </li>
+                <li class="cat_1">
+                    <i class="info icon"></i>
+                    <a  class="ui item cat_1">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </div> 
+   
+
+}
+@section Scripts
+{
+    <environment names="Development">
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+}
+@RenderBody()
