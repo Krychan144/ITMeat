@@ -14,7 +14,6 @@ namespace ITMeat.WEB.Helpers
         {
             object obj;
             tempData.TryGetValue(key, out obj);
-
             return obj == null ? null : JsonConvert.DeserializeObject<T>((string)obj);
         }
     }

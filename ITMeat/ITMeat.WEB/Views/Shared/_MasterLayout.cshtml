@@ -1,35 +1,5 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ITMeat</title>
-
-    <environment names="Development">
-        <link rel="stylesheet" href="~/lib/semantic/dist/semantic.css" />
-    </environment>
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="~/lib/semantic/dist/semantic.min.css" />
-    </environment>
-    @RenderSection("CSS", required: false)
-</head>
-
-<body>
-    @RenderSection("Pre_Body", required: false)
-    @RenderBody()
-    @RenderSection("Post_Body", required: false)
-
-    <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/semantic/dist/semantic.js"></script>
-        <!-- Potrzebne do alertów - wyświetlane prawie wszędzie -->
-        <script src="~/js/alert.js"></script>
-    </environment>
-    <environment names="Staging,Production">
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/semantic/dist/semantic.min.js"></script>
-        <script src="~/js/alert.min.js"></script>
-    </environment>
-    @RenderSection("Scripts", required: false)
-</body>
-</html>
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}

@@ -17,7 +17,6 @@ namespace ITMeat.WEB.Controler
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             base.OnActionExecuted(context);
-
             if (Alert.GetAlerts().Count > 0)
             {
                 TempData.Put("alertMessages", Alert.GetAlerts());
@@ -27,25 +26,20 @@ namespace ITMeat.WEB.Controler
         public string RenderViewToString<T>(string viewName, T model, string controllerName = "")
         {
             ViewData.Model = model;
-
             using (StringWriter sw = new StringWriter())
             {
                 var engine = HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
-
                 if (engine != null)
                 {
                     ViewEngineResult viewResult =
                         engine.FindView(ControllerContext, viewName, true);
                     ViewContext viewContext =
                         new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw, new HtmlHelperOptions());
-
                     viewResult.View.RenderAsync(viewContext);
                 }
-
                 var stringView = sw.GetStringBuilder().ToString();
                 // Move css inline
                 var viewWithInlineCss = PreMailer.Net.PreMailer.MoveCssInline(stringView);
-
                 return viewWithInlineCss.Html;
             }
         }

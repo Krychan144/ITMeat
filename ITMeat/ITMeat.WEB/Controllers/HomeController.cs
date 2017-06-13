@@ -12,7 +12,6 @@ namespace ITMeat.WEB.Controler
             {
                 return RedirectToAction("Index");
             }
-
             return View();
         }
     }
