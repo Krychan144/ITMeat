@@ -5,15 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Helpers\**" />
-    <Compile Remove="Models\**" />
-    <Compile Remove="Quartz\**" />
-    <EmbeddedResource Remove="Helpers\**" />
-    <EmbeddedResource Remove="Models\**" />
-    <EmbeddedResource Remove="Quartz\**" />
-    <None Remove="Helpers\**" />
-    <None Remove="Models\**" />
-    <None Remove="Quartz\**" />
+    <PackageReference Include="AutoMapper" Version="6.0.2" />
+    <PackageReference Include="MailKit" Version="1.16.1" />
+    <PackageReference Include="Microsoft.Net.Compilers" Version="2.2.0" />
+    <PackageReference Include="Quartz" Version="3.0.0-alpha2" />
   </ItemGroup>
 
   <ItemGroup>
