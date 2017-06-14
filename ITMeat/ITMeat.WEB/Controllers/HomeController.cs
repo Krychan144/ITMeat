@@ -14,5 +14,17 @@ namespace ITMeat.WEB.Controler
             }
             return View();
         }
+
+        [AllowAnonymous]
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult Contact()
+        {
+            return View();
+        }
     }
 }

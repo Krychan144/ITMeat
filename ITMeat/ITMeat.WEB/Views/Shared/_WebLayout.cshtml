@@ -12,24 +12,19 @@
 }
 @section Pre_Body
 {
-    @*body*@
     <div class="ui top attached tabular menu">
         <a class="ui logo icon image" href="/">
             <img class="logo" src="~/images/logo.png" alt="Logo" />
         </a>
-        <a class="item" asp-controller="Home" asp-action="Index">
-            ITMeat
-        </a>
+        <a class="item" href="@Url.Action("Index", "Home")"> ITMeat </a>
         <div class="right menu">
-            <div class="item">
-                Register
-            </div>
+            <a class="item">Log in</a>
+            <a class="item" href="@Url.Action("Register", "Auth")"> Register-> </a>
         </div>
     </div>
 }
 @section Post_Body
 {
-    @*footer*@
     <div class="ui inverted vertical footer segment ">
         <div class="container">
             <ul>
@@ -39,16 +34,15 @@
                 </li>
                 <li class="cat_1">
                     <i class="icon mail "></i>
-                    <a  class="ui item cat_1">About</a>
+                    <a class="ui item cat_1" href="@Url.Action("About","Home")">About</a>
                 </li>
                 <li class="cat_1">
                     <i class="info icon"></i>
-                    <a  class="ui item cat_1">Contact</a>
+                    <a class="ui item cat_1" href="@Url.Action("Contact", "Home")">Contact</a>
                 </li>
             </ul>
         </div>
-    </div> 
-   
+    </div>
 
 }
 @section Scripts
