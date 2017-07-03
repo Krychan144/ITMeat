@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ITMeat.WEB.Models.Auth
+namespace ITMeat.WEB.v
 {
     public class RegisterViewModel
     {
