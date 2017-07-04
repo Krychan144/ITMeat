@@ -56,6 +56,7 @@ namespace ITMeat.WEB.Controllers
         {
             return View();
         }
+<<<<<<< Updated upstream
 
         [AllowAnonymous]
         [HttpGet("Login")]
@@ -255,5 +256,7 @@ namespace ITMeat.WEB.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+=======
+>>>>>>> Stashed changes
     }
 }
