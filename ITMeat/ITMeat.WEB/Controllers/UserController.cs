@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace ITMeat.WEB.Controler
+namespace ITMeat.WEB.Controllers
 {
     public class UserController : BaseController
     {

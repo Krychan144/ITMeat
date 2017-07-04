@@ -18,9 +18,15 @@
         </a>
         <a class="item" href="@Url.Action("Index", "Home")"> ITMeat </a>
         <div class="right menu">
-            <a class="item">Log in</a>
             <a class="item" href="@Url.Action("Register", "Auth")"> Register-> </a>
         </div>
+        @await Html.PartialAsync("_LoginPartial")
+    </div>
+    <div class="body-content">
+        @if (TempData.ContainsKey("alertMessages"))
+        {
+            @Html.Partial("_AlertsPartial")
+        }
     </div>
 }
 @section Post_Body

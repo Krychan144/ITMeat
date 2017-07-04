@@ -34,7 +34,9 @@ namespace ITMeat.WEB
             services.AddMvc();
             services.AddEntityFramework().AddDbContext<ITMeatDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Database")));
             services.AddSession();
-            DependencyRegister.RegisterDependecy.Register(services);
+            RegisterDependecy.Register(services);
+            AutoMapperBuilder.Build();
+            services.Configure<EmailServiceCredentials>(Configuration.GetSection("EmailServiceCredentials"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

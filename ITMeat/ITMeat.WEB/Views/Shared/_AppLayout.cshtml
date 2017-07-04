@@ -1,0 +1,13 @@
+﻿@{
+    Layout = "_MasterLayout";
+}
+
+@section CSS
+{
+    <environment names="Development">
+        <link rel="stylesheet" href="~/css/app.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+    </environment>
+}

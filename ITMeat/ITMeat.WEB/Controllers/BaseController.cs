@@ -1,13 +1,13 @@
-﻿using ITMeat.WEB.Helpers;
+﻿using System.IO;
+using ITMeat.WEB.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System.IO;
 
-namespace ITMeat.WEB.Controler
+namespace ITMeat.WEB.Controllers
 {
     [Authorize]
     public class BaseController : Controller

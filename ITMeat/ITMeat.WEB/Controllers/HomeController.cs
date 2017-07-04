@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ITMeat.WEB.Controler
+namespace ITMeat.WEB.Controllers
 {
     public class HomeController : BaseController
     {

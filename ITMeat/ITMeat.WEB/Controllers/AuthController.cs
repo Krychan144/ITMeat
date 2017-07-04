@@ -1,16 +1,20 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using ITMeat.BusinessLogic.Action.Email.Interfaces;
 using ITMeat.BusinessLogic.Configuration.Implementations;
-using ITMeat.WEB.Controler;
-using ITMeat.WEB.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ITMeat.BusinessLogic.Models;
 using ITMeat.BusinessLogic.Action.User.Interfaces;
+using ITMeat.BusinessLogic.Action.UserToken.Implementations;
+using ITMeat.BusinessLogic.Action.UserToken.Interfaces;
 using ITMeat.BusinessLogic.Helpers.Interfaces;
 using ITMeat.WEB.Helpers;
+using ITMeat.WEB.Models;
 using ITMeat.WEB.Models.Common;
-using ITMeat.WEB.v;
+using ITMeat.WEB.Models.Auth;
 
 namespace ITMeat.WEB.Controllers
 {
@@ -21,17 +25,29 @@ namespace ITMeat.WEB.Controllers
         private readonly IConfirmUserEmailByToken _confirmUserEmailByToken;
         private readonly IEmailService _emailService;
         private readonly IAddNewEmailMessage _addNewEmailMessage;
+        private readonly IGetUserTokenByUserId _getUserTokenByUserId;
+        private readonly IGetUserByEmail _getUserByEmail;
+        private readonly IAddUserTokenToUser _addUserTokenToUser;
+        private readonly IGetUserByToken _getUserByToken;
+        private readonly IEditUserPassword _editUserPassword;
 
         public AuthController(IAddNewUser addNewUser,
             IConfirmUserEmailByToken confirmUserEmailByToken,
-            IEmailService emailService,
-            IAddNewEmailMessage addNewEmailMessage
-            )
+             IEmailService emailService,
+            IAddNewEmailMessage addNewEmailMessage,
+            IGetUserByEmail getUserByEmail,
+            IAddUserTokenToUser addUserTokenToUser,
+            IGetUserTokenByUserId getUserTokenByUserId, IGetUserByToken getUserByToken, IEditUserPassword editUserPassword)
         {
             _addNewUser = addNewUser;
             _confirmUserEmailByToken = confirmUserEmailByToken;
             _emailService = emailService;
             _addNewEmailMessage = addNewEmailMessage;
+            _getUserByEmail = getUserByEmail;
+            _addUserTokenToUser = addUserTokenToUser;
+            _getUserTokenByUserId = getUserTokenByUserId;
+            _getUserByToken = getUserByToken;
+            _editUserPassword = editUserPassword;
         }
 
         [AllowAnonymous]
@@ -42,7 +58,7 @@ namespace ITMeat.WEB.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("Register")]
+        [HttpGet("Login")]
         public IActionResult Login()
         {
             return View();
@@ -97,6 +113,147 @@ namespace ITMeat.WEB.Controllers
 
             Alert.Success("Email confirmed");
             return RedirectToAction("Login", "Auth");
+        }
+
+        [AllowAnonymous]
+        [HttpPost("resetpassword")]
+        public IActionResult ResetPasswordInitiation(ResetPasswordInitiationViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                Alert.Danger("Something went wrong");
+
+                return View(model);
+            }
+
+            var user = _getUserByEmail.Invoke(model.Email);
+
+            if (user == null)
+            {
+                Alert.Danger("Something went wrong");
+
+                return View();
+            }
+
+            var token = _addUserTokenToUser.Invoke(user.Id);
+            var callbackUrl = Url.Action("ResetPasswordByToken", "Auth", new { token },
+                Request.Scheme);
+            var emailinfo = new EmailBodyHelper().GetResetPasswordBodyModel(callbackUrl);
+            var stringView = RenderViewToString<EmailBodyModel>("ResetPassword", emailinfo);
+            var message = _emailService.CreateMessage(model.Email, "Confirm your account", stringView);
+            var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
+
+            _addNewEmailMessage.Invoke(mappedMessage);
+            Alert.Success("Email will be sent to your account shortly");
+
+            return RedirectToAction("Login");
+        }
+
+        [AllowAnonymous]
+        [HttpPost("resendconfirmationemail")]
+        public IActionResult ResendConfirmationEmail(ResendConfirmationEmailViewModel model)
+        {
+            var user = _getUserByEmail.Invoke(model.Email);
+
+            if (user == null)
+            {
+                Alert.Danger("Something went wrong");
+
+                return View(model);
+            }
+
+            if (user.EmailConfirmedOn != null)
+            {
+                Alert.Danger("Email already confirmed");
+
+                return RedirectToAction("Login");
+            }
+
+            var token = _addUserTokenToUser.Invoke(user.Id);
+
+            var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token }, Request.Scheme);
+            var emailinfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
+            var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", emailinfo);
+            var message = _emailService.CreateMessage(model.Email, "Confirm your account", stringView);
+            var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
+
+            _addNewEmailMessage.Invoke(mappedMessage);
+            Alert.Success("Check your inbox");
+
+            return RedirectToAction("Login");
+        }
+
+        [AllowAnonymous]
+        [HttpGet("resetpasswordbytoken/{token}")]
+        public IActionResult ResetPasswordByToken(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                Alert.Danger("Invalid token");
+
+                return View("Error");
+            }
+
+            var user = _getUserByToken.Invoke(token);
+
+            if (user == null)
+            {
+                Alert.Danger("Invalid token");
+
+                return View("Error");
+            }
+
+            var model = new ResetPasswordViewModel()
+            {
+                Token = token
+            };
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("resetpasswordbytoken")]
+        public IActionResult ResetPasswordByToken(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                Alert.Danger("Something went wrong");
+
+                return View(model);
+            }
+
+            var user = _getUserByToken.Invoke(model.Token);
+
+            if (user == null)
+            {
+                Alert.Danger("You can't complete this action");
+
+                return View("Login");
+            }
+
+            var result = _editUserPassword.Invoke(user.Id, model.Password);
+
+            if (!result)
+            {
+                Alert.Danger("Something went wrong");
+
+                return View(model);
+            }
+
+            Alert.Success("Your password has been updated");
+
+            return RedirectToAction("Login");
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.Authentication.SignOutAsync("Cookies");
+
+            Alert.Success("Logged out");
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

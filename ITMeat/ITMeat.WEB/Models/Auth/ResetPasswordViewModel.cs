@@ -2,21 +2,17 @@
 
 namespace ITMeat.WEB.Models.Auth
 {
-    public class RegisterViewModel
+    public class ResetPasswordViewModel
     {
         [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        public string Token { get; set; }
 
         [Required]
         public string Password { get; set; }
 
         [Required]
         [Display(Name = "Confirm Password")]
-        [Compare(nameof(Password))]
+        [Compare(nameof(RegisterViewModel.Password))]
         public string ConfirmPassword { get; set; }
-
-        [Required]
-        public string Name { get; set; }
     }
 }
