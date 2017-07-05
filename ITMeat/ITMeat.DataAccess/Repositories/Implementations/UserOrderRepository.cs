@@ -2,7 +2,7 @@
 using ITMeat.DataAccess.Models;
 using ITMeat.DataAccess.Repositories.Interfaces;
 
-namespace ITMeat.DataAccess.Repositories.Implementation
+namespace ITMeat.DataAccess.Repositories.Implementations
 {
     public class UserOrderRepository : GenericRepository<UserOrder>, IUserOrderRepository
     {

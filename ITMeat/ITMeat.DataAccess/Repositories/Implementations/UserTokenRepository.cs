@@ -3,7 +3,7 @@ using ITMeat.DataAccess.Models;
 using ITMeat.DataAccess.Repositories.Interfaces;
 using System;
 
-namespace ITMeat.DataAccess.Repositories.Implementation
+namespace ITMeat.DataAccess.Repositories.Implementations
 {
     public class UserTokenRepository : GenericRepository<UserToken>, IUserTokenRepository
     {

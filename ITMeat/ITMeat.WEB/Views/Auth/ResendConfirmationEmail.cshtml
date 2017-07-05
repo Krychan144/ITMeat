@@ -3,8 +3,9 @@
 }
 @model ITMeat.WEB.Models.Auth.ResendConfirmationEmailViewModel
 
-<div class="ui middle aligned center aligned grid">
-    <div class="column webressetbox">
+<div class="ui two column centered grid">
+    <div class="column">
+        <br />
         <h2 class="ui teal header">Resend confirmation email</h2>
         <br /><br />
         @using (Html.BeginForm("ResendConfirmationEmail", "Auth", FormMethod.Post))
@@ -18,7 +19,7 @@
                     @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                 </div>
                 <div class="field">
-                    <button class="orginalbutton big" type="submit" id="btnLogin">Resend</button>
+                    <button class="ui button" type="submit" id="btnLogin">Resend</button>
                 </div>
             </div>
         }

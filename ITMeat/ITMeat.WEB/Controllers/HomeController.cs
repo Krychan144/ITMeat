@@ -26,5 +26,11 @@ namespace ITMeat.WEB.Controllers
         {
             return View();
         }
+
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

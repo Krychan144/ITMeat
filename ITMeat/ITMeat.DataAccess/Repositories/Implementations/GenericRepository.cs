@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace ITMeat.DataAccess.Repositories.Implementation
+namespace ITMeat.DataAccess.Repositories.Implementations
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {

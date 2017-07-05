@@ -32,10 +32,15 @@ namespace ITMeat.WEB
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
             services.AddEntityFramework().AddDbContext<ITMeatDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Database")));
+
             services.AddSession();
+
             RegisterDependecy.Register(services);
+
             AutoMapperBuilder.Build();
+
             services.Configure<EmailServiceCredentials>(Configuration.GetSection("EmailServiceCredentials"));
         }
 
@@ -44,9 +49,12 @@ namespace ITMeat.WEB
         {
             var debugValue = Configuration.GetSection("Logging:Loglevel:Default").Value;
             var logLevel = (LogLevel)Enum.Parse(typeof(LogLevel), debugValue);
+
             //I'm gonna leave it as string array becase we might want to add some log modules later
+
             string[] logOnlyThese = { }; // or reverse string[] dontlong = {"ObjectResultExecutor", "JsonResultExecutor"};
             loggerFactory.AddDebug((category, _logLevel) => !logOnlyThese.Any(category.Contains) && _logLevel >= logLevel);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -56,14 +64,27 @@ namespace ITMeat.WEB
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
             app.UseStaticFiles();
+
             app.UseSession();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationScheme = "Cookies",
+                LoginPath = new PathString("/Auth/Login"),
+                AccessDeniedPath = new PathString("/Home/AccessDenied"),
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+            });
+
             migrationHelper.Migrate();
         }
     }

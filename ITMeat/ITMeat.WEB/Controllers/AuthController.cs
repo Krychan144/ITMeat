@@ -30,14 +30,18 @@ namespace ITMeat.WEB.Controllers
         private readonly IAddUserTokenToUser _addUserTokenToUser;
         private readonly IGetUserByToken _getUserByToken;
         private readonly IEditUserPassword _editUserPassword;
+        private readonly IAuthenticateUser _authenticateUser;
 
         public AuthController(IAddNewUser addNewUser,
             IConfirmUserEmailByToken confirmUserEmailByToken,
-             IEmailService emailService,
+            IEmailService emailService,
             IAddNewEmailMessage addNewEmailMessage,
             IGetUserByEmail getUserByEmail,
             IAddUserTokenToUser addUserTokenToUser,
-            IGetUserTokenByUserId getUserTokenByUserId, IGetUserByToken getUserByToken, IEditUserPassword editUserPassword)
+            IGetUserTokenByUserId getUserTokenByUserId,
+            IGetUserByToken getUserByToken,
+            IEditUserPassword editUserPassword,
+            IAuthenticateUser authenticateUser)
         {
             _addNewUser = addNewUser;
             _confirmUserEmailByToken = confirmUserEmailByToken;
@@ -48,6 +52,7 @@ namespace ITMeat.WEB.Controllers
             _getUserTokenByUserId = getUserTokenByUserId;
             _getUserByToken = getUserByToken;
             _editUserPassword = editUserPassword;
+            _authenticateUser = authenticateUser;
         }
 
         [AllowAnonymous]
@@ -56,13 +61,56 @@ namespace ITMeat.WEB.Controllers
         {
             return View();
         }
-<<<<<<< Updated upstream
 
         [AllowAnonymous]
         [HttpGet("Login")]
         public IActionResult Login()
         {
             return View();
+        }
+
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
+        {
+            if (!ModelState.IsValid)
+            {
+                Alert.Warning();
+                ViewBag.ReturnUrl = returnUrl;
+
+                return View(model);
+            }
+
+            var access = _authenticateUser.Invoke(model.Email, model.Password);
+
+            if (access == null)
+            {
+                ModelState.AddModelError("Email", "Invalid email or password");
+                Alert.Warning();
+                ViewBag.ReturnUrl = returnUrl;
+
+                return View(model);
+            }
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, access.Name),
+                new Claim(ClaimTypes.Actor, access.Id.ToString()),
+                // TODO: MOVE TO CONST STRING
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, "Claims");
+            var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
+
+            await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
+
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                return RedirectToAction("Index", "User");
+            }
+
+            return Redirect(returnUrl);
         }
 
         [AllowAnonymous]
@@ -256,7 +304,5 @@ namespace ITMeat.WEB.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-=======
->>>>>>> Stashed changes
     }
 }
