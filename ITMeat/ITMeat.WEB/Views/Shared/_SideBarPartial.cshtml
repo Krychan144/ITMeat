@@ -1,16 +1,32 @@
-﻿<div class="ui vertical inverted sidebar menu visible left">
-    <div id="team_menu" class="item">
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+<div class="ui vertical inverted sidebar menu visible left">
+    
+    <div id="name_logo" class="item">
         <div id="team_name">ITMeat</div>
-        <a class="ui logo icon image" href="/">
-            <img src="/images/logo.png" alt="Logo">
-        </a>
-        <div class="item down">
-            <div class="item">
-                @using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new { id = "logoutForm" }))
-            {
-                    <button type="submit" class="ui fluid button negative">Log off</button>
-                }
+        <br/>
+        <div>
+                <a class="ui logo icon image">
+                    <img src="/images/logo.png" alt="Logo">
+                </a>
             </div>
+    </div>
+
+    <div id="panel_menu">
+        <div class=" item itemgreancolor">
+            Stwórz zamowienie ->
+        </div>
+        <div class=" item itemgreancolor">
+            Wyświetl aktywne zamowienia
+        </div>
+        <div class=" item itemgreancolor">
+            Historia zamowień
         </div>
     </div>
+    <div id="logout" class="bottom aligned item">
+        @using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new {id = "logoutForm"}))
+        {
+            <button type="submit" class="ui fluid button negative">Log off</button>
+        }
+    </div>
+
 </div>

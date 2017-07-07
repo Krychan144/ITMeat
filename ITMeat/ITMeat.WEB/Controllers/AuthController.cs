@@ -129,11 +129,12 @@ namespace ITMeat.WEB.Controllers
 
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = userAddAction.Tokens.FirstOrDefault().SecretToken },
                 Request.Scheme);
-            var emailinfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
-            var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", emailinfo);
-            var message = _emailService.CreateMessage(model.Email, "Confirm your account", stringView);
-            var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
-            _addNewEmailMessage.Invoke(mappedMessage);
+
+            // var emailinfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
+            // var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", emailinfo);
+            // var message = _emailService.CreateMessage(model.Email, "Confirm your account", stringView);
+            // var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
+            //_addNewEmailMessage.Invoke(mappedMessage);
 
             Alert.Success("Confirmation email has been sent to your email address");
 
