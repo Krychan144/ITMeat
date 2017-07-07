@@ -10,7 +10,7 @@ namespace ITMeat.WEB.Controllers
         {
             if (HttpContext.User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "User");
             }
             return View();
         }

@@ -11,3 +11,34 @@
         <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
     </environment>
 }
+@section Pre_Body
+{
+    <div id="client_container">
+        <h1> Witam w aplikacji. Dziś zamowien nie będize ;D </h1>
+        @Html.Partial("_SideBarPartial")
+       
+        <div class="ui main container" style="display:none;">
+        @if (TempData.ContainsKey("alertMessages"))
+        {
+        @Html.Partial("_AlertsPartial")
+        }
+}
+
+@section Post_Body
+{
+</div>
+</div>
+}
+
+@section Scripts
+{
+    <environment names="Development">
+        <script src="~/js/app.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/js/app.min.js" asp-append-version="true"></script>
+    </environment>
+}
+
+@RenderBody()

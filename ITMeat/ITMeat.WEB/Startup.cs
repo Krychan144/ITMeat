@@ -51,8 +51,8 @@ namespace ITMeat.WEB
             var logLevel = (LogLevel)Enum.Parse(typeof(LogLevel), debugValue);
 
             //I'm gonna leave it as string array becase we might want to add some log modules later
-
             string[] logOnlyThese = { }; // or reverse string[] dontlong = {"ObjectResultExecutor", "JsonResultExecutor"};
+
             loggerFactory.AddDebug((category, _logLevel) => !logOnlyThese.Any(category.Contains) && _logLevel >= logLevel);
 
             if (env.IsDevelopment())
@@ -69,13 +69,6 @@ namespace ITMeat.WEB
 
             app.UseSession();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
-
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationScheme = "Cookies",
@@ -83,6 +76,13 @@ namespace ITMeat.WEB
                 AccessDeniedPath = new PathString("/Home/AccessDenied"),
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
+            });
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
 
             migrationHelper.Migrate();

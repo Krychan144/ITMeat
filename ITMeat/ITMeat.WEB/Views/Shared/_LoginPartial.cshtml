@@ -4,12 +4,13 @@
         using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new { @class = "navbar-right", id = "logoutForm" }))
         {
 
-            <button type="submit" class="orginalbutton">Log off</button>
-
+            <button type="submit" class="ui green button">Log off</button>
         }
     }
     else
     {
         <a class="item" href="@Url.Action("Login", "Auth")"> Log in </a>
+        <a class="item" href="@Url.Action("Register", "Auth")"> Register-> </a>
+
     }
 }
