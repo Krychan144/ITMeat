@@ -14,13 +14,11 @@ body {
     -webkit-flex-direction: column;
     flex-direction: column;
     height: 100%;
-    min-width: 768px;
     font-family: "Helvetica Neue",Helvetica,"Segoe UI",Tahoma,Arial,sans-serif;
     -webkit-font-smoothing: antialiased;
     font-size: 16px;
     line-height: 1rem;
     color: #61B300;
-    padding: 0;
     overflow-y: hidden;
     overflow-x: hidden;
     -webkit-user-select: none;
@@ -28,6 +26,7 @@ body {
     -ms-user-select: none;
     user-select: none;
 }
+
 .ui.left.sidebar {
     background-color: #C5FF80;
     display: -webkit-box;
@@ -48,7 +47,7 @@ body {
     -ms-flex-negative: 0;
     flex-shrink: 0;
     min-width: 1px;
-    max-width: 260px;
+    max-width: 300px;
     z-index: 201;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -57,6 +56,27 @@ body {
 .itemgreancolor {
     color: #61B300 !important;
 }
+
+#name_logo {
+    font-size: 1.725rem;
+    line-height: 1.375rem;
+    max-width: 9.12rem;
+    padding-bottom: 150px;
+    margin-left: 1.3rem;
+    margin-top: 0.1rem !important;
+    line-height: 1.075rem;
+    color: #61B300 !important;
+    height: 20%;
+    position: relative;
+    text-align: right;
+}
+
+}#logo {
+    left: 30%;
+    height: 30px;
+    margin-bottom: 110px;
+}
+
 #panel_menu {
     width: 100%;
     height: 100%;
@@ -64,18 +84,17 @@ body {
     font-size: 1rem;
     font-weight: 900;
     color: #61B300 !important;
-    text-align: left;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+
 }
-#name_logo {
-    font-size: 1.725rem;
-    line-height: 1.375rem;
-    max-width: 9.12rem;
-    padding-bottom: 20px;
-    margin-left: 1.3rem;
-    margin-top: 0.1rem !important;
-    line-height: 1.075rem;
-    color: #61B300 !important;
+.pushable > .pusher {
+  height: 100%;
+  width: calc(100% - 260px);
 }
+
 .ui.vertical.inverted.sidebar.menu.visible.left {
     color: #61B300 !important;
 
@@ -93,8 +112,35 @@ body {
     flex-grow: 1;
     overflow: hidden;
     background-color: #E2FFBF !important;
-}#logo {
-    left: 30%;
-    height: 30px;
-    margin-bottom: 110px;
+     position: relative;
+ }
+.menu{
+    height: 100%;
+    text-align: left;
+}
+.menubutton{
+    min-width: 220px;
+    text-align: left;
+}
+
+.contentside{
+    width: 100%;
+    height: 100%;
+    font-family: sans-serif;
+    font-size: 1rem;
+    font-weight: 900;
+    color: #61B300 !important;
+    text-align: center;
+
+}
+
+.titlename{
+    font-size: 18px;
+    text-align: center;
+    height: 40px;
+    left: 40%;
+}
+
+.solid{
+    border: solid;
 }

@@ -8,5 +8,10 @@ namespace ITMeat.WEB.Controllers
         {
             return View();
         }
+
+        public IActionResult NewOrder()
+        {
+            return View();
+        }
     }
 }

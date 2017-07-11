@@ -14,21 +14,16 @@
 }
 @section Pre_Body
 {
-    
-        
 
     @Html.Partial("_SideBarPartial")
-    <h1> Witam w aplikacji. Dziś zamowien nie będize ;D </h1>
-        <div class="front_container" style="display:none;">
         @if (TempData.ContainsKey("alertMessages"))
         {
-        @Html.Partial("_AlertsPartial")
+            @Html.Partial("_AlertsPartial")
         }
 }
 
 @section Post_Body
 {
-</div>
 }
 
 @section Scripts
