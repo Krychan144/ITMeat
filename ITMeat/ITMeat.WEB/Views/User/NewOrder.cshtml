@@ -1,14 +1,36 @@
 ﻿@{
     Layout = "_AppLayout";
 }
-<div style="height: 100%;">
-	<div class="titlename solid">Create new order </div>
-	<div class="contentside solid"> form tu bedzie </div>
-	<div class="solid">
-		<div class="ui buttons">
-			<button class="ui button">Cancel</button>
-			<div class="or"></div>
-			<button class="ui positive button">Create</button>
-		</div>
-	</div>
-</div>	
+<div class="center_side">
+    <div class="titlename">Create new order </div>
+    <div class="ui two column centered grid ">
+        <div class="column ">
+            <form class="ui form center aligned" style="margin-top: 100px;">
+                <div class="field " style="left: 40%;">
+                    <div class="your-clock"></div>
+                </div>
+                <div class="field ">
+                    <select class="ui dropdown">
+                        <option > Select Local</option>
+                        <option value="HI">HA-NOI</option>
+                        <option value="PB">Pyszna Bułka</option>
+                    </select>
+                </div>
+                <div class="field ">
+                    <div class="ui calendar">
+                        <div class="ui input left icon">
+                            <i class="calendar icon"></i>
+                            <input type="text" placeholder="Date/Time">
+                        </div>
+                    </div>
+                </div>
+                <div class="field centered aligned "> </div>
+                <div class="ui buttons">
+                    <button class="ui button">Cancel</button>
+                    <div class="or"></div>
+                    <button class="ui positive button">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

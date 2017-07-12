@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -22,5 +23,9 @@ namespace ITMeat.DataAccess.Models
         [Required]
         [Column(TypeName = "DECIMAL(16 ,2)")]
         public decimal Expense { get; set; }
+
+        [Required]
+        [Column(TypeName = "DATETIME")]
+        public DateTime EndDateTime { get; set; }
     }
 }

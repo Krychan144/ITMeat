@@ -53,6 +53,7 @@ body {
     overflow-y: hidden;
     color: #61B300 !important;
 }
+
 .itemgreancolor {
     color: #61B300 !important;
 }
@@ -90,6 +91,7 @@ body {
     cursor: pointer;
 
 }
+
 .pushable > .pusher {
   height: 100%;
   width: calc(100% - 260px);
@@ -97,27 +99,13 @@ body {
 
 .ui.vertical.inverted.sidebar.menu.visible.left {
     color: #61B300 !important;
-
 }
-.front_container {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
-    -moz-flex-grow: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    overflow: hidden;
-    background-color: #E2FFBF !important;
-     position: relative;
- }
+
 .menu{
     height: 100%;
     text-align: left;
 }
+
 .menubutton{
     min-width: 220px;
     text-align: left;
@@ -135,12 +123,25 @@ body {
 }
 
 .titlename{
-    font-size: 18px;
+    font-size: 55px;
     text-align: center;
-    height: 40px;
-    left: 40%;
+    height: 210px;
+    padding-top: 150px;
+    color: #3A3E42;
+    font-weight: bold;
 }
-
+.center_side{
+    background-color: #E2FFBF;
+    height: 100%;
+}
 .solid{
     border: solid;
+}
+.center-block{
+    text-align: center;
+}
+
+ form {
+    display: block;
+    text-align: center;
 }

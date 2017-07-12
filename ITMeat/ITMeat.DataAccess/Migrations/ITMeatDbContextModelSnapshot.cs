@@ -97,6 +97,9 @@ namespace ITMeat.DataAccess.Migrations
 
                     b.Property<DateTime?>("DeletedOn");
 
+                    b.Property<DateTime>("EndDateTime")
+                        .HasColumnType("DATETIME");
+
                     b.Property<decimal>("Expense")
                         .HasColumnType("DECIMAL(16 ,2)");
 

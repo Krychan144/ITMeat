@@ -2,7 +2,11 @@
     transition: "overlay"
 });
 
-/*$(document).ready(function () {
-    console.log("ready!");
-    $("body").removeClass("pushable")
-});*/
+var clock = $('.your-clock').FlipClock({
+    // ... your options here
+    clockFace: 'TwentyFourHourClock',
+});
+
+$('.ui.calendar').calendar({
+    type: 'date/time',
+});
