@@ -8,15 +8,6 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/semantic/dist/semantic.css" />
     </environment>
-    <environment names="Development">
-        <link rel="stylesheet" href="~/lib/flipclock/compiled/flipclock.css" />
-    </environment>
-    <environment names="Development">
-        <link rel="stylesheet" href="~/lib/semantic-ui-calendar/dist/calendar.css" />
-    </environment>
-    <environment names="Development">
-        <link rel="stylesheet" href="~/lib/semantic-ui-calendar/dist/calendar.min.css" />
-    </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="~/lib/semantic/dist/semantic.min.css" />
     </environment>
@@ -30,17 +21,12 @@
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/flipclock/compiled/flipclock.js"></script>
         <script src="~/lib/semantic/dist/semantic.js"></script>
-        <script src="~/lib/semantic-ui-calendar/dist/calendar.js"></script>
-        <!-- Potrzebne do alertów - wyświetlane prawie wszędzie -->
         <script src="~/js/alert.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/semantic/dist/semantic.min.js"></script>
-        <script src="~/lib/flipclock/compiled/flipclock.min.js"></script>
-        <script src="~/lib/semantic-ui-calendar/dist/calendar.min.js"></script>
         <script src="~/js/alert.min.js"></script>
     </environment>
     @RenderSection("Scripts", required: false)

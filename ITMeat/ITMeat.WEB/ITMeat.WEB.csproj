@@ -8,7 +8,9 @@
     <Content Include="wwwroot\css\app.css" />
     <Content Include="wwwroot\css\site.css" />
     <Content Include="wwwroot\js\alert.js" />
+    <Content Include="wwwroot\js\alert.min.js" />
     <Content Include="wwwroot\js\app.js" />
+    <Content Include="wwwroot\js\app.min.js" />
     <Content Include="wwwroot\js\site.js" />
   </ItemGroup>
 

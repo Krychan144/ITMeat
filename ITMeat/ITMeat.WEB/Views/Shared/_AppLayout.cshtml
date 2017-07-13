@@ -6,33 +6,45 @@
 @section CSS
 {
     <environment names="Development">
+        <link rel="stylesheet" href="~/lib/flipclock/compiled/flipclock.css" />
+        <link rel="stylesheet" href="~/lib/semantic-ui-calendar/dist/calendar.css" />
         <link rel="stylesheet" href="~/css/app.css" />
     </environment>
     <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/lib/semantic-ui-calendar/dist/calendar.min.css" />
         <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
     </environment>
 }
 @section Pre_Body
 {
-
+   
     @Html.Partial("_SideBarPartial")
-        @if (TempData.ContainsKey("alertMessages"))
-        {
-            @Html.Partial("_AlertsPartial")
-        }
+    @if (TempData.ContainsKey("alertMessages"))
+    {
+        @Html.Partial("_AlertsPartial")
+    }
 }
 
 @section Post_Body
 {
+   
 }
 
 @section Scripts
 {
     <environment names="Development">
+        <script src="~/lib/flipclock/compiled/flipclock.js"></script>
+        <script src="~/lib/semantic-ui-calendar/dist/calendar.js"></script>
+        <script src="~/lib/signalr/jquery.signalR.js" asp-append-version="true"></script>
+        <script src="~/signalr/hubs"></script>
         <script src="~/js/app.js" asp-append-version="true"></script>
     </environment>
 
     <environment names="Staging,Production">
+        <script src="~/lib/flipclock/compiled/flipclock.min.js"></script>
+        <script src="~/lib/semantic-ui-calendar/dist/calendar.min.js"></script>
+        <script src="~/lib/signalr/jquery.signalR.min.js" asp-append-version="true"></script>
+        <script src="~/signalr/hubs"></script>
         <script src="~/js/app.min.js" asp-append-version="true"></script>
     </environment>
 }

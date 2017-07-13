@@ -42,6 +42,12 @@ namespace ITMeat.WEB
             AutoMapperBuilder.Build();
 
             services.Configure<EmailServiceCredentials>(Configuration.GetSection("EmailServiceCredentials"));
+
+            services.AddSignalR(options =>
+            {
+                options.Hubs.EnableDetailedErrors = true;
+                options.Hubs.EnableJavaScriptProxies = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,6 +83,8 @@ namespace ITMeat.WEB
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
             });
+
+            app.UseSignalR();
 
             app.UseMvc(routes =>
             {
