@@ -1,18 +1,19 @@
 ﻿using System;
 using ITMeat.BusinessLogic.Action.Order.Interfaces;
 using ITMeat.DataAccess.Repositories.Implementations;
+using ITMeat.DataAccess.Repositories.Interfaces;
 
 namespace ITMeat.BusinessLogic.Action.Order.Implementations
 {
     public class CreateNewOrder : ICreateNewOrder
     {
-        private readonly OrderRepository _orderRepository;
-        private readonly UserRepository _userRepository;
-        private readonly UserOrderRepository _userOrderRepository;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserOrderRepository _userOrderRepository;
 
-        public CreateNewOrder(OrderRepository orderRepository,
-            UserRepository userRepository,
-            UserOrderRepository userOrderRepository)
+        public CreateNewOrder(IOrderRepository orderRepository,
+            IUserRepository userRepository,
+            IUserOrderRepository userOrderRepository)
         {
             _orderRepository = orderRepository;
             _userRepository = userRepository;
@@ -39,9 +40,9 @@ namespace ITMeat.BusinessLogic.Action.Order.Implementations
             _orderRepository.Add(newOrder);
             _orderRepository.Save();
 
-            var userRoom = new DataAccess.Models.UserOrder { User = user, Order = newOrder };
+            var userOrder = new DataAccess.Models.UserOrder { User = user, Order = newOrder };
 
-            _userOrderRepository.Add(userRoom);
+            _userOrderRepository.Add(userOrder);
             _userOrderRepository.Save();
 
             return newOrder.Id;

@@ -9,6 +9,7 @@ $(".your-clock").FlipClock({
 $(".ui.calendar").calendar({
     type: "date/time",
 });
+
 /*
  * Create connection SignalR
  */
@@ -49,3 +50,40 @@ $.connection.hub.reconnected(function () {
 window.onbeforeunload = function () {
     $.connection.hub.stop();
 };
+
+/*
+* Apps functions
+*/
+
+//Create orders
+function serializeForm(form) {
+    this.data = $(form).serializeArray();
+    var obj = {};
+    $.each(data, function (key, value) {
+        obj[value.name] = value.value;
+    });
+    return obj;
+};
+
+var createNewOrder = function (data) {
+    $.ajax({
+        async: true,
+        type: "POST",
+        url: "/User/NewOrder",
+        data: { data },
+        success: function (result) {
+            if (result.completed) {
+                console.log("Poprawnie ");
+            } else {
+                console.log("Nie popeawnie ");
+            }
+        },
+        error: function () { console.log("Could not save ."); }
+    });
+};
+
+$("form").submit(function (e) {
+    e.preventDefault();
+    var data = serializeForm($(this));
+    createNewOrder(data);
+});

@@ -1,36 +1,35 @@
 ﻿@{
     Layout = "_AppLayout";
 }
+@model ITMeat.WEB.Models.Order.AddNewOrderViewModel
+
 <div class="center_side">
     <div class="titlename">Create new order </div>
     <div class="ui two column centered grid ">
         <div class="column ">
-            <form class="ui form center aligned" style="margin-top: 100px;">
+            @using (Html.BeginForm(FormMethod.Post, false, new { id = "createOrderForm", @class = "ui form center aligned" }))
+            {
                 <div class="field " style="left: 40%;">
                     <div class="your-clock"></div>
                 </div>
                 <div class="field ">
-                    <select class="ui dropdown">
-                        <option > Select Local</option>
-                        <option value="HI">HA-NOI</option>
-                        <option value="PB">Pyszna Bułka</option>
-                    </select>
+                    @Html.DropDownListFor(x => x.CreateModel.PubName, new List<SelectListItem>(Model.Pubs))
                 </div>
                 <div class="field ">
                     <div class="ui calendar">
                         <div class="ui input left icon">
                             <i class="calendar icon"></i>
-                            <input type="text" placeholder="Date/Time">
+                            @Html.TextBoxFor(m => m.CreateModel.EndOrders, new { id = "PubSelected", type = "text", placeholder = "Date/Time" })
                         </div>
                     </div>
-                </div>
+                </div> 
                 <div class="field centered aligned "> </div>
                 <div class="ui buttons">
-                    <button class="ui button">Cancel</button>
+                    <button id="CancelInCreateButton" class="ui button">Cancel</button>
                     <div class="or"></div>
-                    <button class="ui positive button">Create</button>
+                    <button id="CreateButton" class="ui positive button" type="submit">Create</button>
                 </div>
-            </form>
+            }       
         </div>
     </div>
 </div>

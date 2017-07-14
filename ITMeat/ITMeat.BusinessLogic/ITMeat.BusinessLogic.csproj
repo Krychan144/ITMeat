@@ -15,4 +15,9 @@
     <ProjectReference Include="..\ITMeat.DataAccess\ITMeat.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Action\UserOrder\Implementations\" />
+    <Folder Include="Action\UserOrder\Interfaces\" />
+  </ItemGroup>
+
 </Project>
