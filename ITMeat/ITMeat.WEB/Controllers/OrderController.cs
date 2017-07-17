@@ -13,16 +13,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Hubs;
 using ITMeat.WEB.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ITMeat.WEB.Controllers
 {
-    public class UserController : BaseController
+    [Route("Order")]
+    public class OrderController : BaseController
     {
         private readonly IGetAllPubs _getAllPubs;
         private readonly IAddNewPub _addNewPub;
         private readonly ICreateNewOrder _createNewOrder;
 
-        public UserController(IGetAllPubs getAllPubs,
+        public OrderController(IGetAllPubs getAllPubs,
             IAddNewPub addNewPub,
             ICreateNewOrder createNewOrder)
         {
@@ -37,10 +39,10 @@ namespace ITMeat.WEB.Controllers
         }
 
         [HttpGet("NewOrder")]
-        public IActionResult NewOrder(AddNewOrderViewModel model)
+        public IActionResult NewOrder()
         {
             var pubList = _getAllPubs.Invoke();
-
+            var model = new AddNewOrderViewModel();
             model.Pubs = new List<SelectListItem>();
 
             foreach (var item in pubList)
@@ -52,10 +54,10 @@ namespace ITMeat.WEB.Controllers
         }
 
         [HttpPost("NewOrder")]
-        public IActionResult NewOrder(CreateNewOrderViewModel model)
+        public IActionResult NewOrder(AddNewOrderViewModel model)
         {
             var userModel = new UserModel { Id = ControllerContext.HttpContext.Actor() };
-            var orderModel = new OrderModel { Name = model.PubName, EndDateTime = model.EndOrders, CreatedOn = DateTime.Now, Owner = userModel };
+            var orderModel = new OrderModel { PubId = new Guid(model.PubId), EndDateTime = model.EndOrders, CreatedOn = DateTime.Now, Owner = userModel };
 
             var orderAddAction = _createNewOrder.Invoke(orderModel, ControllerContext.HttpContext.Actor());
 
@@ -65,7 +67,14 @@ namespace ITMeat.WEB.Controllers
                 return View();
             }
             Alert.Success("Great, Order are create.");
-            return RedirectToAction("Index", "User");
+
+            return RedirectToAction("Index", "Order");
+        }
+
+        [HttpGet("ActiveOrders")]
+        public IActionResult ActiveOrders()
+        {
+            return View();
         }
     }
 }

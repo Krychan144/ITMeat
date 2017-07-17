@@ -25,6 +25,9 @@ namespace ITMeat.DataAccess.Models
         public decimal Expense { get; set; }
 
         [Required]
+        public Guid PubId { get; set; }
+
+        [Required]
         [Column(TypeName = "DATETIME")]
         public DateTime EndDateTime { get; set; }
     }

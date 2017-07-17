@@ -10,8 +10,6 @@ namespace ITMeat.WEB.Models.Order
         [Required]
         public DateTime EndOrders { get; set; }
 
-        public string PubName { get; set; }
-
-        public string Adress { get; set; }
+        public string PubId { get; set; }
     }
 }

@@ -5,29 +5,25 @@ namespace ITMeat.WEB.Controllers
 {
     public class HomeController : BaseController
     {
-        [AllowAnonymous]
         public IActionResult Index()
         {
             if (HttpContext.User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "User");
+                return RedirectToAction("Index", "Order");
             }
             return View();
         }
 
-        [AllowAnonymous]
         public IActionResult About()
         {
             return View();
         }
 
-        [AllowAnonymous]
         public IActionResult Contact()
         {
             return View();
         }
 
-        [AllowAnonymous]
         public IActionResult AccessDenied()
         {
             return View();

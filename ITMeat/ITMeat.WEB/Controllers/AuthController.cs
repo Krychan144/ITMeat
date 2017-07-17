@@ -55,21 +55,18 @@ namespace ITMeat.WEB.Controllers
             _authenticateUser = authenticateUser;
         }
 
-        [AllowAnonymous]
         [HttpGet("Register")]
         public IActionResult Register()
         {
             return View();
         }
 
-        [AllowAnonymous]
         [HttpGet("Login")]
         public IActionResult Login()
         {
             return View();
         }
 
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
@@ -107,13 +104,12 @@ namespace ITMeat.WEB.Controllers
 
             if (string.IsNullOrEmpty(returnUrl))
             {
-                return RedirectToAction("Index", "User");
+                return RedirectToAction("Index", "Order");
             }
 
             return Redirect(returnUrl);
         }
 
-        [AllowAnonymous]
         [HttpPost("Register")]
         public IActionResult Register(RegisterViewModel model)
         {
@@ -141,7 +137,6 @@ namespace ITMeat.WEB.Controllers
             return RedirectToAction("Login", "Auth");
         }
 
-        [AllowAnonymous]
         [HttpGet("confirmemail")]
         public IActionResult ConfirmEmail(string token)
         {
@@ -165,7 +160,6 @@ namespace ITMeat.WEB.Controllers
             return RedirectToAction("Login", "Auth");
         }
 
-        [AllowAnonymous]
         [HttpPost("resetpassword")]
         public IActionResult ResetPasswordInitiation(ResetPasswordInitiationViewModel model)
         {
@@ -199,7 +193,6 @@ namespace ITMeat.WEB.Controllers
             return RedirectToAction("Login");
         }
 
-        [AllowAnonymous]
         [HttpPost("resendconfirmationemail")]
         public IActionResult ResendConfirmationEmail(ResendConfirmationEmailViewModel model)
         {
@@ -233,7 +226,6 @@ namespace ITMeat.WEB.Controllers
             return RedirectToAction("Login");
         }
 
-        [AllowAnonymous]
         [HttpGet("resetpasswordbytoken/{token}")]
         public IActionResult ResetPasswordByToken(string token)
         {
@@ -261,7 +253,6 @@ namespace ITMeat.WEB.Controllers
             return View(model);
         }
 
-        [AllowAnonymous]
         [HttpPost("resetpasswordbytoken")]
         public IActionResult ResetPasswordByToken(ResetPasswordViewModel model)
         {

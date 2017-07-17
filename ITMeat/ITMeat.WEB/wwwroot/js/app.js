@@ -3,11 +3,15 @@
 });
 
 $(".your-clock").FlipClock({
-    clockFace: "TwentyFourHourClock",
+    clockFace: 'TwentyFourHourClock',
 });
 
+var now = new Date();
+
 $(".ui.calendar").calendar({
-    type: "date/time",
+    type: 'datetime',
+    minDate: now,
+    ampm: false
 });
 
 /*
@@ -36,7 +40,6 @@ $.connection.hub.error = function (error) {
 $.connection.hub.stateChanged(function (change) {
     if (change.newState === $.signalR.connectionState.reconnecting) {
         console.log("Re-connecting");
-        loadingStart();
     } else if (change.newState === $.signalR.connectionState.connected) {
         console.log("The server is online");
     }
@@ -44,7 +47,6 @@ $.connection.hub.stateChanged(function (change) {
 
 $.connection.hub.reconnected(function () {
     console.log("Reconnected");
-    loadingStop();
 });
 
 window.onbeforeunload = function () {
@@ -69,10 +71,10 @@ var createNewOrder = function (data) {
     $.ajax({
         async: true,
         type: "POST",
-        url: "/User/NewOrder",
-        data: { data },
+        url: "/User/NewOrder/",
+        data: data,
         success: function (result) {
-            if (result.completed) {
+            if (result !== null) {
                 console.log("Poprawnie ");
             } else {
                 console.log("Nie popeawnie ");
@@ -81,9 +83,3 @@ var createNewOrder = function (data) {
         error: function () { console.log("Could not save ."); }
     });
 };
-
-$("form").submit(function (e) {
-    e.preventDefault();
-    var data = serializeForm($(this));
-    createNewOrder(data);
-});

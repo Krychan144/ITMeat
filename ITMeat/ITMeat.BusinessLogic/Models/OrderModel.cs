@@ -12,6 +12,8 @@ namespace ITMeat.BusinessLogic.Models
 
         public string Name { get; set; }
 
+        public Guid PubId { get; set; }
+
         public DateTime EndDateTime { get; set; }
 
         public decimal Expense { get; set; }

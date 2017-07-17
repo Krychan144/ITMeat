@@ -27,6 +27,10 @@ body {
     user-select: none;
 }
 
+.container {
+    height: 100%;    
+}
+
 .ui.left.sidebar {
     background-color: #C5FF80;
     display: -webkit-box;
@@ -154,5 +158,8 @@ form {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    background-color: #E2FFBF;
+}
+#ActiveOrderVievs {
     background-color: #E2FFBF;
 }
