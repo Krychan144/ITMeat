@@ -6,7 +6,7 @@ using ITMeat.BusinessLogic.Models;
 
 namespace ITMeat.BusinessLogic.Action.Order.Interfaces
 {
-    public interface IGetActiveOrderscs : IAction
+    public interface IGetActiveOrders : IAction
     {
         List<OrderModel> Invoke();
     }

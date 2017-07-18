@@ -5,28 +5,29 @@ using System.Text;
 using ITMeat.BusinessLogic.Action.Order.Interfaces;
 using ITMeat.BusinessLogic.Models;
 using ITMeat.DataAccess.Repositories.Implementations;
+using ITMeat.DataAccess.Repositories.Interfaces;
 
 namespace ITMeat.BusinessLogic.Action.Order.Implementations
 {
-    public class GetActiveOrders : IGetActiveOrderscs
+    public class GetActiveOrders : IGetActiveOrders
     {
-        private readonly OrderRepository _orderRepository;
+        private readonly IOrderRepository _orderRepository;
 
-        public GetActiveOrders(OrderRepository orderRepository)
+        public GetActiveOrders(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
         }
 
         public List<OrderModel> Invoke()
         {
-            var dbOrders = _orderRepository.GetAll().ToList();
+            var dbOrders = _orderRepository.GetOrdersActive();
 
             if (dbOrders == null)
             {
                 return null;
             }
 
-            var orderList = dbOrders.Select(item => new OrderModel()
+            var orderList = dbOrders.ToList().Select(item => new OrderModel()
             {
                 Id = item.Id,
                 Name = item.Name,

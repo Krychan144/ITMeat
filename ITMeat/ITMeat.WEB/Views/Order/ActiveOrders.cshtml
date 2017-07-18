@@ -2,6 +2,30 @@
     Layout = "_AppLayout";
 
 }
-<div class="container" id="ActiveOrderVievs">
-    <div class="titlename">Active Orders</div>
+<div class="titlename ">Active Orders</div>
+<div class=" ui one column centered aligned grid  maxheight" id="ActiveOrderVievs">
+    <div class="column  maxheight">
+        <div id="OrderList">
+            <table class="ui single line table">
+                <thead>
+                <tr>
+                    <th>Pub Name</th>
+                    <th>Start Order</th>
+                    <th>End Order</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="ActiveOrderTable" >
+                <tr>
+                    <td>Pyszna Bułka</td>
+                    <td>19/06/2015 10:03:06</td>
+                    <td>19/06/2015 12:03:06</td>
+                        <td>
+                            <button class="ui positive button">Join</button>
+                        </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using ITMeat.BusinessLogic.Action.Order.Interfaces;
-using ITMeat.BusinessLogic.Action.Pub.Implementations;
+﻿using ITMeat.BusinessLogic.Action.Order.Interfaces;
 using ITMeat.BusinessLogic.Action.Pub.Interfaces;
 using ITMeat.BusinessLogic.Models;
+using ITMeat.WEB.Helpers;
 using ITMeat.WEB.Models.Order;
 using Microsoft.AspNetCore.Mvc;
-using ITMeat.WEB.Models.Pub;
-using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.SignalR.Hubs;
-using ITMeat.WEB.Helpers;
-using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
 
 namespace ITMeat.WEB.Controllers
 {
@@ -21,16 +14,16 @@ namespace ITMeat.WEB.Controllers
     public class OrderController : BaseController
     {
         private readonly IGetAllPubs _getAllPubs;
-        private readonly IAddNewPub _addNewPub;
         private readonly ICreateNewOrder _createNewOrder;
+        private readonly IGetActiveOrders _getActiveOrders;
 
         public OrderController(IGetAllPubs getAllPubs,
-            IAddNewPub addNewPub,
-            ICreateNewOrder createNewOrder)
+            ICreateNewOrder createNewOrder,
+            IGetActiveOrders getActiveOrders)
         {
             _getAllPubs = getAllPubs;
-            _addNewPub = addNewPub;
             _createNewOrder = createNewOrder;
+            _getActiveOrders = getActiveOrders;
         }
 
         public IActionResult Index()
@@ -42,8 +35,7 @@ namespace ITMeat.WEB.Controllers
         public IActionResult NewOrder()
         {
             var pubList = _getAllPubs.Invoke();
-            var model = new AddNewOrderViewModel();
-            model.Pubs = new List<SelectListItem>();
+            var model = new AddNewOrderViewModel { Pubs = new List<SelectListItem>() };
 
             foreach (var item in pubList)
             {
@@ -73,6 +65,12 @@ namespace ITMeat.WEB.Controllers
 
         [HttpGet("ActiveOrders")]
         public IActionResult ActiveOrders()
+        {
+            return View();
+        }
+
+        [HttpGet("OrdersHistory")]
+        public IActionResult OrdersHistory()
         {
             return View();
         }

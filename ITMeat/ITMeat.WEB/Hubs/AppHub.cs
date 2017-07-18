@@ -12,7 +12,13 @@ namespace ITMeat.WEB.Hubs
 {
     public class AppHub : Hub
     {
+        private readonly IGetActiveOrders _getActiveOrders;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
+
+        public AppHub(IGetActiveOrders getActiveOrders)
+        {
+            _getActiveOrders = getActiveOrders;
+        }
 
         public override Task OnConnected()
         {
@@ -27,6 +33,12 @@ namespace ITMeat.WEB.Hubs
             ConnectedClients.Remove(userToDelete);
 
             return base.OnDisconnected(stopCalled);
+        }
+
+        public void GetActiveOrders()
+        {
+            var ActiveOrderList = _getActiveOrders.Invoke();
+            Clients.Caller.LoadActiveOrders(ActiveOrderList);
         }
     }
 }

@@ -3,7 +3,7 @@
 });
 
 $(".your-clock").FlipClock({
-    clockFace: 'TwentyFourHourClock',
+    clockFace: 'TwentyFourHourClock'
 });
 
 var now = new Date();
@@ -57,7 +57,7 @@ window.onbeforeunload = function () {
 * Apps functions
 */
 
-//Create orders
+//Create orders room
 function serializeForm(form) {
     this.data = $(form).serializeArray();
     var obj = {};
@@ -83,3 +83,22 @@ var createNewOrder = function (data) {
         error: function () { console.log("Could not save ."); }
     });
 };
+
+/*
+* Load Active Orders
+*/
+
+myHub.client.loadActiveOrders = function (result) {
+    var ActiveOrdersTable = $("#ActiveOrderTable");
+    $.each(result,
+        function ( value) {
+            ActiveOrdersTable.append("  <tr>"+
+                                            "<td>" +value.Name+"</td>" +
+                                            "<td>" + value.CreatedOn +"</td>" +
+                                            "<td>" + value.EndDateTime +"</td>" +
+                                            "<td>" +
+                                            "<button class='ui positive button'>Join</button>"+
+                                            "</td>" +
+                                        "</tr>");
+        });
+}
