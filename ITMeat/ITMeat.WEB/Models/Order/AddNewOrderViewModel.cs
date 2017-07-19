@@ -10,7 +10,7 @@ namespace ITMeat.WEB.Models.Order
         [Required]
         public DateTime EndOrders { get; set; }
 
-        public string PubId { get; set; }
+        public Guid PubId { get; set; }
 
         public List<SelectListItem> Pubs { get; set; }
     }

@@ -15,16 +15,18 @@ namespace ITMeat.DataAccess.Repositories.Implementations
         public IQueryable<Order> GetOrdersActive()
         {
             var query = from order in context.Set<Order>()
+                        join pub in context.Set<Pub>() on order.PubId equals pub.Id
                         where order.EndDateTime > DateTime.UtcNow
                         select new Order
                         {
                             Id = order.Id,
-                            Name = order.Name,
+                            Name = pub.Name,
                             EndDateTime = order.EndDateTime,
                             CreatedOn = order.CreatedOn,
                             Owner = order.Owner,
                             Meals = order.Meals,
                             Expense = order.Expense,
+                            PubId = pub.Id
                         };
 
             return !(query.Count() > 0) ? Enumerable.Empty<Order>().AsQueryable() : query;

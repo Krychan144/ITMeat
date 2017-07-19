@@ -26,12 +26,7 @@ namespace ITMeat.BusinessLogic.Action.Order.Implementations
             {
                 return null;
             }
-
-            var orderList = dbOrders.ToList().Select(item => new OrderModel()
-            {
-                Id = item.Id,
-                Name = item.Name,
-            }).ToList();
+            var orderList = AutoMapper.Mapper.Map<List<OrderModel>>(dbOrders);
 
             return orderList;
         }

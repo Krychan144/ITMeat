@@ -14,6 +14,7 @@ namespace ITMeat.WEB.Hubs
     {
         private readonly IGetActiveOrders _getActiveOrders;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
+        private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
         public AppHub(IGetActiveOrders getActiveOrders)
         {
@@ -38,7 +39,18 @@ namespace ITMeat.WEB.Hubs
         public void GetActiveOrders()
         {
             var ActiveOrderList = _getActiveOrders.Invoke();
-            Clients.Caller.LoadActiveOrders(ActiveOrderList);
+
+            var List = ActiveOrderList.Select(item => new ActiveOrderViewModel
+            {
+                Id = item.Id,
+                PubId = item.PubId,
+                CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation),
+                EndDateTime = item.EndDateTime.ToLocalTime().ToString(TimeStampRepresentation),
+                PubName = item.Name,
+                OwnerId = item.Owner.Id
+            });
+
+            Clients.Caller.LoadActiveOrders(List);
         }
     }
 }

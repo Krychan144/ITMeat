@@ -8,9 +8,10 @@ using ITMeat.DataAccess.Context;
 namespace ITMeat.DataAccess.Migrations
 {
     [DbContext(typeof(ITMeatDbContext))]
-    partial class ITMeatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170719122357_FixSecendMigrations")]
+    partial class FixSecendMigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -97,7 +98,8 @@ namespace ITMeat.DataAccess.Migrations
 
                     b.Property<DateTime?>("DeletedOn");
 
-                    b.Property<DateTime>("EndDateTime");
+                    b.Property<DateTime>("EndDateTime")
+                        .HasColumnType("DATETIME");
 
                     b.Property<decimal>("Expense")
                         .HasColumnType("DECIMAL(16 ,2)");
@@ -111,7 +113,8 @@ namespace ITMeat.DataAccess.Migrations
 
                     b.Property<Guid>("PubId");
 
-                    b.Property<DateTime>("SubmitOrderDate");
+                    b.Property<DateTime>("SubmitOrderDate")
+                        .HasColumnType("DATETIME");
 
                     b.HasKey("Id");
 

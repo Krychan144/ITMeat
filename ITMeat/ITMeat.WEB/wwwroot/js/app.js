@@ -17,9 +17,11 @@ $(".ui.calendar").calendar({
 /*
  * Create connection SignalR
  */
-
+var userId = $("#SignedDiv").data("id");
+var userName = $("#SignedDiv").data("name");
 $.connection.hub.url = "http://localhost:49537/signalr";
-var myHub = $.connection.AppHub;
+var myHub = $.connection.appHub;
+$("#SignedDiv").html("Signed by: " + userName);
 
 /*
  * Start the connection
@@ -28,6 +30,7 @@ var myHub = $.connection.AppHub;
 $.connection.hub.start()
     .done(function () {
         console.log("Connected to Hub.");
+        myHub.server.getActiveOrders();
     })
     .fail(function (a) {
         console.log("Not connected! " + a);
@@ -36,7 +39,6 @@ $.connection.hub.start()
 $.connection.hub.error = function (error) {
     console.warn(error);
 };
-
 $.connection.hub.stateChanged(function (change) {
     if (change.newState === $.signalR.connectionState.reconnecting) {
         console.log("Re-connecting");
@@ -88,17 +90,49 @@ var createNewOrder = function (data) {
 * Load Active Orders
 */
 
+var SubmitOrdersViews = function () {
+    $.ajax({
+        async: true,
+        type: "Get",
+        url: "/User/SubmitOrder/",
+        success: function (result) {
+            if (result !== null) {
+                console.log("Poprawnie ");
+            } else {
+                console.log("Nie popeawnie ");
+            }
+        },
+        error: function () { console.log("Cos nie tak ."); }
+    });
+};
+
 myHub.client.loadActiveOrders = function (result) {
+    console.log("Siema siema siema sieman siema iesiema siem asie msis ssiema sie a");
     var ActiveOrdersTable = $("#ActiveOrderTable");
     $.each(result,
-        function ( value) {
-            ActiveOrdersTable.append("  <tr>"+
-                                            "<td>" +value.Name+"</td>" +
-                                            "<td>" + value.CreatedOn +"</td>" +
-                                            "<td>" + value.EndDateTime +"</td>" +
-                                            "<td>" +
-                                            "<button class='ui positive button'>Join</button>"+
-                                            "</td>" +
-                                        "</tr>");
+        function (index, value) {
+            var divToAppend = "<tr>" +
+                "<td>" + value.PubName + "</td>" +
+                "<td>" + value.CreatedOn + "</td>" +
+                "<td>" + value.EndDateTime + "</td>" +
+                "<td>";
+
+            if (value.OwnerId === userId) {
+                divToAppend += "<div class='ui buttons'>" +
+                    "<button class='ui button'>Remove</button>" +
+                    "<div class='or'></div>" +
+                    "<button class='ui positive button'  id='JoinButton'>Join </button>" +
+                    "</div >";
+            } else {
+                divToAppend += "<button class='ui positive button' id='JoinButton'>Join</button>";
+            }
+            divToAppend += "</td>" +
+                "</tr>";
+            ActiveOrdersTable.append(divToAppend);
         });
 }
+
+$("#JoinButton").click(function () {
+    console.log("wchodzę");
+    SubmitOrdersViews();
+});

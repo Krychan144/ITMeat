@@ -49,7 +49,7 @@ namespace ITMeat.WEB.Controllers
         public IActionResult NewOrder(AddNewOrderViewModel model)
         {
             var userModel = new UserModel { Id = ControllerContext.HttpContext.Actor() };
-            var orderModel = new OrderModel { PubId = new Guid(model.PubId), EndDateTime = model.EndOrders, CreatedOn = DateTime.Now, Owner = userModel };
+            var orderModel = new OrderModel { PubId = model.PubId, EndDateTime = model.EndOrders, CreatedOn = DateTime.UtcNow, Owner = userModel };
 
             var orderAddAction = _createNewOrder.Invoke(orderModel, ControllerContext.HttpContext.Actor());
 
@@ -65,6 +65,12 @@ namespace ITMeat.WEB.Controllers
 
         [HttpGet("ActiveOrders")]
         public IActionResult ActiveOrders()
+        {
+            return View();
+        }
+
+        [HttpGet("SubmitOrder")]
+        public IActionResult SubmitOrder()
         {
             return View();
         }

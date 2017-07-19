@@ -17,5 +17,7 @@ namespace ITMeat.BusinessLogic.Models
         public DateTime EndDateTime { get; set; }
 
         public decimal Expense { get; set; }
+
+        public DateTime SubmitOrderDate { get; set; }
     }
 }

@@ -10,14 +10,12 @@ body {
     -ms-flex-direction: column;
     -webkit-flex-direction: column;
     flex-direction: column;
-    height: 100%;
+    min-height: 100%;
     font-family: "Helvetica Neue",Helvetica,"Segoe UI",Tahoma,Arial,sans-serif;
     -webkit-font-smoothing: antialiased;
     font-size: 16px;
     line-height: 1rem;
     color: #61B300;
-    overflow-y: hidden;
-    overflow-x: hidden;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -84,6 +82,7 @@ body {
 .pushable > .pusher {
     height: 100%;
     width: calc(100% - 260px);
+    overflow-y: auto;
 }
 
 .ui.vertical.inverted.sidebar.menu.visible.left {
@@ -122,7 +121,7 @@ body {
 
 .center_side {
     background-color: #E2FFBF;
-    height: 100%;
+    min-height: 100%;
 }
 
 .solid {
@@ -139,11 +138,11 @@ form {
 }
 
 .maxheight {
-    height: 100%;
+    min-height: 100%;
 }
 
 .Homeside {
-    height: 100%;
+    min-height: 100%;
     background-image: url("../images/BackgroundSide.png");
     background-size: contain;
     background-repeat: no-repeat;
@@ -151,11 +150,16 @@ form {
     background-color: #E2FFBF;
 }
 
-#ActiveOrderVievs, #OrderHistory {
+#ActiveOrderVievs, #HistoryOrderVievs {
     background-color: #E2FFBF;
+    min-height: 100%;
 }
 
 #OrderList {
     margin-left: 5rem;
     margin-right: 5rem;
+}
+
+#ActiveOrderTable, #HistoryOrderTable {
+    overflow-x: scroll;
 }

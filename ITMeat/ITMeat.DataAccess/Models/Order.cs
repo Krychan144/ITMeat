@@ -28,7 +28,8 @@ namespace ITMeat.DataAccess.Models
         public Guid PubId { get; set; }
 
         [Required]
-        [Column(TypeName = "DATETIME")]
         public DateTime EndDateTime { get; set; }
+
+        public DateTime SubmitOrderDate { get; set; }
     }
 }
