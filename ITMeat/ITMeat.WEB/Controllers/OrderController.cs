@@ -48,14 +48,12 @@ namespace ITMeat.WEB.Controllers
         [HttpPost("NewOrder")]
         public IActionResult NewOrder(AddNewOrderViewModel model)
         {
-            //var orderModel = new OrderModel { Pub. = model.PubId, EndDateTime = model.EndOrders, CreatedOn = DateTime.UtcNow};
-
-            var PubOrder = new PubOrderModel
+            var Order = new OrderModel
             {
                 CreatedOn = DateTime.UtcNow,
                 EndDateTime = model.EndOrders,
             };
-            var orderAddAction = _createNewPubOrder.Invoke(PubOrder, ControllerContext.HttpContext.Actor(), model.PubId);
+            var orderAddAction = _createNewPubOrder.Invoke(Order, ControllerContext.HttpContext.Actor(), model.PubId);
 
             if (orderAddAction == Guid.Empty)
             {

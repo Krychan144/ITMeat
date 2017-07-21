@@ -16,7 +16,7 @@ namespace ITMeat.BusinessLogic.Action.PubOrder.Implementations
 
         public List<PubOrderModel> Invoke()
         {
-            var dbPubOrders = _pubOrderRepository.GetActivePubOrders();
+            var dbPubOrders = _pubOrderRepository.GetActiveOrders();
 
             if (dbPubOrders == null)
             {

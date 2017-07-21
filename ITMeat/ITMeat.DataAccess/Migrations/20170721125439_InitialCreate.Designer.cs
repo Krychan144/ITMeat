@@ -8,7 +8,7 @@ using ITMeat.DataAccess.Context;
 namespace ITMeat.DataAccess.Migrations
 {
     [DbContext(typeof(ITMeatDbContext))]
-    [Migration("20170721093219_InitialCreate")]
+    [Migration("20170721125439_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -90,43 +90,22 @@ namespace ITMeat.DataAccess.Migrations
 
                     b.Property<DateTime?>("DeletedOn");
 
+                    b.Property<DateTime>("EndDateTime");
+
                     b.Property<decimal>("Expense")
                         .HasColumnType("DECIMAL(16 ,2)");
 
                     b.Property<DateTime>("ModifiedOn");
 
-                    b.Property<Guid>("PubOrderId");
+                    b.Property<Guid>("OwnerId");
+
+                    b.Property<DateTime>("SubmitDateTime");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PubOrderId")
-                        .IsUnique();
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("ITMeat.DataAccess.Models.OrderMeal", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<DateTime>("ModifiedOn");
-
-                    b.Property<Guid>("OrderId");
-
-                    b.Property<Guid>("PubMealId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("PubMealId");
-
-                    b.ToTable("OrderPubMeal");
                 });
 
             modelBuilder.Entity("ITMeat.DataAccess.Models.Pub", b =>
@@ -162,19 +141,15 @@ namespace ITMeat.DataAccess.Migrations
 
                     b.Property<DateTime?>("DeletedOn");
 
-                    b.Property<DateTime>("EndDateTime");
-
                     b.Property<DateTime>("ModifiedOn");
 
-                    b.Property<Guid>("OwnerId");
+                    b.Property<Guid>("OrderId");
 
                     b.Property<Guid>("PubId");
 
-                    b.Property<DateTime>("SubmitDateTime");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("PubId");
 
@@ -244,6 +219,30 @@ namespace ITMeat.DataAccess.Migrations
                     b.ToTable("UserOrders");
                 });
 
+            modelBuilder.Entity("ITMeat.DataAccess.Models.UserOrderMeal", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<Guid>("MealId");
+
+                    b.Property<DateTime>("ModifiedOn");
+
+                    b.Property<Guid>("UserOrderId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MealId");
+
+                    b.HasIndex("UserOrderId");
+
+                    b.ToTable("UserOrderMeal");
+                });
+
             modelBuilder.Entity("ITMeat.DataAccess.Models.UserToken", b =>
                 {
                     b.Property<Guid>("Id")
@@ -279,27 +278,16 @@ namespace ITMeat.DataAccess.Migrations
 
             modelBuilder.Entity("ITMeat.DataAccess.Models.Order", b =>
                 {
-                    b.HasOne("ITMeat.DataAccess.Models.PubOrder")
-                        .WithOne("Order")
-                        .HasForeignKey("ITMeat.DataAccess.Models.Order", "PubOrderId");
-                });
-
-            modelBuilder.Entity("ITMeat.DataAccess.Models.OrderMeal", b =>
-                {
-                    b.HasOne("ITMeat.DataAccess.Models.Order", "Order")
-                        .WithMany("OrdersMeals")
-                        .HasForeignKey("OrderId");
-
-                    b.HasOne("ITMeat.DataAccess.Models.Meal", "PubMeal")
+                    b.HasOne("ITMeat.DataAccess.Models.User", "Owner")
                         .WithMany()
-                        .HasForeignKey("PubMealId");
+                        .HasForeignKey("OwnerId");
                 });
 
             modelBuilder.Entity("ITMeat.DataAccess.Models.PubOrder", b =>
                 {
-                    b.HasOne("ITMeat.DataAccess.Models.User", "Owner")
+                    b.HasOne("ITMeat.DataAccess.Models.Order", "Order")
                         .WithMany()
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("OrderId");
 
                     b.HasOne("ITMeat.DataAccess.Models.Pub", "Pub")
                         .WithMany("PubOrders")
@@ -315,6 +303,17 @@ namespace ITMeat.DataAccess.Migrations
                     b.HasOne("ITMeat.DataAccess.Models.User", "User")
                         .WithMany("UserOrders")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("ITMeat.DataAccess.Models.UserOrderMeal", b =>
+                {
+                    b.HasOne("ITMeat.DataAccess.Models.Meal", "Meal")
+                        .WithMany()
+                        .HasForeignKey("MealId");
+
+                    b.HasOne("ITMeat.DataAccess.Models.UserOrder", "UserOrder")
+                        .WithMany("OrdersMeals")
+                        .HasForeignKey("UserOrderId");
                 });
 
             modelBuilder.Entity("ITMeat.DataAccess.Models.UserToken", b =>

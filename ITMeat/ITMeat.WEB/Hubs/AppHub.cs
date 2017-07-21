@@ -37,20 +37,20 @@ namespace ITMeat.WEB.Hubs
 
         public void GetActiveOrders()
         {
-            var ActiveOrderList = _getActiveOrders.Invoke();
+            var activeOrderList = _getActiveOrders.Invoke();
 
-            var List = ActiveOrderList.Select(item => new ActiveOrderViewModel
+            var list = activeOrderList.Select(item => new ActiveOrderViewModel
             {
-                OwnerId = item.Owner.Id,
-                OwnerName = item.Owner.Name,
-                CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation),
-                Id = item.Id,
-                EndDateTime = item.EndDateTime.ToLocalTime().ToString(TimeStampRepresentation),
+                OwnerId = item.Order.Owner.Id,
+                OwnerName = item.Order.Owner.Name,
+                CreatedOn = item.Order.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation),
+                Id = item.Order.Id,
+                EndDateTime = item.Order.EndDateTime.ToLocalTime().ToString(TimeStampRepresentation),
                 PubId = item.Pub.Id,
                 PubName = item.Pub.Name
             });
 
-            Clients.Caller.LoadActiveOrders(List);
+            Clients.Caller.LoadActiveOrders(list);
         }
     }
 }

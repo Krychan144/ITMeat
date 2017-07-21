@@ -5,6 +5,6 @@ namespace ITMeat.BusinessLogic.Action.PubOrder.Interfaces
 {
     public interface ICreateNewPubOrder : IAction
     {
-        Guid Invoke(Models.PubOrderModel order, Guid userId, Guid pubId);
+        Guid Invoke(Models.OrderModel order, Guid userId, Guid pubId);
     }
 }

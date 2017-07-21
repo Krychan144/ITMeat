@@ -2,12 +2,12 @@
 
 namespace ITMeat.DataAccess.Models
 {
-    public class OrderMeal : BaseEntity
+    public class UserOrderMeal : BaseEntity
     {
         [Required]
-        public Order Order { get; set; }
+        public UserOrder UserOrder { get; set; }
 
         [Required]
-        public Meal PubMeal { get; set; }
+        public Meal Meal { get; set; }
     }
 }

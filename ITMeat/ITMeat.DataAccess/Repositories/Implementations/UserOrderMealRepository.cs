@@ -4,9 +4,9 @@ using ITMeat.DataAccess.Repositories.Interfaces;
 
 namespace ITMeat.DataAccess.Repositories.Implementations
 {
-    public class OrderMealRepository : GenericRepository<OrderMeal>, IOrderMealRepository
+    public class UserOrderMealRepository : GenericRepository<UserOrderMeal>, IUserOrderMealRepository
     {
-        public OrderMealRepository(IITMeatDbContext context)
+        public UserOrderMealRepository(IITMeatDbContext context)
             : base(context)
         {
         }

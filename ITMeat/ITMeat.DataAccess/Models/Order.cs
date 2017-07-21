@@ -7,17 +7,16 @@ namespace ITMeat.DataAccess.Models
 {
     public class Order : BaseEntity
     {
-        public Order()
-        {
-            OrdersMeals = new HashSet<OrderMeal>();
-        }
-
-        public virtual ICollection<OrderMeal> OrdersMeals { get; set; }
-
         [Required]
         [Column(TypeName = "DECIMAL(16 ,2)")]
         public decimal Expense { get; set; }
 
-        public Guid PubOrderId { get; set; }
+        [Required]
+        public User Owner { get; set; }
+
+        [Required]
+        public DateTime EndDateTime { get; set; }
+
+        public DateTime SubmitDateTime { get; set; }
     }
 }

@@ -12,17 +12,25 @@ namespace ITMeat.DataAccess.Repositories.Implementations
         {
         }
 
-        public IQueryable<PubOrder> GetActivePubOrders()
+        public IQueryable<PubOrder> GetActiveOrders()
         {
-            var query = from puborder in context.Set<PubOrder>()
-                        where puborder.EndDateTime > DateTime.UtcNow
+            var query = from pub in context.Set<Pub>()
+                        join puborder in context.Set<PubOrder>() on pub.Id equals puborder.Pub.Id
+                        join order in context.Set<Order>() on puborder.Order.Id equals order.Id
+                        join user in context.Set<User>() on order.Owner.Id equals user.Id
+                        where order.EndDateTime > DateTime.UtcNow
+
                         select new PubOrder
                         {
-                            CreatedOn = puborder.CreatedOn,
-                            EndDateTime = puborder.EndDateTime,
                             Id = puborder.Id,
-                            Pub = puborder.Pub,
-                            Owner = puborder.Owner
+                            Order = new Order()
+                            {
+                                Owner = user,
+                                CreatedOn = order.CreatedOn,
+                                Id = order.Id,
+                                EndDateTime = order.EndDateTime
+                            },
+                            Pub = pub,
                         };
 
             return !(query.Count() > 0) ? Enumerable.Empty<PubOrder>().AsQueryable() : query;

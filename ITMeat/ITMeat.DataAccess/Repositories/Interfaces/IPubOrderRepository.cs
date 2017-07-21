@@ -5,6 +5,6 @@ namespace ITMeat.DataAccess.Repositories.Interfaces
 {
     public interface IPubOrderRepository : IGenericRepository<PubOrder>, IRepository
     {
-        IQueryable<PubOrder> GetActivePubOrders();
+        IQueryable<PubOrder> GetActiveOrders();
     }
 }

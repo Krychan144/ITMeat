@@ -10,13 +10,5 @@ namespace ITMeat.DataAccess.Models
 
         [Required]
         public Pub Pub { get; set; }
-
-        [Required]
-        public User Owner { get; set; }
-
-        [Required]
-        public DateTime EndDateTime { get; set; }
-
-        public DateTime SubmitDateTime { get; set; }
     }
 }

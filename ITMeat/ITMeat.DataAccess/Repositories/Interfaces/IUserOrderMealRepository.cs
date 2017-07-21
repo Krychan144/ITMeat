@@ -2,7 +2,7 @@
 
 namespace ITMeat.DataAccess.Repositories.Interfaces
 {
-    public interface IOrderMealRepository : IGenericRepository<OrderMeal>, IRepository
+    public interface IUserOrderMealRepository : IGenericRepository<UserOrderMeal>, IRepository
     {
     }
 }

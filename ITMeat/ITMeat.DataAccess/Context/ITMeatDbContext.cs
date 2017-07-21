@@ -52,7 +52,7 @@ namespace ITMeat.DataAccess.Context
         public DbSet<UserOrder> UserOrders { get; set; }
         public DbSet<UserToken> UserTokens { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderMeal> OrderPubMeal { get; set; }
+        public DbSet<UserOrderMeal> UserOrderMeal { get; set; }
         public DbSet<Meal> Meals { get; set; }
         public DbSet<EmailMessage> EmailMessages { get; set; }
         public DbSet<Pub> Pub { get; set; }

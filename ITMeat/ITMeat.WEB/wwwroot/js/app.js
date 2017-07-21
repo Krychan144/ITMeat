@@ -23,6 +23,13 @@ $.connection.hub.url = "http://localhost:49537/signalr";
 var myHub = $.connection.appHub;
 $("#SignedDiv").html("Signed by: " + userName);
 
+function onLoadView() {
+    var title = $(".titlename");
+    if (title.html() === "Active Orders") {
+        myHub.server.getActiveOrders();
+    }
+}
+
 /*
  * Start the connection
  */
@@ -30,7 +37,8 @@ $("#SignedDiv").html("Signed by: " + userName);
 $.connection.hub.start()
     .done(function () {
         console.log("Connected to Hub.");
-        myHub.server.getActiveOrders();
+
+        onLoadView();
     })
     .fail(function (a) {
         console.log("Not connected! " + a);
@@ -131,3 +139,4 @@ myHub.client.loadActiveOrders = function (result) {
             ActiveOrdersTable.append(divToAppend);
         });
 };
+

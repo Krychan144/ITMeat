@@ -6,6 +6,13 @@ namespace ITMeat.DataAccess.Models
 {
     public class UserOrder : BaseEntity
     {
+        public UserOrder()
+        {
+            OrdersMeals = new HashSet<UserOrderMeal>();
+        }
+
+        public virtual ICollection<UserOrderMeal> OrdersMeals { get; set; }
+
         [Required]
         public User User { get; set; }
 

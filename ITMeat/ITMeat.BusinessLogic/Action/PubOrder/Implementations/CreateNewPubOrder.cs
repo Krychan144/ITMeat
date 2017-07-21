@@ -1,6 +1,7 @@
 ﻿using ITMeat.BusinessLogic.Action.PubOrder.Interfaces;
 using ITMeat.DataAccess.Repositories.Interfaces;
 using System;
+using ITMeat.DataAccess.Models;
 
 namespace ITMeat.BusinessLogic.Action.PubOrder.Implementations
 {
@@ -9,19 +10,22 @@ namespace ITMeat.BusinessLogic.Action.PubOrder.Implementations
         private readonly IPubOrderRepository _pubOrderRepository;
         private readonly IUserRepository _userRepository;
         private readonly IPubRepository _pubRepository;
+        private readonly IOrderRepository _orderRepository;
 
         public CreateNewPubOrder(IUserRepository userRepository,
             IPubOrderRepository pubOrderRepository,
-            IPubRepository pubRepository)
+            IPubRepository pubRepository,
+            IOrderRepository orderRepository)
         {
             _userRepository = userRepository;
             _pubOrderRepository = pubOrderRepository;
             _pubRepository = pubRepository;
+            _orderRepository = orderRepository;
         }
 
-        public Guid Invoke(Models.PubOrderModel puborder, Guid userId, Guid pubId)
+        public Guid Invoke(Models.OrderModel order, Guid userId, Guid pubId)
         {
-            if (!puborder.IsValid() || userId == Guid.Empty)
+            if (!order.IsValid() || userId == Guid.Empty)
             {
                 return Guid.Empty;
             }
@@ -39,16 +43,22 @@ namespace ITMeat.BusinessLogic.Action.PubOrder.Implementations
             {
                 return Guid.Empty;
             }
-            {
-            }
-            var newOrder = AutoMapper.Mapper.Map<DataAccess.Models.PubOrder>(puborder);
-            newOrder.Owner = user;
-            newOrder.Pub = pub;
 
-            _pubOrderRepository.Add(newOrder);
+            var emptyOrder = AutoMapper.Mapper.Map<DataAccess.Models.Order>(order);
+            emptyOrder.Owner = user;
+
+            _orderRepository.Add(emptyOrder);
+
+            var newPubOrder = new DataAccess.Models.PubOrder
+            {
+                Pub = pub,
+                Order = emptyOrder
+            };
+
+            _pubOrderRepository.Add(newPubOrder);
             _pubOrderRepository.Save();
 
-            return newOrder.Id;
+            return newPubOrder.Id;
         }
     }
 }
