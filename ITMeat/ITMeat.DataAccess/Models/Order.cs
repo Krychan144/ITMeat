@@ -9,27 +9,15 @@ namespace ITMeat.DataAccess.Models
     {
         public Order()
         {
-            Meals = new HashSet<Meal>();
+            OrdersMeals = new HashSet<OrderMeal>();
         }
 
-        public virtual ICollection<Meal> Meals { get; set; }
-
-        [Required]
-        public User Owner { get; set; }
-
-        [Column(TypeName = "NVARCHAR(100)")]
-        public string Name { get; set; }
+        public virtual ICollection<OrderMeal> OrdersMeals { get; set; }
 
         [Required]
         [Column(TypeName = "DECIMAL(16 ,2)")]
         public decimal Expense { get; set; }
 
-        [Required]
-        public Guid PubId { get; set; }
-
-        [Required]
-        public DateTime EndDateTime { get; set; }
-
-        public DateTime SubmitOrderDate { get; set; }
+        public Guid PubOrderId { get; set; }
     }
 }

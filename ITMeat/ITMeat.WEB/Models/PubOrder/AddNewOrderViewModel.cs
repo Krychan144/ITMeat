@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace ITMeat.WEB.Models.Order
+namespace ITMeat.WEB.Models.PubOrder
 {
     public class AddNewOrderViewModel
     {

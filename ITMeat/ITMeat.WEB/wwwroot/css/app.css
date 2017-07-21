@@ -112,7 +112,7 @@ body {
 .titlename {
     font-size: 55px;
     text-align: center;
-    height: 210px;
+    min-height: 210px;
     padding-top: 100px;
     color: #3A3E42;
     font-weight: bold;
@@ -150,16 +150,16 @@ form {
     background-color: #E2FFBF;
 }
 
-#ActiveOrderVievs, #HistoryOrderVievs {
+#ActiveOrderVievs, #MealsInOrderViews, #HistoryOrderVievs {
     background-color: #E2FFBF;
     min-height: 100%;
 }
 
-#OrderList {
+#OrderList, #MealsList {
     margin-left: 5rem;
     margin-right: 5rem;
 }
 
-#ActiveOrderTable, #HistoryOrderTable {
-    overflow-x: scroll;
+#ActiveOrderTable, #MealsInOrderTable, #HistoryOrderTable {
+    overflow-y: scroll;
 }

@@ -6,15 +6,7 @@ namespace ITMeat.BusinessLogic.Models
 {
     public class OrderModel : BaseModel
     {
-        public List<MealModel> Meals { get; set; }
-
-        public UserModel Owner { get; set; }
-
-        public string Name { get; set; }
-
-        public Guid PubId { get; set; }
-
-        public DateTime EndDateTime { get; set; }
+        public List<OrderMealModel> OrdersPubMeals { get; set; }
 
         public decimal Expense { get; set; }
 

@@ -4,8 +4,6 @@ namespace ITMeat.BusinessLogic.Models
 {
     public class UserOrderModel : BaseModel
     {
-        public List<MealModel> Meals { get; set; }
-
         public UserModel User { get; set; }
 
         public OrderModel Order { get; set; }

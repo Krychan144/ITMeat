@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ITMeat.WEB.Models.Order
+namespace ITMeat.WEB.Models
 {
     public class UserConnection
     {

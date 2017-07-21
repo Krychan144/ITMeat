@@ -6,6 +6,5 @@ namespace ITMeat.DataAccess.Repositories.Interfaces
 {
     public interface IOrderRepository : IGenericRepository<Order>, IRepository
     {
-        IQueryable<Order> GetOrdersActive();
     }
 }

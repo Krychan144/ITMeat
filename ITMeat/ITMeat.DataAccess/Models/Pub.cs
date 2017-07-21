@@ -9,9 +9,11 @@ namespace ITMeat.DataAccess.Models
         public Pub()
         {
             Meals = new HashSet<Meal>();
+            PubOrders = new HashSet<PubOrder>();
         }
 
         public virtual ICollection<Meal> Meals { get; set; }
+        public virtual ICollection<PubOrder> PubOrders { get; set; }
 
         [Required]
         [Column(TypeName = "NVARCHAR(100)")]

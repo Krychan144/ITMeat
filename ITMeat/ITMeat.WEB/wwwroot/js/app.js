@@ -73,7 +73,7 @@ var createNewOrder = function (data) {
     $.ajax({
         async: true,
         type: "POST",
-        url: "/User/NewOrder/",
+        url: "/Order/NewOrder/",
         data: data,
         success: function (result) {
             if (result !== null) {
@@ -94,7 +94,7 @@ var SubmitOrdersViews = function () {
     $.ajax({
         async: true,
         type: "Get",
-        url: "/User/SubmitOrder/",
+        url: "/Order/SubmitOrder/",
         success: function (result) {
             if (result !== null) {
                 console.log("Poprawnie ");
@@ -112,27 +112,22 @@ myHub.client.loadActiveOrders = function (result) {
     $.each(result,
         function (index, value) {
             var divToAppend = "<tr>" +
-                "<td>" + value.PubName + "</td>" +
-                "<td>" + value.CreatedOn + "</td>" +
-                "<td>" + value.EndDateTime + "</td>" +
+                "<td>" +value.PubName +"</td>" +
+                "<td>" + value.OwnerName +"</td>" +
+                "<td>" +value.CreatedOn +"</td>" +
+                "<td>" +value.EndDateTime +"</td>" +
                 "<td>";
 
             if (value.OwnerId === userId) {
-                divToAppend += "<div class='ui buttons'>" +
-                    "<button class='ui button'>Remove</button>" +
-                    "<div class='or'></div>" +
-                    "<button class='ui positive button'  id='JoinButton'>Join </button>" +
-                    "</div >";
+                divToAppend += "<a class='ui button'>Remove</a>" +
+                    "<a class='ui positive button' href='/Order/SubmitOrder/'" +
+                    value.PubId +
+                    "'>Join </a>";
             } else {
-                divToAppend += "<button class='ui positive button' id='JoinButton'>Join</button>";
+                divToAppend += "<a class='ui positive button'href='/Order/SubmitOrder/'" + value.PubId + "'>Join</a>";
             }
             divToAppend += "</td>" +
                 "</tr>";
             ActiveOrdersTable.append(divToAppend);
         });
-}
-
-$("#JoinButton").click(function () {
-    console.log("wchodzę");
-    SubmitOrdersViews();
-});
+};

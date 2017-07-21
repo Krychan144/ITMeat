@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using ITMeat.WEB.Models.Pub;
 
-namespace ITMeat.WEB.Models.Order
+namespace ITMeat.WEB.Models.PubOrder
 {
     public class CreateNewOrderViewModel
     {

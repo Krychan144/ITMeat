@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ITMeat.WEB.Models.Order
+namespace ITMeat.WEB.Models.PubOrder
 {
     public class ActiveOrderViewModel
     {
@@ -19,5 +15,7 @@ namespace ITMeat.WEB.Models.Order
         public Guid PubId { get; set; }
 
         public Guid OwnerId { get; set; }
+
+        public string OwnerName { get; set; }
     }
 }

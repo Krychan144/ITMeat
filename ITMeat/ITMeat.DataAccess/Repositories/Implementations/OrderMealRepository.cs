@@ -1,14 +1,12 @@
-﻿using System;
-using System.Linq;
-using ITMeat.DataAccess.Context;
+﻿using ITMeat.DataAccess.Context;
 using ITMeat.DataAccess.Models;
 using ITMeat.DataAccess.Repositories.Interfaces;
 
 namespace ITMeat.DataAccess.Repositories.Implementations
 {
-    public class MealRepository : GenericRepository<Meal>, IMealRepository
+    public class OrderMealRepository : GenericRepository<OrderMeal>, IOrderMealRepository
     {
-        public MealRepository(IITMeatDbContext context)
+        public OrderMealRepository(IITMeatDbContext context)
             : base(context)
         {
         }

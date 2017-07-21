@@ -1,22 +1,21 @@
-﻿using System;
+﻿using ITMeat.BusinessLogic.Action.PubOrder.Interfaces;
+using ITMeat.WEB.Helpers;
+using ITMeat.WEB.Models;
+using ITMeat.WEB.Models.PubOrder;
+using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ITMeat.BusinessLogic.Action.Order.Interfaces;
-using ITMeat.BusinessLogic.Models;
-using ITMeat.WEB.Helpers;
-using ITMeat.WEB.Models.Order;
-using Microsoft.AspNetCore.SignalR;
 
 namespace ITMeat.WEB.Hubs
 {
     public class AppHub : Hub
     {
-        private readonly IGetActiveOrders _getActiveOrders;
+        private readonly IGetActivePubOrders _getActiveOrders;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
-        public AppHub(IGetActiveOrders getActiveOrders)
+        public AppHub(IGetActivePubOrders getActiveOrders)
         {
             _getActiveOrders = getActiveOrders;
         }
@@ -42,12 +41,13 @@ namespace ITMeat.WEB.Hubs
 
             var List = ActiveOrderList.Select(item => new ActiveOrderViewModel
             {
-                Id = item.Id,
-                PubId = item.PubId,
+                OwnerId = item.Owner.Id,
+                OwnerName = item.Owner.Name,
                 CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation),
+                Id = item.Id,
                 EndDateTime = item.EndDateTime.ToLocalTime().ToString(TimeStampRepresentation),
-                PubName = item.Name,
-                OwnerId = item.Owner.Id
+                PubId = item.Pub.Id,
+                PubName = item.Pub.Name
             });
 
             Clients.Caller.LoadActiveOrders(List);

@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Order\" />
     <Folder Include="Models\User\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>

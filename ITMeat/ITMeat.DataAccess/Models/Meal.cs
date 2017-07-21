@@ -6,9 +6,6 @@ namespace ITMeat.DataAccess.Models
     public class Meal : BaseEntity
     {
         [Required]
-        public UserOrder UserOrder { get; set; }
-
-        [Required]
         [Column(TypeName = "NVARCHAR(100)")]
         public string Name { get; set; }
 
@@ -19,5 +16,8 @@ namespace ITMeat.DataAccess.Models
         [Required]
         [Column(TypeName = "NVARCHAR(100)")]
         public string Type { get; set; }
+
+        [Required]
+        public Pub Pub { get; set; }
     }
 }

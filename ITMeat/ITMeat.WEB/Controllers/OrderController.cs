@@ -1,12 +1,12 @@
-﻿using ITMeat.BusinessLogic.Action.Order.Interfaces;
-using ITMeat.BusinessLogic.Action.Pub.Interfaces;
+﻿using ITMeat.BusinessLogic.Action.Pub.Interfaces;
 using ITMeat.BusinessLogic.Models;
 using ITMeat.WEB.Helpers;
-using ITMeat.WEB.Models.Order;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using ITMeat.BusinessLogic.Action.PubOrder.Interfaces;
+using ITMeat.WEB.Models.PubOrder;
 
 namespace ITMeat.WEB.Controllers
 {
@@ -14,16 +14,16 @@ namespace ITMeat.WEB.Controllers
     public class OrderController : BaseController
     {
         private readonly IGetAllPubs _getAllPubs;
-        private readonly ICreateNewOrder _createNewOrder;
-        private readonly IGetActiveOrders _getActiveOrders;
+        private readonly ICreateNewPubOrder _createNewPubOrder;
+        private readonly IGetActivePubOrders _getActiveOrders;
 
         public OrderController(IGetAllPubs getAllPubs,
-            ICreateNewOrder createNewOrder,
-            IGetActiveOrders getActiveOrders)
+            IGetActivePubOrders getActiveOrders,
+            ICreateNewPubOrder createNewPubOrder)
         {
             _getAllPubs = getAllPubs;
-            _createNewOrder = createNewOrder;
             _getActiveOrders = getActiveOrders;
+            _createNewPubOrder = createNewPubOrder;
         }
 
         public IActionResult Index()
@@ -48,10 +48,14 @@ namespace ITMeat.WEB.Controllers
         [HttpPost("NewOrder")]
         public IActionResult NewOrder(AddNewOrderViewModel model)
         {
-            var userModel = new UserModel { Id = ControllerContext.HttpContext.Actor() };
-            var orderModel = new OrderModel { PubId = model.PubId, EndDateTime = model.EndOrders, CreatedOn = DateTime.UtcNow, Owner = userModel };
+            //var orderModel = new OrderModel { Pub. = model.PubId, EndDateTime = model.EndOrders, CreatedOn = DateTime.UtcNow};
 
-            var orderAddAction = _createNewOrder.Invoke(orderModel, ControllerContext.HttpContext.Actor());
+            var PubOrder = new PubOrderModel
+            {
+                CreatedOn = DateTime.UtcNow,
+                EndDateTime = model.EndOrders,
+            };
+            var orderAddAction = _createNewPubOrder.Invoke(PubOrder, ControllerContext.HttpContext.Actor(), model.PubId);
 
             if (orderAddAction == Guid.Empty)
             {
@@ -70,7 +74,7 @@ namespace ITMeat.WEB.Controllers
         }
 
         [HttpGet("SubmitOrder")]
-        public IActionResult SubmitOrder()
+        public IActionResult SubmitOrder(Guid PubId)
         {
             return View();
         }

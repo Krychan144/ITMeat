@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ITMeat.DataAccess.Migrations
 {
-    public partial class initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,7 +30,7 @@ namespace ITMeat.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pubs",
+                name: "Pub",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -42,7 +42,7 @@ namespace ITMeat.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pubs", x => x.Id);
+                    table.PrimaryKey("PK_Pub", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -66,24 +66,55 @@ namespace ITMeat.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "Meals",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
-                    Expense = table.Column<decimal>(type: "DECIMAL(16 ,2)", nullable: false),
+                    Expense = table.Column<decimal>(type: "DECIMAL(16,2)", nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(type: "NVARCHAR(100)", nullable: true),
-                    OwnerId = table.Column<Guid>(nullable: false)
+                    Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false),
+                    PubId = table.Column<Guid>(nullable: false),
+                    Type = table.Column<string>(type: "NVARCHAR(100)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.PrimaryKey("PK_Meals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders_Users_OwnerId",
+                        name: "FK_Meals_Pub_PubId",
+                        column: x => x.PubId,
+                        principalTable: "Pub",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PubOrder",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    EndDateTime = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: false),
+                    OwnerId = table.Column<Guid>(nullable: false),
+                    PubId = table.Column<Guid>(nullable: false),
+                    SubmitDateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PubOrder", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PubOrder_Users_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PubOrder_Pub_PubId",
+                        column: x => x.PubId,
+                        principalTable: "Pub",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -107,6 +138,56 @@ namespace ITMeat.DataAccess.Migrations
                         name: "FK_UserTokens_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Expense = table.Column<decimal>(type: "DECIMAL(16 ,2)", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: false),
+                    PubOrderId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_PubOrder_PubOrderId",
+                        column: x => x.PubOrderId,
+                        principalTable: "PubOrder",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderPubMeal",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: false),
+                    OrderId = table.Column<Guid>(nullable: false),
+                    PubMealId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderPubMeal", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderPubMeal_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_OrderPubMeal_Meals_PubMealId",
+                        column: x => x.PubMealId,
+                        principalTable: "Meals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -140,63 +221,36 @@ namespace ITMeat.DataAccess.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Meals",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    DeletedOn = table.Column<DateTime>(nullable: true),
-                    Expense = table.Column<decimal>(type: "DECIMAL(16,2)", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false),
-                    OrderId = table.Column<Guid>(nullable: true),
-                    PubId = table.Column<Guid>(nullable: true),
-                    Type = table.Column<string>(type: "NVARCHAR(100)", nullable: false),
-                    UserOrderId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Meals", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Meals_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Meals_Pubs_PubId",
-                        column: x => x.PubId,
-                        principalTable: "Pubs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Meals_UserOrders_UserOrderId",
-                        column: x => x.UserOrderId,
-                        principalTable: "UserOrders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Meals_OrderId",
-                table: "Meals",
-                column: "OrderId");
-
             migrationBuilder.CreateIndex(
                 name: "IX_Meals_PubId",
                 table: "Meals",
                 column: "PubId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Meals_UserOrderId",
-                table: "Meals",
-                column: "UserOrderId");
+                name: "IX_Orders_PubOrderId",
+                table: "Orders",
+                column: "PubOrderId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_OwnerId",
-                table: "Orders",
+                name: "IX_OrderPubMeal_OrderId",
+                table: "OrderPubMeal",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderPubMeal_PubMealId",
+                table: "OrderPubMeal",
+                column: "PubMealId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PubOrder_OwnerId",
+                table: "PubOrder",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PubOrder_PubId",
+                table: "PubOrder",
+                column: "PubId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserOrders_OrderId",
@@ -220,22 +274,28 @@ namespace ITMeat.DataAccess.Migrations
                 name: "EmailMessages");
 
             migrationBuilder.DropTable(
-                name: "Meals");
-
-            migrationBuilder.DropTable(
-                name: "UserTokens");
-
-            migrationBuilder.DropTable(
-                name: "Pubs");
+                name: "OrderPubMeal");
 
             migrationBuilder.DropTable(
                 name: "UserOrders");
 
             migrationBuilder.DropTable(
+                name: "UserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Meals");
+
+            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
+                name: "PubOrder");
+
+            migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Pub");
         }
     }
 }

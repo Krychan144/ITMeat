@@ -16,6 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Action\Order\Implementations\" />
+    <Folder Include="Action\Order\Interfaces\" />
     <Folder Include="Action\UserOrder\Implementations\" />
     <Folder Include="Action\UserOrder\Interfaces\" />
   </ItemGroup>
