@@ -163,3 +163,10 @@ form {
 #ActiveOrderTable, #MealsInOrderTable, #HistoryOrderTable {
     overflow-y: scroll;
 }
+
+.AddNewOrdersMeals {
+
+    height: 100px;
+    float: right;
+    text-align: right;
+}

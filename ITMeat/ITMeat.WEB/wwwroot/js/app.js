@@ -114,25 +114,46 @@ var SubmitOrdersViews = function () {
     });
 };
 
+function loadUserOrders() {
+    console.log("Load User Meals in Orders");
+    var MealsInOrderTable = $("#MealsInOrderTable");
+    $.each(result,
+        function (index, value) {
+            var divToAppend = "<tr>" +
+                "<td>" + value.UserName + "</td>" +
+                "<td>" + value.MealsName + "</td>" +
+                "<td>" + value.Quantity + "</td>" +
+                "<td>" + value.Expense + "</td>" +
+                "<td>";
+
+            if (value.UserId === userId) {
+                divToAppend += "<a class='ui button'>Remove</a>";
+            }
+            divToAppend += "</td>" +
+                "</tr>" +
+                "";
+            MealsInOrderTable.append(divToAppend);
+        });
+}
 myHub.client.loadActiveOrders = function (result) {
-    console.log("Siema siema siema sieman siema iesiema siem asie msis ssiema sie a");
+    console.log("Load Active Orders");
     var ActiveOrdersTable = $("#ActiveOrderTable");
     $.each(result,
         function (index, value) {
             var divToAppend = "<tr>" +
-                "<td>" +value.PubName +"</td>" +
-                "<td>" + value.OwnerName +"</td>" +
-                "<td>" +value.CreatedOn +"</td>" +
-                "<td>" +value.EndDateTime +"</td>" +
+                "<td>" + value.PubName + "</td>" +
+                "<td>" + value.OwnerName + "</td>" +
+                "<td>" + value.CreatedOn + "</td>" +
+                "<td>" + value.EndDateTime + "</td>" +
                 "<td>";
 
             if (value.OwnerId === userId) {
                 divToAppend += "<a class='ui button'>Remove</a>" +
-                    "<a class='ui positive button' href='/Order/SubmitOrder/'" +
+                    "<a id ='JoinToOrderButton' onclick='loadUserOrders();' class='ui positive button' href='/Order/SubmitOrder/'" +
                     value.PubId +
                     "'>Join </a>";
             } else {
-                divToAppend += "<a class='ui positive button'href='/Order/SubmitOrder/'" + value.PubId + "'>Join</a>";
+                divToAppend += "<a id ='JoinToOrderButton' onclick='loadUserOrders();' class='ui positive button'href='/Order/SubmitOrder/'" + value.PubId + "'>Join</a>";
             }
             divToAppend += "</td>" +
                 "</tr>";
@@ -140,3 +161,18 @@ myHub.client.loadActiveOrders = function (result) {
         });
 };
 
+$("#AddMealCircleButton").click(function () {
+    thisModal = $(".ui.basic.add-order.modal");
+
+    $(thisModal).modal({
+        closable: false,
+        onDeny: function () {
+            $(thisModal).parent().css("background-color", "");
+        },
+        onApprove: function () {
+            $(thisModal).parent().css("background-color", "");
+        }
+    }).modal("show");
+
+    $(thisModal).parent().css("background-color", "#fff");
+});

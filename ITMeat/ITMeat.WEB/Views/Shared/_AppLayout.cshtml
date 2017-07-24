@@ -17,8 +17,9 @@
 }
 @section Pre_Body
 {
-   
+
     @Html.Partial("_SideBarPartial")
+    @Html.Partial("_AddMealToOrderModal")
     @if (TempData.ContainsKey("alertMessages"))
     {
         @Html.Partial("_AlertsPartial")
@@ -27,7 +28,7 @@
 
 @section Post_Body
 {
-   
+
 }
 
 @section Scripts

@@ -1,8 +1,10 @@
-﻿using ITMeat.BusinessLogic.Action.Pub.Interfaces;
+﻿using System;
+using ITMeat.BusinessLogic.Action.Pub.Interfaces;
 using ITMeat.BusinessLogic.Models;
 using ITMeat.DataAccess.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using ITMeat.BusinessLogic.Action.UserToken.Implementations;
 
 namespace ITMeat.BusinessLogic.Action.Pub.Implementations
 {
@@ -15,7 +17,7 @@ namespace ITMeat.BusinessLogic.Action.Pub.Implementations
             _pubRepository = pubRepository;
         }
 
-        public List<PubModel> Invoke()
+        public List<MealModel> Invoke(Guid pubId)
         {
             var dbPubs = _pubRepository.GetAll().ToList();
 

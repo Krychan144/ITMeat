@@ -12,5 +12,22 @@ namespace ITMeat.DataAccess.Repositories.Implementations
             : base(context)
         {
         }
+
+        public IQueryable<Meal> GetPubMeals(Guid pubId)
+        {
+            var query = from meal in context.Set<Meal>()
+                        join pub in context.Set<Pub>() on meal.Pub.Id equals pub.Id
+                        where meal.Pub.Id == pubId
+                        select new Meal
+                        {
+                            Id = meal.Id,
+                            Pub = pub,
+                            Expense = meal.Expense,
+                            Name = meal.Name,
+                            Type = meal.Type,
+                        };
+
+            return !(query.Count() > 0) ? Enumerable.Empty<Meal>().AsQueryable() : query;
+        }
     }
 }
