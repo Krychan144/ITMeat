@@ -2,11 +2,12 @@
     Layout = "_AppLayout";
 
 }
-    <div class="titlename">Please add your meals,Thanks man!</div>
-    <div id="MealsInOrderViews">
-        <div id="MealsList">
-            <table class="ui single line table">
-                <thead>
+@Html.Partial("_AddMealToOrderModal")
+<div class="titlename">Please add your meals,Thanks man!</div>
+<div id="MealsInOrderViews">
+    <div id="MealsList">
+        <table class="ui single line table">
+            <thead>
                 <tr>
                     <th>User Name</th>
                     <th>Meals Name</th>
@@ -14,14 +15,11 @@
                     <th class="one wide">Expense</th>
                     <th>Action</th>
                 </tr>
-                </thead>
-                <tbody id="MealsInOrderTable" >
-                </tbody>
-            </table>
-              <div class="AddNewOrdersMeals">
-                <button id="AddMealCircleButton"> <i class="huge green add circle icon"></i> </button>
-              </div>
+            </thead>
+            <tbody id="MealsInOrderTable"></tbody>
+        </table>
+        <div class="AddNewOrdersMeals">
+            <button id="AddMealCircleButton" onclick="AddNewMeal('@ViewBag.OrderId.ToString()')"> <i class="huge green add circle icon"></i> </button>
         </div>
-
-
     </div>
+</div>

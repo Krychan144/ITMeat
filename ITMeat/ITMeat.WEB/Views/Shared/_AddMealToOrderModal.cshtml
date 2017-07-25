@@ -1,4 +1,5 @@
-﻿@model ITMeat.WEB.Models.Order.AddMealToOrder
+﻿@using ITMeat.WEB.Models.Order
+@model ITMeat.WEB.Models.Order.AddMealToOrder
 
 <style>
     .chat_slack_button {
@@ -43,9 +44,22 @@
     @using (Html.BeginForm(FormMethod.Post, false, new { id = "addMealToOrderForm", @class = "ui large form" }))
     {
         <div class="content">
+
             <div class="field">
-                @Html.LabelFor(x => x.Quantity)
-                @Html.TextBoxFor(m => m.MealName, new { @class = "form-control", placeholder = "MealName", required = "required" })
+                @Html.DropDownListFor(x => x.MealName,
+                        new SelectList(
+                            new List<Object>
+                            {
+                                new { value = 1 , text = "Kaszanka" },
+                                new { value = 2 , text = "Pasztet"},
+                                new { value = 3 , text = "Salceson"},
+                                new { value = 4 , text = "Żeberka"},
+                                new { value = 5 , text = "Golonka"}
+                            },
+                            "value",
+                            "text",
+                            1
+                            ));
             </div>
 
             <div class="field">

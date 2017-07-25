@@ -7,7 +7,6 @@ namespace ITMeat.WEB.Models.PubOrder
 {
     public class AddNewOrderViewModel
     {
-        [Required]
         public DateTime EndOrders { get; set; }
 
         public Guid PubId { get; set; }

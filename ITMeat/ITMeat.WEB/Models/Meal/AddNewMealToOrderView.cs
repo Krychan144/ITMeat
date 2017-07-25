@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace ITMeat.WEB.Models.Order
+namespace ITMeat.WEB.Models.Meal
 {
-    public class AddMealToOrder
+    public class AddNewMealToOrderView
     {
-        public Guid mealId { get; set; }
-
         public Guid PubId { get; set; }
 
         public Guid User { get; set; }
@@ -13,5 +14,7 @@ namespace ITMeat.WEB.Models.Order
         public byte Quantity { get; set; }
 
         public string MealName { get; set; }
+
+        public Decimal Expanse { get; set; }
     }
 }

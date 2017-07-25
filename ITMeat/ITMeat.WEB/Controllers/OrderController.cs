@@ -71,9 +71,10 @@ namespace ITMeat.WEB.Controllers
             return View();
         }
 
-        [HttpGet("SubmitOrder")]
-        public IActionResult SubmitOrder(Guid PubId)
+        [HttpGet("SubmitOrder/{id}")]
+        public IActionResult SubmitOrder(Guid id)
         {
+            ViewBag.OrderId = id;
             return View();
         }
 

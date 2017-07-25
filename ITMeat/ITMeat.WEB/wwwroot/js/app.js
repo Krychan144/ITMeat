@@ -29,7 +29,7 @@ function onLoadView() {
         myHub.server.getActiveOrders();
     }
 }
-
+//***************************************************************************************************************************
 /*
  * Start the connection
  */
@@ -54,11 +54,9 @@ $.connection.hub.stateChanged(function (change) {
         console.log("The server is online");
     }
 });
-
 $.connection.hub.reconnected(function () {
     console.log("Reconnected");
 });
-
 window.onbeforeunload = function () {
     $.connection.hub.stop();
 };
@@ -93,28 +91,10 @@ var createNewOrder = function (data) {
         error: function () { console.log("Could not save ."); }
     });
 };
-
 /*
-* Load Active Orders
-*/
-
-var SubmitOrdersViews = function () {
-    $.ajax({
-        async: true,
-        type: "Get",
-        url: "/Order/SubmitOrder/",
-        success: function (result) {
-            if (result !== null) {
-                console.log("Poprawnie ");
-            } else {
-                console.log("Nie popeawnie ");
-            }
-        },
-        error: function () { console.log("Cos nie tak ."); }
-    });
-};
-
-function loadUserOrders() {
+ * Order History
+ */
+function loadPubOrders() {
     console.log("Load User Meals in Orders");
     var MealsInOrderTable = $("#MealsInOrderTable");
     $.each(result,
@@ -135,6 +115,9 @@ function loadUserOrders() {
             MealsInOrderTable.append(divToAppend);
         });
 }
+/*
+* Load Active Orders
+*/
 myHub.client.loadActiveOrders = function (result) {
     console.log("Load Active Orders");
     var ActiveOrdersTable = $("#ActiveOrderTable");
@@ -146,24 +129,36 @@ myHub.client.loadActiveOrders = function (result) {
                 "<td>" + value.CreatedOn + "</td>" +
                 "<td>" + value.EndDateTime + "</td>" +
                 "<td>";
-
             if (value.OwnerId === userId) {
                 divToAppend += "<a class='ui button'>Remove</a>" +
-                    "<a id ='JoinToOrderButton' onclick='loadUserOrders();' class='ui positive button' href='/Order/SubmitOrder/'" +
-                    value.PubId +
-                    "'>Join </a>";
+                    '<a id ="JoinToOrderButton" onclick="loadPubOrders(' + value.Id + ');"class="ui positive button" href="/Order/SubmitOrder/ '+ value.Id +'">Join</a>';
+                console.log(value.Id);
             } else {
-                divToAppend += "<a id ='JoinToOrderButton' onclick='loadUserOrders();' class='ui positive button'href='/Order/SubmitOrder/'" + value.PubId + "'>Join</a>";
+                divToAppend += '<a id ="JoinToOrderButton" onclick="loadPubOrders(' +
+                    value.Id +
+                    ');"class="ui positive button" href="/Order/SubmitOrder/ ' +
+                    value.Id +
+                    '">Join</a>';
             }
+
             divToAppend += "</td>" +
                 "</tr>";
             ActiveOrdersTable.append(divToAppend);
         });
 };
 
-$("#AddMealCircleButton").click(function () {
-    thisModal = $(".ui.basic.add-order.modal");
+/*
+ * Modal, Add meal to order
+ */
+myHub.client.PubMealLoadedAction = function (result) {
+}
 
+function AddNewMeal(value) {
+    console.log("AddnewMeal");
+    thisModal = $(".ui.basic.add-order.modal");
+    // var orderId = value;
+    //console.log(orderId);
+    myHub.server.getMealfromPub(value);
     $(thisModal).modal({
         closable: false,
         onDeny: function () {
@@ -175,4 +170,8 @@ $("#AddMealCircleButton").click(function () {
     }).modal("show");
 
     $(thisModal).parent().css("background-color", "#fff");
-});
+};
+
+/*
+*Submitt view
+*/

@@ -59,15 +59,15 @@ namespace ITMeat.WEB.Hubs
             Clients.Caller.LoadActiveOrders(list);
         }
 
-        public void GetUsersFromDomain(string pubId)
+        public void GetMealfromPub(Guid orderId)
         {
-            var mealList = _getPubMeals.Invoke(new Guid(pubId));
+            var mealList = _getPubMeals.Invoke(orderId);
 
             var viewList = mealList.Select(item => new AddMealToOrder
             {
-                mealId = item.Id,
                 PubId = item.Pub.Id,
                 MealName = item.Name,
+                Expense = item.Expense
             });
 
             Clients.Caller.PubMealLoadedAction(viewList);

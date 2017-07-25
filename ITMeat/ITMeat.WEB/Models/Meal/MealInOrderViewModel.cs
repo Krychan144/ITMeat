@@ -8,7 +8,9 @@ namespace ITMeat.WEB.Models.Meal
 {
     public class MealInOrderViewModel
     {
-        public UserOrder UserOrder { get; set; }
+        public Guid Userid { get; set; }
+
+        public string UserName { get; set; }
 
         public string Name { get; set; }
 

@@ -17,7 +17,7 @@ namespace ITMeat.BusinessLogic.Action.Pub.Implementations
             _pubRepository = pubRepository;
         }
 
-        public List<MealModel> Invoke(Guid pubId)
+        public List<PubModel> Invoke()
         {
             var dbPubs = _pubRepository.GetAll().ToList();
 
