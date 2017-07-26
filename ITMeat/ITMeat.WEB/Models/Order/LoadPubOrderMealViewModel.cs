@@ -2,13 +2,11 @@
 
 namespace ITMeat.WEB.Models.Order
 {
-    public class AddMealToOrder
+    public class LoadPubOrderMealViewModel
     {
         public Guid PubId { get; set; }
 
-        public Guid User { get; set; }
-
-        public byte Quantity { get; set; }
+        public Guid MealId { get; set; }
 
         public string MealName { get; set; }
 

@@ -1,4 +1,11 @@
-﻿$(".ui.sidebar.left").sidebar("setting", {
+﻿//declaration
+var userId = $("#SignedDiv").data("id");
+var userName = $("#SignedDiv").data("name");
+var now = new Date();
+var InJoinRoomId;
+
+//View Settings
+$(".ui.sidebar.left").sidebar("setting", {
     transition: "overlay"
 });
 
@@ -6,38 +13,36 @@ $(".your-clock").FlipClock({
     clockFace: 'TwentyFourHourClock'
 });
 
-var now = new Date();
-
 $(".ui.calendar").calendar({
     type: 'datetime',
     minDate: now,
     ampm: false
 });
 
-/*
- * Create connection SignalR
- */
-var userId = $("#SignedDiv").data("id");
-var userName = $("#SignedDiv").data("name");
-$.connection.hub.url = "http://localhost:49537/signalr";
-var myHub = $.connection.appHub;
 $("#SignedDiv").html("Signed by: " + userName);
 
+/*
+ * Load data from server when server connected
+ */
 function onLoadView() {
     var title = $(".titlename");
     if (title.html() === "Active Orders") {
-        myHub.server.getActiveOrders();
+        myHub.server.getActivePubOrders();
     }
 }
+
+/*
+ * Create connection SignalR
+ */
+$.connection.hub.url = "http://localhost:49537/signalr";
+var myHub = $.connection.appHub;
 //***************************************************************************************************************************
 /*
  * Start the connection
  */
-
 $.connection.hub.start()
     .done(function () {
         console.log("Connected to Hub.");
-
         onLoadView();
     })
     .fail(function (a) {
@@ -65,7 +70,7 @@ window.onbeforeunload = function () {
 * Apps functions
 */
 
-//Create orders room
+//Send Model from Form
 function serializeForm(form) {
     this.data = $(form).serializeArray();
     var obj = {};
@@ -73,8 +78,9 @@ function serializeForm(form) {
         obj[value.name] = value.value;
     });
     return obj;
-};
+}
 
+//Create orders room
 var createNewOrder = function (data) {
     $.ajax({
         async: true,
@@ -91,34 +97,16 @@ var createNewOrder = function (data) {
         error: function () { console.log("Could not save ."); }
     });
 };
+
 /*
  * Order History
  */
-function loadPubOrders() {
-    console.log("Load User Meals in Orders");
-    var MealsInOrderTable = $("#MealsInOrderTable");
-    $.each(result,
-        function (index, value) {
-            var divToAppend = "<tr>" +
-                "<td>" + value.UserName + "</td>" +
-                "<td>" + value.MealsName + "</td>" +
-                "<td>" + value.Quantity + "</td>" +
-                "<td>" + value.Expense + "</td>" +
-                "<td>";
+//ToDO
 
-            if (value.UserId === userId) {
-                divToAppend += "<a class='ui button'>Remove</a>";
-            }
-            divToAppend += "</td>" +
-                "</tr>" +
-                "";
-            MealsInOrderTable.append(divToAppend);
-        });
-}
 /*
 * Load Active Orders
 */
-myHub.client.loadActiveOrders = function (result) {
+myHub.client.loadActivePubOrders = function (result) {
     console.log("Load Active Orders");
     var ActiveOrdersTable = $("#ActiveOrderTable");
     $.each(result,
@@ -131,13 +119,13 @@ myHub.client.loadActiveOrders = function (result) {
                 "<td>";
             if (value.OwnerId === userId) {
                 divToAppend += "<a class='ui button'>Remove</a>" +
-                    '<a id ="JoinToOrderButton" onclick="loadPubOrders(' + value.Id + ');"class="ui positive button" href="/Order/SubmitOrder/ '+ value.Id +'">Join</a>';
-                console.log(value.Id);
+                    '<a id ="JoinToOrderButton" onclick="loadPubOrders(' + value.PubOrderId + ');"class="ui positive button" href="/Order/SubmitOrder/ ' + value.PubOrderId + '">Join</a>';
+                console.log(value.PubOrderId);
             } else {
                 divToAppend += '<a id ="JoinToOrderButton" onclick="loadPubOrders(' +
-                    value.Id +
+                    value.PubOrderId +
                     ');"class="ui positive button" href="/Order/SubmitOrder/ ' +
-                    value.Id +
+                    value.PubOrderId +
                     '">Join</a>';
             }
 
@@ -145,31 +133,98 @@ myHub.client.loadActiveOrders = function (result) {
                 "</tr>";
             ActiveOrdersTable.append(divToAppend);
         });
+   
 };
 
 /*
- * Modal, Add meal to order
+ * Get Added Meals To Joined PubOrder
  */
-myHub.client.PubMealLoadedAction = function (result) {
+myHub.client.getAddedMealsToJoinedPubOrder = function(result) {
+    console.log("Load User Meals in Orders");
+    var MealsInOrderTable = $("#MealsInOrderTable");
+    $.each(result,
+        function(index, value) {
+            var divToAppend = "<tr>" +
+                "<td>" +
+                value.MealName +
+                "</td>" +
+                "<td>" +
+                value.MealName +
+                "</td>" +
+                "<td>" +
+               1 +
+                "</td>" +
+                "<td>" +
+                value.Expense +
+                "</td>" +
+                "<td>";
+
+            if (value.UserId === userId) {
+                divToAppend += "<a class='ui button'>Remove</a>";
+            }
+            divToAppend += "</td>" +
+                "</tr>" +
+                "";
+            MealsInOrderTable.append(divToAppend);
+        });
+};
+
+$("#MealsInOrderViews").ready(function () {
+    $.when($.connection.hub.start() ).then(function ()
+    {
+        InJoinRoomId = $("#MealsInOrderTable").data("puborderid");
+        console.log("dupa z tym" + InJoinRoomId);
+        myHub.server.getAddedMealsToJoinedPubOrder(InJoinRoomId);
+    });
+});
+/*
+ * Modal, LoadMealInModal,
+ */
+myHub.client.pubMealLoadedAction = function (result) {
+    console.log("Load PubMeal");
+    $.each(result,
+        function(index, item) {
+            $("#newMealinOrderSelect").append($("<option>",
+                { text: item.MealName, value: item.MealId, selected: false },
+                "</option>"));
+        });
+};
+
+function AddNewMeal(orderPubId) {
+    console.log("Add new Meal");
+    AddMealModal = $(".ui.basic.add-order.modal");
+    /**
+     * Show modal/settings
+     */
+    $(AddMealModal).modal('setting', 'closable', false)
+        .modal('show');
+    /*
+     * Load PubMealsfromDataBase
+     */
+    $.when($.connection.hub.start()).then(function () {
+        myHub.server.getMealfromPub(orderPubId);
+    });
 }
 
-function AddNewMeal(value) {
-    console.log("AddnewMeal");
-    thisModal = $(".ui.basic.add-order.modal");
-    // var orderId = value;
-    //console.log(orderId);
-    myHub.server.getMealfromPub(value);
-    $(thisModal).modal({
-        closable: false,
-        onDeny: function () {
-            $(thisModal).parent().css("background-color", "");
+/*
+*Add meals to Orders
+*/
+//ToDO Not work now
+var AddNewMealsToPupOrders = function (data) {
+    $.ajax({
+        async: true,
+        type: "POST",
+        url: "/Order/NewMealsInPubOrders/",
+        data: data,
+        success: function (result) {
+            if (result !== null) {
+                console.log("Poprawnie ");
+            } else {
+                console.log("Nie popeawnie ");
+            }
         },
-        onApprove: function () {
-            $(thisModal).parent().css("background-color", "");
-        }
-    }).modal("show");
-
-    $(thisModal).parent().css("background-color", "#fff");
+        error: function () { console.log("Could not save ."); }
+    });
 };
 
 /*

@@ -2,28 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ITMeat.BusinessLogic.Action.Pub.Interfaces;
+using ITMeat.BusinessLogic.Action.Meal.Interfaces;
 using ITMeat.BusinessLogic.Models;
 using ITMeat.DataAccess.Repositories.Interfaces;
 
-namespace ITMeat.BusinessLogic.Action.Pub.Implementations
+namespace ITMeat.BusinessLogic.Action.Meal.Implementations
 {
-    public class GetPubMeals : IGetPubMeals
+    internal class GetPubMealByPubOrderId : IGetPubMealByPubOrderId
     {
         private readonly IMealRepository _mealRepository;
 
-        public GetPubMeals(IMealRepository mealRepository)
+        public GetPubMealByPubOrderId(IMealRepository mealRepository)
         {
             _mealRepository = mealRepository;
         }
 
-        public List<MealModel> Invoke(Guid pubId)
+        public List<MealModel> Invoke(Guid pubOrderId)
         {
-            if (pubId == Guid.Empty)
+            if (pubOrderId == Guid.Empty)
             {
                 return null;
             }
-            var dbMeals = _mealRepository.GetPubMeals(pubId).ToList();
+            var dbMeals = _mealRepository.GetPubMealByPubOrderId(pubOrderId).ToList();
 
             if (dbMeals == null)
             {
@@ -35,7 +35,12 @@ namespace ITMeat.BusinessLogic.Action.Pub.Implementations
                 Id = item.Id,
                 Expense = item.Expense,
                 Name = item.Name,
-                Type = item.Type
+                Pub = new PubModel
+                {
+                    Id = item.Pub.Id,
+                    Adress = item.Pub.Adress,
+                    Name = item.Pub.Name
+                }
             }).ToList();
 
             return mealsList;

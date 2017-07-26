@@ -4,7 +4,7 @@ namespace ITMeat.WEB.Models.PubOrder
 {
     public class ActiveOrderViewModel
     {
-        public Guid Id { get; set; }
+        public Guid OrderId { get; set; }
 
         public string PubName { get; set; }
 
@@ -17,5 +17,7 @@ namespace ITMeat.WEB.Models.PubOrder
         public Guid OwnerId { get; set; }
 
         public string OwnerName { get; set; }
+
+        public Guid PubOrderId { get; set; }
     }
 }

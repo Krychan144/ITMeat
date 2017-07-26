@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ITMeat.BusinessLogic.Action.Meal.Interfaces;
 using ITMeat.BusinessLogic.Action.Pub.Interfaces;
 using ITMeat.WEB.Models.Order;
 
@@ -16,14 +17,16 @@ namespace ITMeat.WEB.Hubs
     {
         private readonly IGetActivePubOrders _getActiveOrders;
         private readonly IGetPubMeals _getPubMeals;
+        private readonly IGetPubMealByPubOrderId _getPubMealByPubOrderId;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
         public AppHub(IGetActivePubOrders getActiveOrders,
-            IGetPubMeals getPubMeals)
+            IGetPubMeals getPubMeals, IGetPubMealByPubOrderId pubMealByPubOrderId)
         {
             _getActiveOrders = getActiveOrders;
             _getPubMeals = getPubMeals;
+            _getPubMealByPubOrderId = pubMealByPubOrderId;
         }
 
         public override Task OnConnected()
@@ -41,7 +44,7 @@ namespace ITMeat.WEB.Hubs
             return base.OnDisconnected(stopCalled);
         }
 
-        public void GetActiveOrders()
+        public void GetActivePubOrders()
         {
             var activeOrderList = _getActiveOrders.Invoke();
 
@@ -50,27 +53,44 @@ namespace ITMeat.WEB.Hubs
                 OwnerId = item.Order.Owner.Id,
                 OwnerName = item.Order.Owner.Name,
                 CreatedOn = item.Order.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation),
-                Id = item.Order.Id,
+                OrderId = item.Order.Id,
                 EndDateTime = item.Order.EndDateTime.ToLocalTime().ToString(TimeStampRepresentation),
                 PubId = item.Pub.Id,
-                PubName = item.Pub.Name
+                PubName = item.Pub.Name,
+                PubOrderId = item.Id
             });
 
-            Clients.Caller.LoadActiveOrders(list);
+            Clients.Caller.LoadActivePubOrders(list);
         }
 
-        public void GetMealfromPub(Guid orderId)
+        public void GetMealfromPub(Guid pubOrderId)
         {
-            var mealList = _getPubMeals.Invoke(orderId);
+            var mealList = _getPubMealByPubOrderId.Invoke(pubOrderId);
 
-            var viewList = mealList.Select(item => new AddMealToOrder
+            var viewList = mealList.Select(item => new LoadPubOrderMealViewModel
             {
                 PubId = item.Pub.Id,
                 MealName = item.Name,
-                Expense = item.Expense
+                Expense = item.Expense,
+                MealId = item.Id,
             });
 
             Clients.Caller.PubMealLoadedAction(viewList);
+        }
+
+        public void GetAddedMealsToJoinedPubOrder(Guid pubOrderId)
+        {
+            var OrderMealsList = _getPubMealByPubOrderId.Invoke(pubOrderId);
+
+            var list = OrderMealsList.Select(item => new LoadPubOrderMealViewModel
+            {
+                PubId = item.Pub.Id,
+                MealName = item.Name,
+                Expense = 1,
+                MealId = item.Id,
+            });
+
+            Clients.Caller.GetAddedMealsToJoinedPubOrder(list);
         }
     }
 }

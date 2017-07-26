@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using ITMeat.BusinessLogic.Action.PubOrder.Interfaces;
+using ITMeat.WEB.Models.Meal.FormModels;
 using ITMeat.WEB.Models.PubOrder;
 
 namespace ITMeat.WEB.Controllers
@@ -71,10 +72,10 @@ namespace ITMeat.WEB.Controllers
             return View();
         }
 
-        [HttpGet("SubmitOrder/{id}")]
-        public IActionResult SubmitOrder(Guid id)
+        [HttpGet("SubmitOrder/{PubOrderId}")]
+        public IActionResult SubmitOrder(Guid PubOrderId)
         {
-            ViewBag.OrderId = id;
+            ViewBag.PubOrderId = PubOrderId;
             return View();
         }
 
@@ -82,6 +83,12 @@ namespace ITMeat.WEB.Controllers
         public IActionResult OrdersHistory()
         {
             return View();
+        }
+
+        [HttpPost("NewMealsInPubOrders")]
+        public IActionResult NewMealsInPubOrders(AddNewMealToOrderViewModel model)
+        {
+            return RedirectToAction("ActiveOrders", "Order");
         }
     }
 }

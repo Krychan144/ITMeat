@@ -22,9 +22,9 @@ namespace ITMeat.BusinessLogic.Action.PubOrder.Implementations
             {
                 return null;
             }
-            var orderList = AutoMapper.Mapper.Map<List<PubOrderModel>>(dbPubOrders);
+            var pubOrderorderList = AutoMapper.Mapper.Map<List<PubOrderModel>>(dbPubOrders);
 
-            return orderList;
+            return pubOrderorderList;
         }
     }
 }

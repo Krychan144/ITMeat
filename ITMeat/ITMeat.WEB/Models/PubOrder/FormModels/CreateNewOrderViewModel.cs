@@ -1,7 +1,6 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace ITMeat.WEB.Models.PubOrder
+namespace ITMeat.WEB.Models.PubOrder.FormModels
 {
     public class CreateNewOrderViewModel
     {
