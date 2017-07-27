@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using ITMeat.BusinessLogic.Action.PubOrder.Interfaces;
+using ITMeat.BusinessLogic.Action.UserOrder.Interfaces;
 using ITMeat.WEB.Models.Meal.FormModels;
 using ITMeat.WEB.Models.PubOrder;
 
@@ -17,14 +18,16 @@ namespace ITMeat.WEB.Controllers
         private readonly IGetAllPubs _getAllPubs;
         private readonly ICreateNewPubOrder _createNewPubOrder;
         private readonly IGetActivePubOrders _getActiveOrders;
+        private readonly ICreateUserOrder _createUserOrder;
 
         public OrderController(IGetAllPubs getAllPubs,
             IGetActivePubOrders getActiveOrders,
-            ICreateNewPubOrder createNewPubOrder)
+            ICreateNewPubOrder createNewPubOrder, ICreateUserOrder createUserOrder)
         {
             _getAllPubs = getAllPubs;
             _getActiveOrders = getActiveOrders;
             _createNewPubOrder = createNewPubOrder;
+            _createUserOrder = createUserOrder;
         }
 
         public IActionResult Index()
@@ -79,14 +82,29 @@ namespace ITMeat.WEB.Controllers
             return View();
         }
 
+        [HttpGet("JoinToPubOrders/{PubOrderId}")]
+        public IActionResult JoinToPubOrders(Guid PubOrderId)
+        {
+            ViewBag.PubOrderId = PubOrderId;
+
+            var AddUserOrderAction = _createUserOrder.Invoke(ControllerContext.HttpContext.Actor(), PubOrderId);
+            if (AddUserOrderAction == Guid.Empty)
+            {
+                Alert.Success("Complete you order.");
+                return RedirectToAction("SubmitOrder", "Order");
+            }
+            Alert.Success("Great, Now you can add yours Meals.");
+            return RedirectToAction("SubmitOrder", "Order");
+        }
+
         [HttpGet("OrdersHistory")]
         public IActionResult OrdersHistory()
         {
             return View();
         }
 
-        [HttpPost("NewMealsInPubOrders")]
-        public IActionResult NewMealsInPubOrders(AddNewMealToOrderViewModel model)
+        [HttpPost("SubmitOrder/{PubOrderId}")]
+        public IActionResult SubmitOrder(Guid PubOrderId, AddNewMealToOrderViewModel model)
         {
             return RedirectToAction("ActiveOrders", "Order");
         }

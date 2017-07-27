@@ -80,24 +80,6 @@ function serializeForm(form) {
     return obj;
 }
 
-//Create orders room
-var createNewOrder = function (data) {
-    $.ajax({
-        async: true,
-        type: "POST",
-        url: "/Order/NewOrder/",
-        data: data,
-        success: function (result) {
-            if (result !== null) {
-                console.log("Poprawnie ");
-            } else {
-                console.log("Nie popeawnie ");
-            }
-        },
-        error: function () { console.log("Could not save ."); }
-    });
-};
-
 /*
  * Order History
  */
@@ -118,32 +100,53 @@ myHub.client.loadActivePubOrders = function (result) {
                 "<td>" + value.EndDateTime + "</td>" +
                 "<td>";
             if (value.OwnerId === userId) {
-                divToAppend += "<a class='ui button'>Remove</a>" +
-                    '<a id ="JoinToOrderButton" onclick="loadPubOrders(' + value.PubOrderId + ');"class="ui positive button" href="/Order/SubmitOrder/ ' + value.PubOrderId + '">Join</a>';
-                console.log(value.PubOrderId);
+                if (value.IsJoined === false) {
+                    divToAppend += "<a class='ui button'>Remove</a>" +
+                        '<a id ="JoinToOrderButton" onclick="loadPubOrders(' +
+                        value.PubOrderId +
+                        ');"class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                        value.PubOrderId +
+                        '">Join</a>';
+                    console.log(value.PubOrderId);
+                } else {
+                    divToAppend += "<a class='ui button'>Remove</a>" +
+                        '<a id ="JoinToOrderButton" onclick="loadPubOrders(' +
+                        value.PubOrderId +
+                        ');"class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                        value.PubOrderId +
+                        '">Continue</a>';
+                    console.log(value.PubOrderId);
+                }
             } else {
-                divToAppend += '<a id ="JoinToOrderButton" onclick="loadPubOrders(' +
-                    value.PubOrderId +
-                    ');"class="ui positive button" href="/Order/SubmitOrder/ ' +
-                    value.PubOrderId +
-                    '">Join</a>';
+                if (value.IsJoined === false) {
+                    divToAppend += '<a id ="JoinToOrderButton" onclick="loadPubOrders(' +
+                        value.PubOrderId +
+                        ');"class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                        value.PubOrderId +
+                        '">Join</a>';
+                } else {
+                    divToAppend += '<a id ="JoinToOrderButton" onclick="loadPubOrders(' +
+                        value.PubOrderId +
+                        ');"class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                        value.PubOrderId +
+                        '">Continue</a>';
+                }
             }
 
             divToAppend += "</td>" +
                 "</tr>";
             ActiveOrdersTable.append(divToAppend);
         });
-   
 };
 
 /*
  * Get Added Meals To Joined PubOrder
  */
-myHub.client.getAddedMealsToJoinedPubOrder = function(result) {
+myHub.client.getAddedMealsToJoinedPubOrder = function (result) {
     console.log("Load User Meals in Orders");
     var MealsInOrderTable = $("#MealsInOrderTable");
     $.each(result,
-        function(index, value) {
+        function (index, value) {
             var divToAppend = "<tr>" +
                 "<td>" +
                 value.MealName +
@@ -152,7 +155,7 @@ myHub.client.getAddedMealsToJoinedPubOrder = function(result) {
                 value.MealName +
                 "</td>" +
                 "<td>" +
-               1 +
+                1 +
                 "</td>" +
                 "<td>" +
                 value.Expense +
@@ -170,8 +173,7 @@ myHub.client.getAddedMealsToJoinedPubOrder = function(result) {
 };
 
 $("#MealsInOrderViews").ready(function () {
-    $.when($.connection.hub.start() ).then(function ()
-    {
+    $.when($.connection.hub.start()).then(function () {
         InJoinRoomId = $("#MealsInOrderTable").data("puborderid");
         console.log("dupa z tym" + InJoinRoomId);
         myHub.server.getAddedMealsToJoinedPubOrder(InJoinRoomId);
@@ -183,7 +185,7 @@ $("#MealsInOrderViews").ready(function () {
 myHub.client.pubMealLoadedAction = function (result) {
     console.log("Load PubMeal");
     $.each(result,
-        function(index, item) {
+        function (index, item) {
             $("#newMealinOrderSelect").append($("<option>",
                 { text: item.MealName, value: item.MealId, selected: false },
                 "</option>"));
@@ -205,28 +207,3 @@ function AddNewMeal(orderPubId) {
         myHub.server.getMealfromPub(orderPubId);
     });
 }
-
-/*
-*Add meals to Orders
-*/
-//ToDO Not work now
-var AddNewMealsToPupOrders = function (data) {
-    $.ajax({
-        async: true,
-        type: "POST",
-        url: "/Order/NewMealsInPubOrders/",
-        data: data,
-        success: function (result) {
-            if (result !== null) {
-                console.log("Poprawnie ");
-            } else {
-                console.log("Nie popeawnie ");
-            }
-        },
-        error: function () { console.log("Could not save ."); }
-    });
-};
-
-/*
-*Submitt view
-*/

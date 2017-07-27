@@ -30,7 +30,7 @@
     <label>Choose your food, then the number, by default one. It will appear in the team order. </label>
     <br />
     <hr />
-    @using (Html.BeginForm(FormMethod.Post, false, new {id = "addMealToOrderForm", @class = "ui form center aligned"}))
+    @using (Html.BeginForm(FormMethod.Post, false, new { id = "addMealToOrderForm", @class = "ui form center aligned" }))
     {
         <div class="content">
             <div class="field">
@@ -38,7 +38,7 @@
                     new SelectList(
                         new List<Object>
                         {
-                        }, "value", "text", 1), new {id = "newMealinOrderSelect"})
+                        }, "value", "text", 1), new { id = "newMealinOrderSelect" })
             </div>
             <div class="field">
                 @Html.DropDownListFor(x => x.Quantity,
@@ -53,12 +53,14 @@
                         }, "value", "text", 1))
             </div>
         </div>
-        <br/>
-        <hr/>
-        <div class="ui buttons">
-            <button class="ui button">Cancel</button>
-            <div class="or"></div>
-            <button class="ui positive button" type="submit">Add</button>
-        </div>
+        <br />
+        <hr />
     }
+    <div class="actions" style="text-align: right">
+        <div class="ui buttons">
+            <button class="ui cancel button"><i class="remove icon"></i> Cancel</button>
+            <div class="or"></div>
+            <button class="ui positive button" form="addMealToOrderForm" type="submit"><i class="add icon"></i> Add</button>
+        </div>
+    </div>
 </div>

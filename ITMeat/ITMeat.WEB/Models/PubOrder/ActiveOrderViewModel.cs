@@ -19,5 +19,7 @@ namespace ITMeat.WEB.Models.PubOrder
         public string OwnerName { get; set; }
 
         public Guid PubOrderId { get; set; }
+
+        public bool IsJoined { get; set; }
     }
 }

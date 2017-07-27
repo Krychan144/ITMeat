@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ITMeat.BusinessLogic.Action.Meal.Interfaces;
 using ITMeat.BusinessLogic.Action.Pub.Interfaces;
+using ITMeat.BusinessLogic.Action.UserOrder.Interfaces;
 using ITMeat.WEB.Models.Order;
 
 namespace ITMeat.WEB.Hubs
@@ -16,17 +17,18 @@ namespace ITMeat.WEB.Hubs
     public class AppHub : Hub
     {
         private readonly IGetActivePubOrders _getActiveOrders;
-        private readonly IGetPubMeals _getPubMeals;
         private readonly IGetPubMealByPubOrderId _getPubMealByPubOrderId;
+        private readonly IGetActiveUserOrders _getUserOrders;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
         public AppHub(IGetActivePubOrders getActiveOrders,
-            IGetPubMeals getPubMeals, IGetPubMealByPubOrderId pubMealByPubOrderId)
+            IGetPubMealByPubOrderId pubMealByPubOrderId,
+            IGetActiveUserOrders getUserOrders)
         {
             _getActiveOrders = getActiveOrders;
-            _getPubMeals = getPubMeals;
             _getPubMealByPubOrderId = pubMealByPubOrderId;
+            _getUserOrders = getUserOrders;
         }
 
         public override Task OnConnected()
@@ -47,6 +49,7 @@ namespace ITMeat.WEB.Hubs
         public void GetActivePubOrders()
         {
             var activeOrderList = _getActiveOrders.Invoke();
+            var userOrderList = _getUserOrders.Invoke(Context.Actor());
 
             var list = activeOrderList.Select(item => new ActiveOrderViewModel
             {
@@ -58,6 +61,14 @@ namespace ITMeat.WEB.Hubs
                 PubId = item.Pub.Id,
                 PubName = item.Pub.Name,
                 PubOrderId = item.Id
+            });
+
+            list.ToList().ForEach(c =>
+            {
+                if (userOrderList.Any(x => x.Id == c.OrderId))
+                {
+                    c.IsJoined = true;
+                }
             });
 
             Clients.Caller.LoadActivePubOrders(list);
@@ -80,6 +91,7 @@ namespace ITMeat.WEB.Hubs
 
         public void GetAddedMealsToJoinedPubOrder(Guid pubOrderId)
         {
+            //ToDo create reposytory GetOrdersbyPubOrderId
             var OrderMealsList = _getPubMealByPubOrderId.Invoke(pubOrderId);
 
             var list = OrderMealsList.Select(item => new LoadPubOrderMealViewModel
