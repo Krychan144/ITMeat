@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ITMeat.BusinessLogic.Action.UserOrder.Interfaces;
-using ITMeat.BusinessLogic.Models;
-using ITMeat.DataAccess.Models;
+﻿using ITMeat.BusinessLogic.Action.UserOrder.Interfaces;
 using ITMeat.DataAccess.Repositories.Interfaces;
+using System;
+using System.Linq;
 
 namespace ITMeat.BusinessLogic.Action.UserOrder.Implementations
 {
@@ -29,33 +25,34 @@ namespace ITMeat.BusinessLogic.Action.UserOrder.Implementations
 
         public Guid Invoke(Guid userId, Guid pubOrderId)
         {
-            if (pubOrderId == Guid.Empty || userId == Guid.Empty || _pubOrdersRepository.FindBy(c => c.Order.Owner.Id == userId).Count() > 0)
+            if (pubOrderId == Guid.Empty || userId == Guid.Empty || _userOrderRepository.GetUserOrders(pubOrderId, userId).Count() > 0)
             {
                 return Guid.Empty;
             }
 
-            var user = _userRepository.GetById(userId);
+            var dbuser = _userRepository.GetById(userId);
 
-            if (user == null)
+            if (dbuser == null)
             {
                 return Guid.Empty;
             }
 
-            var User = AutoMapper.Mapper.Map<DataAccess.Models.User>(user);
+            var user = AutoMapper.Mapper.Map<DataAccess.Models.User>(dbuser);
 
-            var order = _orderRepository.GetOrderByPubOrderId(pubOrderId);
+            var dborder = _orderRepository.GetOrderByPubOrderId(pubOrderId);
 
-            if ((order == null))
+            if (dborder == null)
             {
                 return Guid.Empty;
             }
 
-            var Order = AutoMapper.Mapper.Map<DataAccess.Models.Order>(order);
+            var order = AutoMapper.Mapper.Map<DataAccess.Models.Order>(dborder.FirstOrDefault());
 
-            var newUserOrder = new DataAccess.Models.UserOrder()
+            var newUserOrder = new DataAccess.Models.UserOrder
             {
-                Order = Order,
-                User = User,
+                Order = order,
+                User = user,
+                Expense = 0
             };
 
             _userOrderRepository.Add(newUserOrder);

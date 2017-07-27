@@ -30,5 +30,20 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                         };
             return !(query.Count() > 0) ? Enumerable.Empty<Order>().AsQueryable() : query;
         }
+
+        public IQueryable<UserOrder> GetUserOrders(Guid pubOrderId, Guid userid)
+        {
+            var query = from user in context.Set<User>()
+                        join userorder in context.Set<UserOrder>() on user.Id equals userorder.User.Id
+                        join order in context.Set<Order>() on userorder.Order.Id equals order.Id
+                        join pubOrder in context.Set<PubOrder>() on order.Id equals pubOrder.Order.Id
+                        where pubOrder.Id == pubOrderId
+                        where user.Id == userid
+                        select new UserOrder
+                        {
+                            Id = userorder.Id,
+                        };
+            return !(query.Count() > 0) ? Enumerable.Empty<UserOrder>().AsQueryable() : query;
+        }
     }
 }

@@ -9,9 +9,9 @@ namespace ITMeat.BusinessLogic.Action.PubOrder.Implementations
     {
         private readonly IPubOrderRepository _pubOrderRepository;
 
-        public GetActivePubOrders(IPubOrderRepository PuborderRepository)
+        public GetActivePubOrders(IPubOrderRepository puborderRepository)
         {
-            _pubOrderRepository = PuborderRepository;
+            _pubOrderRepository = puborderRepository;
         }
 
         public List<PubOrderModel> Invoke()

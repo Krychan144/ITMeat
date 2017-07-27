@@ -88,6 +88,7 @@ namespace ITMeat.WEB.Controllers
             ViewBag.PubOrderId = PubOrderId;
 
             var AddUserOrderAction = _createUserOrder.Invoke(ControllerContext.HttpContext.Actor(), PubOrderId);
+
             if (AddUserOrderAction == Guid.Empty)
             {
                 Alert.Success("Complete you order.");
