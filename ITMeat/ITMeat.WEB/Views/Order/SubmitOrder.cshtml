@@ -16,10 +16,10 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody id="MealsInOrderTable" data-PubOrderId="@ViewBag.PubOrderId"></tbody>
+            <tbody id="MealsInOrderTable" data-OrderId="@ViewBag.OrderId"></tbody>
         </table>
         <div class="AddNewOrdersMeals">
-            <button id="AddMealCircleButton" onclick="AddNewMeal('@ViewBag.PubOrderId')"> <i class="huge green add circle icon"></i> </button>
+            <button id="AddMealCircleButton" onclick="AddNewMeal('@ViewBag.OrderId')"> <i class="huge green add circle icon"></i> </button>
         </div>
     </div>
 </div>

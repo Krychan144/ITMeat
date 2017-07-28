@@ -6,6 +6,6 @@ namespace ITMeat.DataAccess.Repositories.Interfaces
 {
     public interface IOrderRepository : IGenericRepository<Order>, IRepository
     {
-        IQueryable<Order> GetOrderByPubOrderId(Guid pubOrderId);
+        Order GetOrderByPubOrderId(Guid pubOrderId);
     }
 }

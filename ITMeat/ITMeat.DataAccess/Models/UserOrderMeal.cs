@@ -9,5 +9,8 @@ namespace ITMeat.DataAccess.Models
 
         [Required]
         public Meal Meal { get; set; }
+
+        [Required]
+        public int Quantity { get; set; }
     }
 }

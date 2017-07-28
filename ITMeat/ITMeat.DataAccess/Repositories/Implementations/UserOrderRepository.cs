@@ -17,33 +17,50 @@ namespace ITMeat.DataAccess.Repositories.Implementations
         public IQueryable<Order> GetActiveUserOrders(Guid userid)
         {
             var query = from userOrder in context.Set<UserOrder>()
-                            // where order.EndDateTime > DateTime.UtcNow
+                        join order in context.Set<Order>() on userOrder.Order.Id equals order.Id
+                        where order.EndDateTime > DateTime.UtcNow
                         where userOrder.User.Id == userid
                         select new Order
                         {
-                            Id = userOrder.Order.Id,
-                            Expense = userOrder.Order.Expense,
-                            Owner = userOrder.Order.Owner,
-                            SubmitDateTime = userOrder.Order.SubmitDateTime,
-                            EndDateTime = userOrder.Order.EndDateTime,
-                            CreatedOn = userOrder.Order.CreatedOn
+                            Id = order.Id,
+                            Expense = order.Expense,
+                            Owner = order.Owner,
+                            SubmitDateTime = order.SubmitDateTime,
+                            EndDateTime = order.EndDateTime,
+                            CreatedOn = order.CreatedOn
                         };
             return !(query.Count() > 0) ? Enumerable.Empty<Order>().AsQueryable() : query;
         }
 
-        public IQueryable<UserOrder> GetUserOrders(Guid pubOrderId, Guid userid)
+        public IQueryable<UserOrder> GetUserOrders(Guid orderId, Guid userid)
         {
             var query = from user in context.Set<User>()
                         join userorder in context.Set<UserOrder>() on user.Id equals userorder.User.Id
                         join order in context.Set<Order>() on userorder.Order.Id equals order.Id
-                        join pubOrder in context.Set<PubOrder>() on order.Id equals pubOrder.Order.Id
-                        where pubOrder.Id == pubOrderId
+                        where order.Id == orderId
                         where user.Id == userid
                         select new UserOrder
                         {
                             Id = userorder.Id,
                         };
             return !(query.Count() > 0) ? Enumerable.Empty<UserOrder>().AsQueryable() : query;
+        }
+
+        public UserOrder GetUserOrderByUserAndOrderId(Guid userId, Guid orderId)
+        {
+            var query = (from order in context.Set<Order>()
+                         join userOrder in context.Set<UserOrder>() on order.Id equals userOrder.Order.Id
+                         join user in context.Set<User>() on userOrder.User.Id equals user.Id
+                         where user.Id == userId
+                         where order.Id == orderId
+                         select new UserOrder
+                         {
+                             Id = userOrder.Id,
+                             User = userOrder.User,
+                             Expense = userOrder.Expense,
+                             Order = userOrder.Order
+                         }).SingleOrDefault();
+            return query;
         }
     }
 }

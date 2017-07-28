@@ -202,6 +202,7 @@ namespace ITMeat.DataAccess.Migrations
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     MealId = table.Column<Guid>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
                     UserOrderId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>

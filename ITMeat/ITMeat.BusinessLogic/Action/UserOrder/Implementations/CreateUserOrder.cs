@@ -2,6 +2,8 @@
 using ITMeat.DataAccess.Repositories.Interfaces;
 using System;
 using System.Linq;
+using ITMeat.BusinessLogic.Models;
+using ITMeat.DataAccess.Models;
 
 namespace ITMeat.BusinessLogic.Action.UserOrder.Implementations
 {
@@ -23,35 +25,35 @@ namespace ITMeat.BusinessLogic.Action.UserOrder.Implementations
             _pubOrdersRepository = pubOrdersRepository1;
         }
 
-        public Guid Invoke(Guid userId, Guid pubOrderId)
+        public Guid Invoke(Guid userId, Guid orderId)
         {
-            if (pubOrderId == Guid.Empty || userId == Guid.Empty || _userOrderRepository.GetUserOrders(pubOrderId, userId).Count() > 0)
+            if (orderId == Guid.Empty || userId == Guid.Empty)
+            {
+                return Guid.Empty;
+            }
+
+            var dbUserOrder = _userOrderRepository.GetUserOrders(orderId, userId);
+            if (dbUserOrder.Any())
             {
                 return Guid.Empty;
             }
 
             var dbuser = _userRepository.GetById(userId);
-
             if (dbuser == null)
             {
                 return Guid.Empty;
             }
 
-            var user = AutoMapper.Mapper.Map<DataAccess.Models.User>(dbuser);
-
-            var dborder = _orderRepository.GetOrderByPubOrderId(pubOrderId);
-
+            var dborder = _orderRepository.GetById(orderId);
             if (dborder == null)
             {
                 return Guid.Empty;
             }
 
-            var order = AutoMapper.Mapper.Map<DataAccess.Models.Order>(dborder.FirstOrDefault());
-
             var newUserOrder = new DataAccess.Models.UserOrder
             {
-                Order = order,
-                User = user,
+                Order = dborder,
+                User = dbuser,
                 Expense = 0
             };
 

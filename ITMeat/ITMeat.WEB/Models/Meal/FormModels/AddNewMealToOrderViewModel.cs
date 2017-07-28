@@ -8,7 +8,7 @@ namespace ITMeat.WEB.Models.Meal.FormModels
 
         public Guid User { get; set; }
 
-        public byte Quantity { get; set; }
+        public int Quantity { get; set; }
 
         public Guid MealId { get; set; }
     }

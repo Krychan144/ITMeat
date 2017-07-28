@@ -17,17 +17,17 @@ namespace ITMeat.WEB.Hubs
     public class AppHub : Hub
     {
         private readonly IGetActivePubOrders _getActiveOrders;
-        private readonly IGetPubMealByPubOrderId _getPubMealByPubOrderId;
+        private readonly IGetPubMealByOrderId _getPubMealByOrderId;
         private readonly IGetActiveUserOrders _getUserOrders;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
         public AppHub(IGetActivePubOrders getActiveOrders,
-            IGetPubMealByPubOrderId pubMealByPubOrderId,
+            IGetPubMealByOrderId pubMealByPubOrderId,
             IGetActiveUserOrders getUserOrders)
         {
             _getActiveOrders = getActiveOrders;
-            _getPubMealByPubOrderId = pubMealByPubOrderId;
+            _getPubMealByOrderId = pubMealByPubOrderId;
             _getUserOrders = getUserOrders;
         }
 
@@ -60,23 +60,16 @@ namespace ITMeat.WEB.Hubs
                 EndDateTime = item.Order.EndDateTime.ToLocalTime().ToString(TimeStampRepresentation),
                 PubId = item.Pub.Id,
                 PubName = item.Pub.Name,
-                PubOrderId = item.Id
-            });
-
-            list.ToList().ForEach(c =>
-            {
-                if (userOrderList.Any(x => x.Id == c.OrderId))
-                {
-                    c.IsJoined = true;
-                }
+                PubOrderId = item.Id,
+                IsJoined = userOrderList.Any(x => x.Id == item.Order.Id)
             });
 
             Clients.Caller.LoadActivePubOrders(list);
         }
 
-        public void GetMealfromPub(Guid pubOrderId)
+        public void GetMealfromPub(Guid orderId)
         {
-            var mealList = _getPubMealByPubOrderId.Invoke(pubOrderId);
+            var mealList = _getPubMealByOrderId.Invoke(orderId);
 
             var viewList = mealList.Select(item => new LoadPubOrderMealViewModel
             {
@@ -89,10 +82,10 @@ namespace ITMeat.WEB.Hubs
             Clients.Caller.PubMealLoadedAction(viewList);
         }
 
-        public void GetAddedMealsToJoinedPubOrder(Guid pubOrderId)
+        public void GetAddedMealsToJoinedPubOrder(Guid OrderId)
         {
             //ToDo create reposytory GetOrdersbyPubOrderId
-            var OrderMealsList = _getPubMealByPubOrderId.Invoke(pubOrderId);
+            var OrderMealsList = _getPubMealByOrderId.Invoke(OrderId);
 
             var list = OrderMealsList.Select(item => new LoadPubOrderMealViewModel
             {

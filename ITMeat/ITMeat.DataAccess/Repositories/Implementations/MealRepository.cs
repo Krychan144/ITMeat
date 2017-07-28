@@ -30,12 +30,13 @@ namespace ITMeat.DataAccess.Repositories.Implementations
             return !(query.Count() > 0) ? Enumerable.Empty<Meal>().AsQueryable() : query;
         }
 
-        public IQueryable<Meal> GetPubMealByPubOrderId(Guid pubOrderId)
+        public IQueryable<Meal> GetPubMealByOrderId(Guid OrderId)
         {
             var query = from meal in context.Set<Meal>()
                         join pub in context.Set<Pub>() on meal.Pub.Id equals pub.Id
                         join pubOrder in context.Set<PubOrder>() on pub.Id equals pubOrder.Pub.Id
-                        where pubOrder.Id == pubOrderId
+                        join order in context.Set<Order>() on pubOrder.Order.Id equals order.Id
+                        where order.Id == OrderId
                         select new Meal
                         {
                             Id = meal.Id,

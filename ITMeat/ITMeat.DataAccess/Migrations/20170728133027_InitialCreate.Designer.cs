@@ -8,7 +8,7 @@ using ITMeat.DataAccess.Context;
 namespace ITMeat.DataAccess.Migrations
 {
     [DbContext(typeof(ITMeatDbContext))]
-    [Migration("20170721125439_InitialCreate")]
+    [Migration("20170728133027_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -231,6 +231,8 @@ namespace ITMeat.DataAccess.Migrations
                     b.Property<Guid>("MealId");
 
                     b.Property<DateTime>("ModifiedOn");
+
+                    b.Property<int>("Quantity");
 
                     b.Property<Guid>("UserOrderId");
 

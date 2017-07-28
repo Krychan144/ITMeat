@@ -7,8 +7,8 @@ using ITMeat.BusinessLogic.Models;
 
 namespace ITMeat.BusinessLogic.Action.Meal.Interfaces
 {
-    public interface IGetPubMealByPubOrderId : IAction
+    public interface IGetPubMealByOrderId : IAction
     {
-        List<MealModel> Invoke(Guid PubOrderId);
+        List<MealModel> Invoke(Guid OrderId);
     }
 }

@@ -8,22 +8,22 @@ using ITMeat.DataAccess.Repositories.Interfaces;
 
 namespace ITMeat.BusinessLogic.Action.Meal.Implementations
 {
-    internal class GetPubMealByPubOrderId : IGetPubMealByPubOrderId
+    internal class GetPubMealByOrderId : IGetPubMealByOrderId
     {
         private readonly IMealRepository _mealRepository;
 
-        public GetPubMealByPubOrderId(IMealRepository mealRepository)
+        public GetPubMealByOrderId(IMealRepository mealRepository)
         {
             _mealRepository = mealRepository;
         }
 
-        public List<MealModel> Invoke(Guid pubOrderId)
+        public List<MealModel> Invoke(Guid OrderId)
         {
-            if (pubOrderId == Guid.Empty)
+            if (OrderId == Guid.Empty)
             {
                 return null;
             }
-            var dbMeals = _mealRepository.GetPubMealByPubOrderId(pubOrderId).ToList();
+            var dbMeals = _mealRepository.GetPubMealByOrderId(OrderId).ToList();
 
             if (dbMeals == null)
             {

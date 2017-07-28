@@ -2,7 +2,7 @@
 var userId = $("#SignedDiv").data("id");
 var userName = $("#SignedDiv").data("name");
 var now = new Date();
-var InJoinRoomId;
+var InJoinedOrderID;
 
 //View Settings
 $(".ui.sidebar.left").sidebar("setting", {
@@ -93,46 +93,52 @@ myHub.client.loadActivePubOrders = function (result) {
     var ActiveOrdersTable = $("#ActiveOrderTable");
     $.each(result,
         function (index, value) {
+            console.log(value.OrderId);
             var divToAppend = "<tr>" +
-                "<td>" + value.PubName + "</td>" +
-                "<td>" + value.OwnerName + "</td>" +
-                "<td>" + value.CreatedOn + "</td>" +
-                "<td>" + value.EndDateTime + "</td>" +
+                "<td>" +
+                value.PubName +
+                "</td>" +
+                "<td>" +
+                value.OwnerName +
+                "</td>" +
+                "<td>" +
+                value.CreatedOn +
+                "</td>" +
+                "<td>" +
+                value.EndDateTime +
+                "</td>" +
                 "<td>";
             if (value.OwnerId === userId) {
                 if (value.IsJoined === false) {
                     divToAppend += "<a class='ui button'>Remove</a>" +
                         '<a id ="JoinToOrderButton" onclick="loadPubOrders(' +
-                        value.PubOrderId +
+                        value.OrderId +
                         ');"class="ui positive button" href="/Order/JoinToPubOrders/ ' +
-                        value.PubOrderId +
+                        value.OrderId +
                         '">Join</a>';
-                    console.log(value.PubOrderId);
                 } else {
                     divToAppend += "<a class='ui button'>Remove</a>" +
                         '<a id ="JoinToOrderButton" onclick="loadPubOrders(' +
-                        value.PubOrderId +
+                        value.OrderId +
                         ');"class="ui positive button" href="/Order/JoinToPubOrders/ ' +
-                        value.PubOrderId +
+                        value.OrderId +
                         '">Continue</a>';
-                    console.log(value.PubOrderId);
                 }
             } else {
                 if (value.IsJoined === false) {
                     divToAppend += '<a id ="JoinToOrderButton" onclick="loadPubOrders(' +
-                        value.PubOrderId +
+                        value.OrderId +
                         ');"class="ui positive button" href="/Order/JoinToPubOrders/ ' +
-                        value.PubOrderId +
+                        value.OrderId +
                         '">Join</a>';
                 } else {
                     divToAppend += '<a id ="JoinToOrderButton" onclick="loadPubOrders(' +
-                        value.PubOrderId +
+                        value.OrderId +
                         ');"class="ui positive button" href="/Order/JoinToPubOrders/ ' +
-                        value.PubOrderId +
+                        value.OrderId +
                         '">Continue</a>';
                 }
             }
-
             divToAppend += "</td>" +
                 "</tr>";
             ActiveOrdersTable.append(divToAppend);
@@ -174,9 +180,9 @@ myHub.client.getAddedMealsToJoinedPubOrder = function (result) {
 
 $("#MealsInOrderViews").ready(function () {
     $.when($.connection.hub.start()).then(function () {
-        InJoinRoomId = $("#MealsInOrderTable").data("puborderid");
-        console.log("dupa z tym" + InJoinRoomId);
-        myHub.server.getAddedMealsToJoinedPubOrder(InJoinRoomId);
+        InJoinedOrderID = $("#MealsInOrderTable").data("OrderId");
+        console.log("dupa z tym" + InJoinedOrderID);
+        myHub.server.getAddedMealsToJoinedPubOrder(InJoinedOrderID);
     });
 });
 /*
@@ -192,7 +198,7 @@ myHub.client.pubMealLoadedAction = function (result) {
         });
 };
 
-function AddNewMeal(orderPubId) {
+function AddNewMeal(orderId) {
     console.log("Add new Meal");
     AddMealModal = $(".ui.basic.add-order.modal");
     /**
@@ -204,6 +210,6 @@ function AddNewMeal(orderPubId) {
      * Load PubMealsfromDataBase
      */
     $.when($.connection.hub.start()).then(function () {
-        myHub.server.getMealfromPub(orderPubId);
+        myHub.server.getMealfromPub(orderId);
     });
 }

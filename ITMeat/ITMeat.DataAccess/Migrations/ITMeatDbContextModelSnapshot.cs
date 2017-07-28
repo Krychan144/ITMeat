@@ -231,6 +231,8 @@ namespace ITMeat.DataAccess.Migrations
 
                     b.Property<DateTime>("ModifiedOn");
 
+                    b.Property<int>("Quantity");
+
                     b.Property<Guid>("UserOrderId");
 
                     b.HasKey("Id");

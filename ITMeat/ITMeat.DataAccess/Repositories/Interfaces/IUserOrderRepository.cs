@@ -9,5 +9,7 @@ namespace ITMeat.DataAccess.Repositories.Interfaces
         IQueryable<Order> GetActiveUserOrders(Guid userid);
 
         IQueryable<UserOrder> GetUserOrders(Guid pubOrderId, Guid userOrderId);
+
+        UserOrder GetUserOrderByUserAndOrderId(Guid userId, Guid orderId);
     }
 }

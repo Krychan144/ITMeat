@@ -1,4 +1,5 @@
-﻿using ITMeat.DataAccess.Models;
+﻿using System;
+using ITMeat.DataAccess.Models;
 
 namespace ITMeat.DataAccess.Repositories.Interfaces
 {
