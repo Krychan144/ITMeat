@@ -8,6 +8,6 @@ namespace ITMeat.BusinessLogic.Action.UserOrderMeals.Interfaces
 {
     public interface IAddNewMealsToUserOrders : IAction
     {
-        Guid Invoke(Guid mealId, int quantity, UserOrderModel userOrderId);
+        Guid Invoke(Guid orderId, Guid mealId, int quantity, UserOrderModel userOrderId);
     }
 }

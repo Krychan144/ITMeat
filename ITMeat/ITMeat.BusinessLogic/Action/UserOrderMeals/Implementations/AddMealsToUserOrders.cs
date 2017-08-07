@@ -13,17 +13,20 @@ namespace ITMeat.BusinessLogic.Action.UserOrderMeals.Implementations
         private readonly IMealRepository _mealRepository;
         private readonly IUserOrderMealRepository _userOrderMealRepository;
         private readonly IUserOrderRepository _userOrderRepository;
+        private readonly IOrderRepository _orderRepository;
 
         public AddMealsToUserOrders(IMealRepository mealRepository,
             IUserOrderMealRepository userOrderMealRepository,
-            IUserOrderRepository orderRepository)
+            IUserOrderRepository orderRepository,
+            IOrderRepository orderRepository1)
         {
             _mealRepository = mealRepository;
             _userOrderMealRepository = userOrderMealRepository;
             _userOrderRepository = orderRepository;
+            _orderRepository = orderRepository1;
         }
 
-        public Guid Invoke(Guid mealId, int quantity, UserOrderModel userOrderId)
+        public Guid Invoke(Guid ordrId, Guid mealId, int quantity, UserOrderModel userOrderId)
         {
             if (userOrderId == null || mealId == Guid.Empty || quantity == 0)
             {
@@ -48,6 +51,14 @@ namespace ITMeat.BusinessLogic.Action.UserOrderMeals.Implementations
                 Quantity = quantity
             };
 
+            var dbOrder = _orderRepository.GetById(ordrId);
+            if (dbOrder == null)
+            {
+                return Guid.Empty;
+            }
+
+            dbuserOrder.Expense = dbuserOrder.Expense + (quantity * dbMeal.Expense);
+            dbOrder.Expense = dbOrder.Expense + (quantity * dbMeal.Expense);
             _userOrderMealRepository.Add(userOrderMeal);
             _userOrderMealRepository.Save();
 

@@ -110,16 +110,16 @@ namespace ITMeat.WEB.Controllers
         }
 
         [HttpPost("SubmitOrder/{OrderId}")]
-        public IActionResult SubmitOrder(Guid OrderId, AddNewMealToOrderViewModel model)
+        public IActionResult SubmitOrder(Guid orderId, AddNewMealToOrderViewModel model)
         {
-            var userOrderModel = _getUserOrderByUserAndOrderId.Invoke(ControllerContext.HttpContext.Actor(), OrderId);
+            var userOrderModel = _getUserOrderByUserAndOrderId.Invoke(ControllerContext.HttpContext.Actor(), orderId);
             if (userOrderModel == null)
             {
                 Alert.Danger("Please Join again. ");
                 return RedirectToAction("SubmitOrder", "Order");
             }
 
-            var addMealAction = _addNewMealsToUserOrders.Invoke(model.MealId, model.Quantity, userOrderModel);
+            var addMealAction = _addNewMealsToUserOrders.Invoke(orderId, model.MealId, model.Quantity, userOrderModel);
 
             if (addMealAction == Guid.Empty)
             {

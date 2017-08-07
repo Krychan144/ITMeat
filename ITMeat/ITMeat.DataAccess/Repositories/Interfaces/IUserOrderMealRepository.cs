@@ -1,8 +1,11 @@
-﻿using ITMeat.DataAccess.Models;
+﻿using System;
+using System.Linq;
+using ITMeat.DataAccess.Models;
 
 namespace ITMeat.DataAccess.Repositories.Interfaces
 {
     public interface IUserOrderMealRepository : IGenericRepository<UserOrderMeal>, IRepository
     {
+        IQueryable<UserOrderMeal> GetOrderMeals(Guid orderId);
     }
 }

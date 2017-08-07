@@ -23,7 +23,7 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                         select new PubOrder
                         {
                             Id = puborder.Id,
-                            Order = new Order()
+                            Order = new Order
                             {
                                 Owner = user,
                                 CreatedOn = order.CreatedOn,

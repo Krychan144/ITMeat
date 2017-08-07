@@ -10,7 +10,10 @@ using System.Threading.Tasks;
 using ITMeat.BusinessLogic.Action.Meal.Interfaces;
 using ITMeat.BusinessLogic.Action.Pub.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrder.Interfaces;
+using ITMeat.BusinessLogic.Action.UserOrderMeals.Implementations;
+using ITMeat.BusinessLogic.Action.UserOrderMeals.Interfaces;
 using ITMeat.WEB.Models.Order;
+using ITMeat.WEB.Models.UserOrderMeals;
 
 namespace ITMeat.WEB.Hubs
 {
@@ -19,16 +22,19 @@ namespace ITMeat.WEB.Hubs
         private readonly IGetActivePubOrders _getActiveOrders;
         private readonly IGetPubMealByOrderId _getPubMealByOrderId;
         private readonly IGetActiveUserOrders _getUserOrders;
+        private readonly IGetUserOrderMeals _getUserOrderMeals;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
         public AppHub(IGetActivePubOrders getActiveOrders,
             IGetPubMealByOrderId pubMealByPubOrderId,
-            IGetActiveUserOrders getUserOrders)
+            IGetActiveUserOrders getUserOrders,
+            IGetUserOrderMeals getUserOrderMeals)
         {
             _getActiveOrders = getActiveOrders;
             _getPubMealByOrderId = pubMealByPubOrderId;
             _getUserOrders = getUserOrders;
+            _getUserOrderMeals = getUserOrderMeals;
         }
 
         public override Task OnConnected()
@@ -82,20 +88,20 @@ namespace ITMeat.WEB.Hubs
             Clients.Caller.PubMealLoadedAction(viewList);
         }
 
-        public void GetAddedMealsToJoinedPubOrder(Guid OrderId)
+        public void GetUserOrders(Guid orderId)
         {
-            //ToDo create reposytory GetOrdersbyPubOrderId
-            var OrderMealsList = _getPubMealByOrderId.Invoke(OrderId);
-
-            var list = OrderMealsList.Select(item => new LoadPubOrderMealViewModel
+            var userOrderMeal = _getUserOrderMeals.Invoke(orderId);
+            var viewList = userOrderMeal.Select(item => new GetUserOrderMealViewModel
             {
-                PubId = item.Pub.Id,
-                MealName = item.Name,
-                Expense = 1,
-                MealId = item.Id,
+                UserName = item.UserOrder.User.Name,
+                UserId = item.UserOrder.User.Id,
+                Quantity = item.Quantity,
+                Expense = item.Quantity * item.PubMeal.Expense,
+                MealName = item.PubMeal.Name,
+                Id = item.Id
             });
 
-            Clients.Caller.GetAddedMealsToJoinedPubOrder(list);
+            Clients.Caller.GetUserOrderMeals(viewList);
         }
     }
 }
