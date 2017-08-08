@@ -29,6 +29,7 @@ namespace ITMeat.WEB.Hubs
         private readonly IDeleteUserOrderMeal _deleteUserOrderMeal;
         private readonly IGetUserOrderByUserAndOrderId _getUserOrderByUserAndOrderId;
         private readonly IGetUserOrderMealById _getUserOrderMealById;
+        private readonly IGetMealByUserOrderMealId _getMealByUserOrderMealId;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
@@ -39,7 +40,8 @@ namespace ITMeat.WEB.Hubs
             IDeleteUserOrderMeal deleteUserOrderMeal,
             IGetUserOrderByUserAndOrderId getUserOrderByUserAndOrderId,
             IAddNewMealsToUserOrders addNewMealsToUserOrders,
-            IGetUserOrderMealById getUserOrderMealById)
+            IGetUserOrderMealById getUserOrderMealById,
+            IGetMealByUserOrderMealId getMealByUserOrderMealId)
         {
             _getActiveOrders = getActiveOrders;
             _getPubMealByOrderId = pubMealByPubOrderId;
@@ -49,6 +51,7 @@ namespace ITMeat.WEB.Hubs
             _getUserOrderByUserAndOrderId = getUserOrderByUserAndOrderId;
             _addNewMealsToUserOrders = addNewMealsToUserOrders;
             _getUserOrderMealById = getUserOrderMealById;
+            _getMealByUserOrderMealId = getMealByUserOrderMealId;
         }
 
         public override Task OnConnected()
@@ -161,17 +164,20 @@ namespace ITMeat.WEB.Hubs
                 {
                     return;
                 }
+
+                var meal = _getMealByUserOrderMealId.Invoke(addMealAction);
+
                 var addedMealView = new GetUserOrderMealViewModel
                 {
                     Id = addedMeal.Id,
                     Quantity = addedMeal.Quantity,
-                    MealName = addedMeal.PubMeal.Name,
-                    Expense = addedMeal.Quantity * addedMeal.PubMeal.Expense,
+                    MealName = meal.Name,
+                    Expense = addedMeal.Quantity * meal.Expense,
                     UserId = addedMeal.UserOrder.User.Id,
                     UserName = addedMeal.UserOrder.User.Name,
                 };
 
-                Clients.All.AddNewMealToUserOrder(addedMealView);
+                Clients.All.AddNewMealToUserOrder(addedMealView, orderId);
             }
         }
     }

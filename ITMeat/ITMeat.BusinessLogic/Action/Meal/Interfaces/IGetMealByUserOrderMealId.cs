@@ -6,7 +6,7 @@ using ITMeat.BusinessLogic.Models;
 
 namespace ITMeat.BusinessLogic.Action.Meal.Interfaces
 {
-    public interface IGetMealByUserOrderMealIdcs : IAction
+    public interface IGetMealByUserOrderMealId : IAction
     {
         MealModel Invoke(Guid userOrderMealId);
     }

@@ -34,7 +34,7 @@ function onLoadView() {
 /*
  * Create connection SignalR,
  */
-$.connection.hub.url = "http://localhost:49537/signalr";
+$.connection.hub.url = "http://localhost:49538/signalr";
 var myHub = $.connection.appHub;
 
 /*
@@ -121,6 +121,9 @@ $.when($.connection.hub.start()).then(function () {
  */
 myHub.client.pubMealLoadedAction = function (result) {
     console.log("Load PubMeal");
+    $("#newMealinOrderSelect").find("option")
+        .remove()
+        .end();
     $.each(result,
         function (index, item) {
             $("#newMealinOrderSelect").append($("<option>",
@@ -128,6 +131,7 @@ myHub.client.pubMealLoadedAction = function (result) {
                 "</option>"));
         });
 };
+
 
 /*
  * Add new Meal to Order
@@ -149,43 +153,45 @@ function AddNewMeal(orderId) {
 }
 $("#addMealToOrderForm").submit(function (e) {
     e.preventDefault();
-    data = serializeForm($(this));
+    var data = serializeForm($(this));
     myHub.server.addNewMealToOrder(data, InJoinedOrderID);
     $(".ui.basic.add-order.modal").modal("hide");
 });
-myHub.client.addNewMealToUserOrder = function (result) {
-    Console.log("Somebody add order");
 
+myHub.client.addNewMealToUserOrder = function (result, id) {
+    console.log("Somebody add order");
     var mealsInOrderTable = $("#MealsInOrderTable");
-
-    var divToAppend = "<tr id ='orderMealid' data-usermealid='" +
-        result.Id +
-        "'>" +
-        "<td>" +
-        result.UserName +
-        "</td>" +
-        "<td>" +
-        result.MealName +
-        "</td>" +
-        "<td>" +
-        result.Quantity +
-        "</td>" +
-        "<td>" +
-        result.Expense +
-        "</td>" +
-        "<td>";
-    if (result.UserId === userId) {
-        divToAppend += '<a class="ui button" onClick="deleteMealFromOrder(\'' + value.Id + '\')">Remove</a>';
+    if (id === $("#MealsInOrderTable").data("orderid")) {
+        var divToAppend = "<tr id ='orderMealid' data-usermealid='" +
+            result.Id +
+            "'>" +
+            "<td>" +
+            result.UserName +
+            "</td>" +
+            "<td>" +
+            result.MealName +
+            "</td>" +
+            "<td>" +
+            result.Quantity +
+            "</td>" +
+            "<td>" +
+            result.Expense +
+            "</td>" +
+            "<td>";
+        if (result.UserId === userId) {
+            divToAppend += '<a class="ui button" onClick="deleteMealFromOrder(\'' + result.Id + '\')">Remove</a>';
+        }
+        divToAppend += "</td>" +
+            "</tr>";
+        mealsInOrderTable.append(divToAppend);
     }
-    divToAppend += "</td>" +
-        "</tr>";
-    mealsInOrderTable.append(divToAppend);
 };
 /*
 * Get OrdersMeals,
 */
 myHub.client.getUserOrderMeals = function (result) {
     console.log("Load User Meals in Orders");
+
     var mealsInOrderTable = $("#MealsInOrderTable");
     $.each(result,
         function (index, value) {
