@@ -9,5 +9,7 @@ namespace ITMeat.DataAccess.Repositories.Interfaces
         IQueryable<Meal> GetPubMeals(Guid pubId);
 
         IQueryable<Meal> GetPubMealByOrderId(Guid OrderId);
+
+        Meal GetMealByUserOrderMealId(Guid userOrderMealId);
     }
 }

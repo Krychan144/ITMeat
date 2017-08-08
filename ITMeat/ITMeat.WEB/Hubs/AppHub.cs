@@ -12,8 +12,10 @@ using ITMeat.BusinessLogic.Action.Pub.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrder.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrderMeals.Implementations;
 using ITMeat.BusinessLogic.Action.UserOrderMeals.Interfaces;
+using ITMeat.WEB.Models.Meal.FormModels;
 using ITMeat.WEB.Models.Order;
 using ITMeat.WEB.Models.UserOrderMeals;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITMeat.WEB.Hubs
 {
@@ -23,18 +25,30 @@ namespace ITMeat.WEB.Hubs
         private readonly IGetPubMealByOrderId _getPubMealByOrderId;
         private readonly IGetActiveUserOrders _getUserOrders;
         private readonly IGetUserOrderMeals _getUserOrderMeals;
+        private readonly IAddNewMealsToUserOrders _addNewMealsToUserOrders;
+        private readonly IDeleteUserOrderMeal _deleteUserOrderMeal;
+        private readonly IGetUserOrderByUserAndOrderId _getUserOrderByUserAndOrderId;
+        private readonly IGetUserOrderMealById _getUserOrderMealById;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
         public AppHub(IGetActivePubOrders getActiveOrders,
             IGetPubMealByOrderId pubMealByPubOrderId,
             IGetActiveUserOrders getUserOrders,
-            IGetUserOrderMeals getUserOrderMeals)
+            IGetUserOrderMeals getUserOrderMeals,
+            IDeleteUserOrderMeal deleteUserOrderMeal,
+            IGetUserOrderByUserAndOrderId getUserOrderByUserAndOrderId,
+            IAddNewMealsToUserOrders addNewMealsToUserOrders,
+            IGetUserOrderMealById getUserOrderMealById)
         {
             _getActiveOrders = getActiveOrders;
             _getPubMealByOrderId = pubMealByPubOrderId;
             _getUserOrders = getUserOrders;
             _getUserOrderMeals = getUserOrderMeals;
+            _deleteUserOrderMeal = deleteUserOrderMeal;
+            _getUserOrderByUserAndOrderId = getUserOrderByUserAndOrderId;
+            _addNewMealsToUserOrders = addNewMealsToUserOrders;
+            _getUserOrderMealById = getUserOrderMealById;
         }
 
         public override Task OnConnected()
@@ -102,6 +116,63 @@ namespace ITMeat.WEB.Hubs
             });
 
             Clients.Caller.GetUserOrderMeals(viewList);
+        }
+
+        public void DeleteUserOrderMeal(Guid userOrderMealId)
+        {
+            if (userOrderMealId == Guid.Empty)
+            {
+                return;
+            }
+
+            var userOrderMeal = _getPubMealByOrderId.Invoke(userOrderMealId);
+
+            if (userOrderMeal == null)
+            {
+                return;
+            }
+
+            var deleted = _deleteUserOrderMeal.Invoke(userOrderMealId);
+
+            if (deleted)
+            {
+                Clients.All.DeletedUserOrderMeal(userOrderMealId);
+            }
+        }
+
+        public void AddNewMealToOrder(AddNewMealToOrderViewModel model, Guid orderId)
+        {
+            {
+                var userOrderModel = _getUserOrderByUserAndOrderId.Invoke(Context.Actor(), orderId);
+                if (userOrderModel == null)
+                {
+                    return;
+                }
+
+                var addMealAction = _addNewMealsToUserOrders.Invoke(orderId, model.MealId, model.Quantity, userOrderModel);
+
+                if (addMealAction == Guid.Empty)
+                {
+                    return;
+                }
+
+                var addedMeal = _getUserOrderMealById.Invoke(addMealAction);
+                if (addedMeal == null)
+                {
+                    return;
+                }
+                var addedMealView = new GetUserOrderMealViewModel
+                {
+                    Id = addedMeal.Id,
+                    Quantity = addedMeal.Quantity,
+                    MealName = addedMeal.PubMeal.Name,
+                    Expense = addedMeal.Quantity * addedMeal.PubMeal.Expense,
+                    UserId = addedMeal.UserOrder.User.Id,
+                    UserName = addedMeal.UserOrder.User.Name,
+                };
+
+                Clients.All.AddNewMealToUserOrder(addedMealView);
+            }
         }
     }
 }

@@ -48,5 +48,21 @@ namespace ITMeat.DataAccess.Repositories.Implementations
 
             return !(query.Count() > 0) ? Enumerable.Empty<Meal>().AsQueryable() : query;
         }
+
+        public Meal GetMealByUserOrderMealId(Guid userOrderMealId)
+        {
+            var query = (from meal in context.Set<Meal>()
+                         join userOrderMeal in context.Set<UserOrderMeal>() on meal.Id equals userOrderMeal.Meal.Id
+                         where userOrderMealId == userOrderMeal.Id
+                         select new Meal
+                         {
+                             Id = meal.Id,
+                             Name = meal.Name,
+                             Type = meal.Type,
+                             Expense = meal.Expense,
+                         }).SingleOrDefault();
+
+            return query;
+        }
     }
 }

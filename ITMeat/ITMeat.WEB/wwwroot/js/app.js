@@ -1,10 +1,13 @@
-﻿//declaration
+﻿/**
+ * Declaration,
+ */
 var userId = $("#SignedDiv").data("id");
 var userName = $("#SignedDiv").data("name");
 var now = new Date();
 var InJoinedOrderID;
+var MealsToDeleteID;
 
-//View Settings
+//View Settings,
 $(".ui.sidebar.left").sidebar("setting", {
     transition: "overlay"
 });
@@ -19,7 +22,7 @@ $(".ui.calendar").calendar({
 $("#SignedDiv").html("Signed by: " + userName);
 
 /*
- * Load data from server when server connected
+ * Load data from server when server connected,
  */
 function onLoadView() {
     var title = $(".titlename");
@@ -29,17 +32,16 @@ function onLoadView() {
 }
 
 /*
- * Create connection SignalR
+ * Create connection SignalR,
  */
 $.connection.hub.url = "http://localhost:49537/signalr";
 var myHub = $.connection.appHub;
 
-
 /*
-* Apps functions
+* Apps functions,
 */
 
-//Send Model from Form
+//Send Model from Form,
 function serializeForm(form) {
     this.data = $(form).serializeArray();
     var obj = {};
@@ -50,12 +52,12 @@ function serializeForm(form) {
 }
 
 /*
- * Order History
+ * Order History,
  */
 //ToDO
 
 /*
-* Load Active Orders
+* Load Active Orders,
 */
 myHub.client.loadActivePubOrders = function (result) {
     console.log("Load Active Orders");
@@ -103,23 +105,19 @@ myHub.client.loadActivePubOrders = function (result) {
             divToAppend += "</td>" +
                 "</tr>";
             activeOrdersTable.append(divToAppend);
-        }); 
+        });
 };
-
-$("#MealsInOrderViews").ready(function () {
-    $.when($.connection.hub.start()).then(function () {
-        if ($("#MealsInOrderTable").data("orderid") !== null)
-        {
-            InJoinedOrderID = $("#MealsInOrderTable").data("orderid");            
-               
-        }
-        myHub.server.getUserOrders(InJoinedOrderID); 
-       
+$.when($.connection.hub.start()).then(function () {
+    $("#MealsInOrderTable").ready(function () {
+        if ($("#MealsInOrderTable").data("orderid") !== null) {
+            InJoinedOrderID = $("#MealsInOrderTable").data("orderid");
+        } console.log("dupa z tym" + InJoinedOrderID);
+        myHub.server.getUserOrders(InJoinedOrderID);
     });
 });
 
 /*
- * Modal, LoadMealInModal,
+ * Modal, Load Meal In FormModal,
  */
 myHub.client.pubMealLoadedAction = function (result) {
     console.log("Load PubMeal");
@@ -130,14 +128,18 @@ myHub.client.pubMealLoadedAction = function (result) {
                 "</option>"));
         });
 };
+
+/*
+ * Add new Meal to Order
+ */
 function AddNewMeal(orderId) {
     console.log("Add new Meal");
     var addMealModal = $(".ui.basic.add-order.modal");
     /**
      * Show modal/settings
      */
-    $(addMealModal).modal('setting', 'closable', false)
-        .modal('show');
+    $(addMealModal).modal("setting", "closable", false)
+        .modal("show");
     /*
      * Load PubMealsfromDataBase
      */
@@ -145,35 +147,52 @@ function AddNewMeal(orderId) {
         myHub.server.getMealfromPub(orderId);
     });
 }
+$("#addMealToOrderForm").submit(function (e) {
+    e.preventDefault();
+    data = serializeForm($(this));
+    myHub.server.addNewMealToOrder(data, InJoinedOrderID);
+    $(".ui.basic.add-order.modal").modal("hide");
+});
+myHub.client.addNewMealToUserOrder = function (result) {
+    Console.log("Somebody add order");
 
+    var mealsInOrderTable = $("#MealsInOrderTable");
+
+    var divToAppend = "<tr id ='orderMealid' data-usermealid='" +
+        result.Id +
+        "'>" +
+        "<td>" +
+        result.UserName +
+        "</td>" +
+        "<td>" +
+        result.MealName +
+        "</td>" +
+        "<td>" +
+        result.Quantity +
+        "</td>" +
+        "<td>" +
+        result.Expense +
+        "</td>" +
+        "<td>";
+    if (result.UserId === userId) {
+        divToAppend += '<a class="ui button" onClick="deleteMealFromOrder(\'' + value.Id + '\')">Remove</a>';
+    }
+    divToAppend += "</td>" +
+        "</tr>";
+    mealsInOrderTable.append(divToAppend);
+};
 /*
-* Get UserOrders
+* Get OrdersMeals,
 */
-
-function deleteMealFromOrder(value) {
-    console.log(value);
-
-    console.log("Add new Meal");
-    var deleteMealModal = $(".ui.mini.modal");
-    /**
-     * Show modal/settings
-     */
-    $(deleteMealModal).modal('setting', 'closable', false)
-        .modal('show');
-   
-}
-
-
 myHub.client.getUserOrderMeals = function (result) {
-    console.log("dupa z tym" + InJoinedOrderID);
     console.log("Load User Meals in Orders");
     var mealsInOrderTable = $("#MealsInOrderTable");
     $.each(result,
-        function(index, value) {
-            var divToAppend = "<tr>" +
-                "<td data-usermealid='" +
+        function (index, value) {
+            var divToAppend = "<tr id ='orderMealid' data-usermealid='" +
                 value.Id +
                 "'>" +
+                "<td>" +
                 value.UserName +
                 "</td>" +
                 "<td>" +
@@ -184,22 +203,51 @@ myHub.client.getUserOrderMeals = function (result) {
                 "</td>" +
                 "<td>" +
                 value.Expense +
-                " zł</td>" +
+                "</td>" +
                 "<td>";
-
             if (value.UserId === userId) {
-                divToAppend += "<a class='ui button' onClick='deleteMealFromOrder('"+value.Id+"')'>Remove</a>";
+                divToAppend += '<a class="ui button" onClick="deleteMealFromOrder(\'' + value.Id + '\')">Remove</a>';
             }
             divToAppend += "</td>" +
-                "</tr>" +
-                "";
+                "</tr>";
             mealsInOrderTable.append(divToAppend);
         });
 };
 
+/*
+ * Delete Meal form orders,
+ */
+function deleteMealFromOrder(userOrderMeals) {
+    console.log("Zarcie to usuniecia", userOrderMeals);
+    MealsToDeleteID = userOrderMeals;
+    console.log("Delete Meal form Order");
+    var deleteMealModal = $(".ui.mini.modal");
+    /**
+     * Show modal/settings
+     */
+    $(deleteMealModal).modal({
+        closable: false,
+        onApprove: function () {
+            myHub.server.deleteUserOrderMeal(MealsToDeleteID);
+        }
+    }).modal("show");
+}
+myHub.client.deletedUserOrderMeal = function (result) {
+    if (result !== null) {
+        var deletedUserOrderMeal = $("#orderMealid[data-usermealid='" + result + "']");
+        console.log("Klient usuwa zamowienie o id = " + deletedUserOrderMeal.data("usermealid"));
+        deletedUserOrderMeal.hide("slow",
+            function () {
+                deletedUserOrderMeal.remove();
+            });
+    } else {
+        window.alert("Błąd na stronie, spróbój ponownie z 3 tygodnei ;)");
+    }
+};
+
 //***************************************************************************************************************************
 /*
- * Start the connection
+ * Start the connection,
  */
 $.connection.hub.start()
     .done(function () {

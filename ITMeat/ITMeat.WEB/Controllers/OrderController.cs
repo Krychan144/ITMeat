@@ -19,20 +19,14 @@ namespace ITMeat.WEB.Controllers
         private readonly IGetAllPubs _getAllPubs;
         private readonly ICreateNewPubOrder _createNewPubOrder;
         private readonly ICreateUserOrder _createUserOrder;
-        private readonly IGetUserOrderByUserAndOrderId _getUserOrderByUserAndOrderId;
-        private readonly IAddNewMealsToUserOrders _addNewMealsToUserOrders;
 
         public OrderController(IGetAllPubs getAllPubs,
             ICreateNewPubOrder createNewPubOrder,
-            ICreateUserOrder createUserOrder,
-            IGetUserOrderByUserAndOrderId getUserOrderByUserAndOrderId,
-            IAddNewMealsToUserOrders addNewMealsToUserOrders)
+            ICreateUserOrder createUserOrder)
         {
             _getAllPubs = getAllPubs;
             _createNewPubOrder = createNewPubOrder;
             _createUserOrder = createUserOrder;
-            _getUserOrderByUserAndOrderId = getUserOrderByUserAndOrderId;
-            _addNewMealsToUserOrders = addNewMealsToUserOrders;
         }
 
         public IActionResult Index()
@@ -107,27 +101,6 @@ namespace ITMeat.WEB.Controllers
         public IActionResult OrdersHistory()
         {
             return View();
-        }
-
-        [HttpPost("SubmitOrder/{OrderId}")]
-        public IActionResult SubmitOrder(Guid orderId, AddNewMealToOrderViewModel model)
-        {
-            var userOrderModel = _getUserOrderByUserAndOrderId.Invoke(ControllerContext.HttpContext.Actor(), orderId);
-            if (userOrderModel == null)
-            {
-                Alert.Danger("Please Join again. ");
-                return RedirectToAction("SubmitOrder", "Order");
-            }
-
-            var addMealAction = _addNewMealsToUserOrders.Invoke(orderId, model.MealId, model.Quantity, userOrderModel);
-
-            if (addMealAction == Guid.Empty)
-            {
-                Alert.Danger("Error, Please add again");
-                return RedirectToAction("SubmitOrder", "Order");
-            }
-            Alert.Success("Your meal are added");
-            return RedirectToAction("SubmitOrder", "Order");
         }
     }
 }
