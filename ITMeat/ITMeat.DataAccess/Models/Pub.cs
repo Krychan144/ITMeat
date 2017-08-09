@@ -20,6 +20,10 @@ namespace ITMeat.DataAccess.Models
         public string Name { get; set; }
 
         [Required]
+        [Column(TypeName = "DECIMAL(11,0)")]
+        public decimal Phone { get; set; }
+
+        [Required]
         [Column(TypeName = "NVARCHAR(100)")]
         public string Adress { get; set; }
     }

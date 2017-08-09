@@ -38,7 +38,8 @@ namespace ITMeat.DataAccess.Migrations
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false)
+                    Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false),
+                    Phone = table.Column<decimal>(type: "DECIMAL(11,0)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -100,7 +101,7 @@ namespace ITMeat.DataAccess.Migrations
                     Expense = table.Column<decimal>(type: "DECIMAL(16 ,2)", nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
                     OwnerId = table.Column<Guid>(nullable: false),
-                    SubmitDateTime = table.Column<DateTime>(nullable: false)
+                    SubmitDateTime = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {

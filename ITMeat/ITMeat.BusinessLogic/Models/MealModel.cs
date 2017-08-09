@@ -8,6 +8,8 @@
 
         public string Type { get; set; }
 
+        public decimal Phone { get; set; }
+
         public PubModel Pub { get; set; }
     }
 }

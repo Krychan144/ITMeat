@@ -17,6 +17,6 @@ namespace ITMeat.DataAccess.Models
         [Required]
         public DateTime EndDateTime { get; set; }
 
-        public DateTime SubmitDateTime { get; set; }
+        public DateTime? SubmitDateTime { get; set; }
     }
 }

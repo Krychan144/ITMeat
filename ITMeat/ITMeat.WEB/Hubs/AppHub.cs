@@ -30,6 +30,8 @@ namespace ITMeat.WEB.Hubs
         private readonly IGetUserOrderByUserAndOrderId _getUserOrderByUserAndOrderId;
         private readonly IGetUserOrderMealById _getUserOrderMealById;
         private readonly IGetMealByUserOrderMealId _getMealByUserOrderMealId;
+        private readonly IDeletePubOrderByPubOrderId _deletePubOrderByPubOrderId;
+        private readonly IGetPubOrderByPubOrderId _getPubOrderByPubOrderId;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
@@ -41,7 +43,9 @@ namespace ITMeat.WEB.Hubs
             IGetUserOrderByUserAndOrderId getUserOrderByUserAndOrderId,
             IAddNewMealsToUserOrders addNewMealsToUserOrders,
             IGetUserOrderMealById getUserOrderMealById,
-            IGetMealByUserOrderMealId getMealByUserOrderMealId)
+            IGetMealByUserOrderMealId getMealByUserOrderMealId,
+            IDeletePubOrderByPubOrderId deletePubOrderByPubOrderId,
+            IGetPubOrderByPubOrderId getPubOrderByPubOrderId)
         {
             _getActiveOrders = getActiveOrders;
             _getPubMealByOrderId = pubMealByPubOrderId;
@@ -52,6 +56,8 @@ namespace ITMeat.WEB.Hubs
             _addNewMealsToUserOrders = addNewMealsToUserOrders;
             _getUserOrderMealById = getUserOrderMealById;
             _getMealByUserOrderMealId = getMealByUserOrderMealId;
+            _deletePubOrderByPubOrderId = deletePubOrderByPubOrderId;
+            this._getPubOrderByPubOrderId = getPubOrderByPubOrderId;
         }
 
         public override Task OnConnected()
@@ -80,6 +86,7 @@ namespace ITMeat.WEB.Hubs
                 OwnerName = item.Order.Owner.Name,
                 CreatedOn = item.Order.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation),
                 OrderId = item.Order.Id,
+                ToSubmitet = item.Order.EndDateTime.ToLocalTime() < DateTime.Now ? true : false,
                 EndDateTime = item.Order.EndDateTime.ToLocalTime().ToString(TimeStampRepresentation),
                 PubId = item.Pub.Id,
                 PubName = item.Pub.Name,
@@ -140,6 +147,28 @@ namespace ITMeat.WEB.Hubs
             if (deleted)
             {
                 Clients.All.DeletedUserOrderMeal(userOrderMealId);
+            }
+        }
+
+        public void DeletePubOrder(Guid pubOrderId)
+        {
+            if (pubOrderId == Guid.Empty)
+            {
+                return;
+            }
+            //ToDo
+            var pubOrder = _getPubOrderByPubOrderId.Invoke(pubOrderId);
+
+            if (pubOrder == null)
+            {
+                return;
+            }
+            //
+            var deleted = _deletePubOrderByPubOrderId.Invoke(pubOrderId);
+
+            if (deleted)
+            {
+                Clients.All.DeletedPubOrder(pubOrderId);
             }
         }
 

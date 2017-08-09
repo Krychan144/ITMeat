@@ -43,8 +43,9 @@ namespace ITMeat.BusinessLogic.Action.PubOrder.Implementations
             {
                 return Guid.Empty;
             }
-
-            var emptyOrder = AutoMapper.Mapper.Map<DataAccess.Models.Order>(order);
+            var orderToAdd = order;
+            orderToAdd.EndDateTime = orderToAdd.EndDateTime.ToUniversalTime();
+            var emptyOrder = AutoMapper.Mapper.Map<DataAccess.Models.Order>(orderToAdd);
             emptyOrder.Owner = user;
 
             _orderRepository.Add(emptyOrder);

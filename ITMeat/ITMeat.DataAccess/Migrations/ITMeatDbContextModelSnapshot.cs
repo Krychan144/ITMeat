@@ -98,7 +98,7 @@ namespace ITMeat.DataAccess.Migrations
 
                     b.Property<Guid>("OwnerId");
 
-                    b.Property<DateTime>("SubmitDateTime");
+                    b.Property<DateTime?>("SubmitDateTime");
 
                     b.HasKey("Id");
 
@@ -125,6 +125,9 @@ namespace ITMeat.DataAccess.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("NVARCHAR(100)");
+
+                    b.Property<decimal>("Phone")
+                        .HasColumnType("DECIMAL(11,0)");
 
                     b.HasKey("Id");
 

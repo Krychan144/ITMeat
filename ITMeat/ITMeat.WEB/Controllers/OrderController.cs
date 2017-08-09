@@ -51,12 +51,12 @@ namespace ITMeat.WEB.Controllers
         [HttpPost("NewOrder")]
         public IActionResult NewOrder(AddNewOrderViewModel model)
         {
-            var Order = new OrderModel
+            var order = new OrderModel
             {
                 CreatedOn = DateTime.UtcNow,
                 EndDateTime = model.EndOrders,
             };
-            var orderAddAction = _createNewPubOrder.Invoke(Order, ControllerContext.HttpContext.Actor(), model.PubId);
+            var orderAddAction = _createNewPubOrder.Invoke(order, ControllerContext.HttpContext.Actor(), model.PubId);
 
             if (orderAddAction == Guid.Empty)
             {
@@ -75,9 +75,9 @@ namespace ITMeat.WEB.Controllers
         }
 
         [HttpGet("SubmitOrder/{OrderId}")]
-        public IActionResult SubmitOrder(Guid OrderId)
+        public IActionResult SubmitOrder(Guid orderId)
         {
-            ViewBag.OrderId = OrderId;
+            ViewBag.OrderId = orderId;
             return View();
         }
 
@@ -100,6 +100,13 @@ namespace ITMeat.WEB.Controllers
         [HttpGet("OrdersHistory")]
         public IActionResult OrdersHistory()
         {
+            return View();
+        }
+
+        [HttpGet("SummaryOrderr/{OrderId}")]
+        public IActionResult SummaryOrder(Guid orderId)
+        {
+            ViewBag.OrderId = orderId;
             return View();
         }
     }

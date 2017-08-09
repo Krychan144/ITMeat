@@ -1,0 +1,21 @@
+﻿@{
+    Layout = "_AppLayout";
+
+}
+<div class="titlename">Please add your meals,Thanks man!</div>
+<div id="MealsInOrderViews">
+    <div id="MealsList">
+        <table class="ui single line table">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Meals Name</th>
+                    <th>Quantity</th>
+                    <th>Expense</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="MealsInOrderTable" data-OrderId="@ViewBag.OrderId"></tbody>
+        </table>
+    </div>
+</div>

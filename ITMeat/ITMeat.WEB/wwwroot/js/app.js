@@ -34,7 +34,7 @@ function onLoadView() {
 /*
  * Create connection SignalR,
  */
-$.connection.hub.url = "http://localhost:49538/signalr";
+//$.connection.hub.url = "http://localhost:49538/signalr";
 var myHub = $.connection.appHub;
 
 /*
@@ -59,13 +59,16 @@ function serializeForm(form) {
 /*
 * Load Active Orders,
 */
+
 myHub.client.loadActivePubOrders = function (result) {
     console.log("Load Active Orders");
     var activeOrdersTable = $("#ActiveOrderTable");
     $.each(result,
         function (index, value) {
             InJoinedOrderID = value.OrderId;
-            var divToAppend = "<tr>" +
+            var divToAppend = "<tr id='ActiveOrderTable' data-PubOrderId='" +
+                value.PubOrderId +
+                "'>" +
                 "<td>" +
                 value.PubName +
                 "</td>" +
@@ -79,29 +82,43 @@ myHub.client.loadActivePubOrders = function (result) {
                 value.EndDateTime +
                 "</td>" +
                 "<td>";
-            if (value.OwnerId === userId) {
-                if (value.IsJoined === false) {
-                    divToAppend += "<a class='ui button'>Remove</a>" +
-                        '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
-                        value.OrderId +
-                        '">Join</a>';
+            if (value.ToSubmitet === false) {
+                if (value.OwnerId === userId) {
+                    if (value.IsJoined === false) {
+                        divToAppend += '<a class="ui button" onClick="deletePubOrder(\'' +
+                            value.PubOrderId +
+                            '\')" >Remove</a>' +
+                            '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                            value.OrderId +
+                            '">Join</a>';
+                    } else {
+                        divToAppend += '<a class="ui button" onClick="deletePubOrder(\'' +
+                            value.PubOrderId +
+                            '\')" >Remove</a>' +
+                            '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                            value.OrderId +
+                            '">Continue</a>';
+                    }
                 } else {
-                    divToAppend += "<a class='ui button'>Remove</a>" +
-                        '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
-                        value.OrderId +
-                        '">Continue</a>';
+                    if (value.IsJoined === false) {
+                        divToAppend +=
+                            '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                            value.OrderId +
+                            '">Join</a>';
+                    } else {
+                        divToAppend +=
+                            '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                            value.OrderId +
+                            '">Continue</a>';
+                    }
                 }
             } else {
-                if (value.IsJoined === false) {
-                    divToAppend += '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
-                        value.OrderId +
-                        '">Join</a>';
-                } else {
-                    divToAppend += '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
-                        value.OrderId +
-                        '">Continue</a>';
-                }
+                divToAppend +=
+                    '<a id ="GoToSummaryView" class="ui orange button" href="/Order/SummaryView/ ' +
+                    value.OrderId +
+                    '">Summary</a>';
             }
+
             divToAppend += "</td>" +
                 "</tr>";
             activeOrdersTable.append(divToAppend);
@@ -131,7 +148,6 @@ myHub.client.pubMealLoadedAction = function (result) {
                 "</option>"));
         });
 };
-
 
 /*
  * Add new Meal to Order
@@ -227,7 +243,7 @@ function deleteMealFromOrder(userOrderMeals) {
     console.log("Zarcie to usuniecia", userOrderMeals);
     MealsToDeleteID = userOrderMeals;
     console.log("Delete Meal form Order");
-    var deleteMealModal = $(".ui.mini.modal");
+    var deleteMealModal = $("#deleteMealModal");
     /**
      * Show modal/settings
      */
@@ -241,7 +257,7 @@ function deleteMealFromOrder(userOrderMeals) {
 myHub.client.deletedUserOrderMeal = function (result) {
     if (result !== null) {
         var deletedUserOrderMeal = $("#orderMealid[data-usermealid='" + result + "']");
-        console.log("Klient usuwa zamowienie o id = " + deletedUserOrderMeal.data("usermealid"));
+        console.log("Klient usuwa potrawę z zamowienia o id = " + deletedUserOrderMeal.data("usermealid"));
         deletedUserOrderMeal.hide("slow",
             function () {
                 deletedUserOrderMeal.remove();
@@ -250,6 +266,44 @@ myHub.client.deletedUserOrderMeal = function (result) {
         window.alert("Błąd na stronie, spróbój ponownie z 3 tygodnei ;)");
     }
 };
+
+/*
+ * Delete Pub Order
+ */
+function deletePubOrder(value) {
+    console.log("Zamowienie do usunięcia", value);
+    var pubOrderToDeleteId = value;
+    console.log("Delete Pub Order");
+    var deleteMealModal = $("#deletePubOrderModal");
+    /**
+     * Show modal/settings
+     */
+    $(deleteMealModal).modal({
+        closable: false,
+        onApprove: function () {
+            myHub.server.deletePubOrder(pubOrderToDeleteId);
+        }
+    }).modal("show");
+}
+myHub.client.deletedPubOrder = function (result) {
+    if (result !== null) {
+        var deletedOrder = $("#ActiveOrderTable[data-puborderid='" + result + "']");
+        console.log("Klient usuwa zamowienie o id = " + deletedOrder.data("puborderid"));
+        deletedOrder.hide("slow",
+            function () {
+                deletedOrder.remove();
+            });
+    } else {
+        window.alert("Błąd na stronie, spróbój ponownie z 3 tygodnei ;)");
+    }
+};
+
+/*
+ * Summary View
+ */
+function SummaryView(orderId) {
+    console.log("Przeniesiemy Cię tu ");
+}
 
 //***************************************************************************************************************************
 /*
