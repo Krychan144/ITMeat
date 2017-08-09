@@ -32,6 +32,8 @@ namespace ITMeat.WEB.Hubs
         private readonly IGetMealByUserOrderMealId _getMealByUserOrderMealId;
         private readonly IDeletePubOrderByPubOrderId _deletePubOrderByPubOrderId;
         private readonly IGetPubOrderByPubOrderId _getPubOrderByPubOrderId;
+        private readonly ICreateNewPubOrder _createNewPubOrder;
+        private readonly IGetUserSubmittedOrders _getUserSubmittedOrders;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
@@ -45,7 +47,9 @@ namespace ITMeat.WEB.Hubs
             IGetUserOrderMealById getUserOrderMealById,
             IGetMealByUserOrderMealId getMealByUserOrderMealId,
             IDeletePubOrderByPubOrderId deletePubOrderByPubOrderId,
-            IGetPubOrderByPubOrderId getPubOrderByPubOrderId)
+            IGetPubOrderByPubOrderId getPubOrderByPubOrderId,
+            ICreateNewPubOrder createNewPubOrder,
+            IGetUserSubmittedOrders getUserSubmittedOrders)
         {
             _getActiveOrders = getActiveOrders;
             _getPubMealByOrderId = pubMealByPubOrderId;
@@ -57,7 +61,9 @@ namespace ITMeat.WEB.Hubs
             _getUserOrderMealById = getUserOrderMealById;
             _getMealByUserOrderMealId = getMealByUserOrderMealId;
             _deletePubOrderByPubOrderId = deletePubOrderByPubOrderId;
-            this._getPubOrderByPubOrderId = getPubOrderByPubOrderId;
+            _getPubOrderByPubOrderId = getPubOrderByPubOrderId;
+            _createNewPubOrder = createNewPubOrder;
+            _getUserSubmittedOrders = getUserSubmittedOrders;
         }
 
         public override Task OnConnected()
@@ -95,6 +101,25 @@ namespace ITMeat.WEB.Hubs
             });
 
             Clients.Caller.LoadActivePubOrders(list);
+        }
+
+        public void GetUserSubmittedOrders()
+        {
+            var userSubmittedOrderList = _getUserSubmittedOrders.Invoke(Context.Actor());
+
+            var list = userSubmittedOrderList.Select(item => new ActiveOrderViewModel
+            {
+                OwnerId = item.Order.Owner.Id,
+                OwnerName = item.Order.Owner.Name,
+                CreatedOn = item.Order.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation),
+                OrderId = item.Order.Id,              
+                EndDateTime = item.Order.EndDateTime.ToLocalTime().ToString(TimeStampRepresentation),
+                PubId = item.Pub.Id,
+                PubName = item.Pub.Name,
+                PubOrderId = item.Id,
+            });
+
+            Clients.Caller.GetUserSubmittedOrders(list);
         }
 
         public void GetMealfromPub(Guid orderId)
@@ -208,6 +233,34 @@ namespace ITMeat.WEB.Hubs
 
                 Clients.All.AddNewMealToUserOrder(addedMealView, orderId);
             }
+        }
+
+        public void AddNewPubOrder(AddNewOrderViewModel model)
+        {
+            var orderAddAction = _createNewPubOrder.Invoke(model.EndOrders, Context.Actor(), model.PubId);
+
+            if (orderAddAction == Guid.Empty)
+            {
+                return;
+            }
+
+            var addedPubOrder = _getPubOrderByPubOrderId.Invoke(orderAddAction);
+
+            var pubOrder = new ActiveOrderViewModel
+            {
+                OwnerId = addedPubOrder.Order.Owner.Id,
+                OwnerName = addedPubOrder.Order.Owner.Name,
+                CreatedOn = addedPubOrder.Order.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation),
+                OrderId = addedPubOrder.Order.Id,
+                ToSubmitet = addedPubOrder.Order.EndDateTime.ToLocalTime() < DateTime.Now ? true : false,
+                EndDateTime = addedPubOrder.Order.EndDateTime.ToLocalTime().ToString(TimeStampRepresentation),
+                PubId = addedPubOrder.Pub.Id,
+                PubName = addedPubOrder.Pub.Name,
+                PubOrderId = addedPubOrder.Id,
+                IsJoined = false
+            };
+
+            Clients.All.AddNewPubOrder(pubOrder);
         }
     }
 }

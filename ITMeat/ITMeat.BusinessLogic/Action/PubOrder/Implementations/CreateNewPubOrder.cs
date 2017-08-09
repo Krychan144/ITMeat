@@ -1,6 +1,7 @@
 ﻿using ITMeat.BusinessLogic.Action.PubOrder.Interfaces;
 using ITMeat.DataAccess.Repositories.Interfaces;
 using System;
+using ITMeat.BusinessLogic.Models;
 using ITMeat.DataAccess.Models;
 
 namespace ITMeat.BusinessLogic.Action.PubOrder.Implementations
@@ -23,9 +24,9 @@ namespace ITMeat.BusinessLogic.Action.PubOrder.Implementations
             _orderRepository = orderRepository;
         }
 
-        public Guid Invoke(Models.OrderModel order, Guid userId, Guid pubId)
+        public Guid Invoke(DateTime endDateTime, Guid userId, Guid pubId)
         {
-            if (!order.IsValid() || userId == Guid.Empty)
+            if (userId == Guid.Empty)
             {
                 return Guid.Empty;
             }
@@ -43,6 +44,13 @@ namespace ITMeat.BusinessLogic.Action.PubOrder.Implementations
             {
                 return Guid.Empty;
             }
+
+            var order = new OrderModel
+            {
+                CreatedOn = DateTime.UtcNow,
+                EndDateTime = endDateTime,
+            };
+
             var orderToAdd = order;
             orderToAdd.EndDateTime = orderToAdd.EndDateTime.ToUniversalTime();
             var emptyOrder = AutoMapper.Mapper.Map<DataAccess.Models.Order>(orderToAdd);

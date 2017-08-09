@@ -29,6 +29,9 @@ function onLoadView() {
     if (title.html() === "Active Orders") {
         myHub.server.getActivePubOrders();
     }
+    if (title.html() === "Orders History") {
+        myHub.server.getUserSubmittedOrders();
+    }
 }
 
 /*
@@ -54,8 +57,40 @@ function serializeForm(form) {
 /*
  * Order History,
  */
-//ToDO
+myHub.client.getUserSubmittedOrders = function (result) {
+    console.log("Load Orders History");
+    var historyOrdersTable = $("#HistoryOrderTable");
+    $.each(result,
+        function (index, value) {
+            InJoinedOrderID = value.OrderId;
+            if (value.OwnerId === userId) {
+                var divToAppend = "<tr id='HistoryOrderTable' data-PubOrderId='" +
+                    value.PubOrderId +
+                    "'>" +
+                    "<td>" +
+                    value.PubName +
+                    "</td>" +
+                    "<td>" +
+                    value.OwnerName +
+                    "</td>" +
+                    "<td>" +
+                    value.CreatedOn +
+                    "</td>" +
+                    "<td>" +
+                    value.EndDateTime +
+                    "</td>" +
+                    "<td>";
+                divToAppend +=
+                    '<a id ="GoToSummaryView" class="ui blue button" href="/Order/SummaryView/ ' +
+                    value.OrderId +
+                    '">Look Summary</a>';
 
+                divToAppend += "</td>" +
+                    "</tr>";
+                historyOrdersTable.append(divToAppend);
+            }
+        });
+};
 /*
 * Load Active Orders,
 */
@@ -173,7 +208,6 @@ $("#addMealToOrderForm").submit(function (e) {
     myHub.server.addNewMealToOrder(data, InJoinedOrderID);
     $(".ui.basic.add-order.modal").modal("hide");
 });
-
 myHub.client.addNewMealToUserOrder = function (result, id) {
     console.log("Somebody add order");
     var mealsInOrderTable = $("#MealsInOrderTable");
@@ -201,6 +235,77 @@ myHub.client.addNewMealToUserOrder = function (result, id) {
             "</tr>";
         mealsInOrderTable.append(divToAppend);
     }
+};
+
+/*
+ * Add new PubOrder
+ */
+$("#createOrderForm").submit(function (e) {
+    e.preventDefault();
+    var data = serializeForm($(this));
+    myHub.server.addNewPubOrder(data);
+});
+myHub.client.addNewPubOrder = function (result) {
+    console.log("Somebody add Puborder", result.OwnerId);
+    var activeOrdersTable = $("#ActiveOrderTable");
+    InJoinedOrderID = result.OrderId;
+
+    var divToAppend = "<tr id='ActiveOrderTable' data-PubOrderId='" +
+        result.PubOrderId +
+        "'>" +
+        "<td>" +
+        result.PubName +
+        "</td>" +
+        "<td>" +
+        result.OwnerName +
+        "</td>" +
+        "<td>" +
+        result.CreatedOn +
+        "</td>" +
+        "<td>" +
+        result.EndDateTime +
+        "</td>" +
+        "<td>";
+    if (result.ToSubmitet === false) {
+        if (result.OwnerId === userId) {
+            if (result.IsJoined === false) {
+                divToAppend += '<a class="ui button" onClick="deletePubOrder(\'' +
+                    result.PubOrderId +
+                    '\')" >Remove</a>' +
+                    '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                    result.OrderId +
+                    '">Join</a>';
+            } else {
+                divToAppend += '<a class="ui button" onClick="deletePubOrder(\'' +
+                    result.PubOrderId +
+                    '\')" >Remove</a>' +
+                    '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                    result.OrderId +
+                    '">Continue</a>';
+            }
+        } else {
+            if (result.IsJoined === false) {
+                divToAppend +=
+                    '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                    result.OrderId +
+                    '">Join</a>';
+            } else {
+                divToAppend +=
+                    '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                    result.OrderId +
+                    '">Continue</a>';
+            }
+        }
+    } else {
+        divToAppend +=
+            '<a id ="GoToSummaryView" class="ui orange button" href="/Order/SummaryView/ ' +
+            result.OrderId +
+            '">Summary</a>';
+    }
+
+    divToAppend += "</td>" +
+        "</tr>";
+    activeOrdersTable.append(divToAppend);
 };
 /*
 * Get OrdersMeals,

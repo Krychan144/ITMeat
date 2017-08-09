@@ -48,26 +48,6 @@ namespace ITMeat.WEB.Controllers
             return View(model);
         }
 
-        [HttpPost("NewOrder")]
-        public IActionResult NewOrder(AddNewOrderViewModel model)
-        {
-            var order = new OrderModel
-            {
-                CreatedOn = DateTime.UtcNow,
-                EndDateTime = model.EndOrders,
-            };
-            var orderAddAction = _createNewPubOrder.Invoke(order, ControllerContext.HttpContext.Actor(), model.PubId);
-
-            if (orderAddAction == Guid.Empty)
-            {
-                Alert.Danger("Zamowienie już istnieje");
-                return View();
-            }
-            Alert.Success("Great, Order are create.");
-
-            return RedirectToAction("Index", "Order");
-        }
-
         [HttpGet("ActiveOrders")]
         public IActionResult ActiveOrders()
         {
