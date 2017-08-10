@@ -150,7 +150,7 @@ form {
     background-color: #E2FFBF;
 }
 
-#ActiveOrderVievs, #MealsInOrderViews, #HistoryOrderVievs {
+#ActiveOrderVievs, #MealsInOrderViews, #HistoryOrderVievs, #CompleteOrderViews {
     background-color: #E2FFBF;
     min-height: 100%;
 }
@@ -160,7 +160,13 @@ form {
     margin-right: 5rem;
 }
 
-#ActiveOrderTable, #MealsInOrderTable, #HistoryOrderTable {
+#OrderMealList {
+    margin-left: 15rem;
+    margin-right: 15rem;
+}
+
+
+#ActiveOrderTable, #MealsInOrderTable, #HistoryOrderTable, #MealsInCompleteTable {
     overflow-y: scroll;
 }
 

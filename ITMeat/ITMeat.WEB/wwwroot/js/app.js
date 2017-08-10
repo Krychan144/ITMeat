@@ -32,6 +32,20 @@ function onLoadView() {
     if (title.html() === "Orders History") {
         myHub.server.getUserSubmittedOrders();
     }
+    if (title.html() === "Order is complete!") {
+        InJoinedOrderID = $("#MealsInCompleteTable").data("orderid");
+        myHub.server.getMealsinCompleteOrder(InJoinedOrderID);
+    }
+    if (title.html() === "Please add your meals,Thanks man!") {    
+        $("#MealsInOrderTable").ready(function () {
+        if ($("#MealsInOrderTable").data("orderid") !== null) {
+            InJoinedOrderID = $("#MealsInOrderTable").data("orderid");
+       } console.log("dupa z tym" + InJoinedOrderID);
+        myHub.server.getUserOrders(InJoinedOrderID);
+    });
+    }
+        
+    
 }
 
 /*
@@ -71,19 +85,19 @@ myHub.client.getUserSubmittedOrders = function (result) {
                     value.PubName +
                     "</td>" +
                     "<td>" +
-                    value.OwnerName +
-                    "</td>" +
-                    "<td>" +
                     value.CreatedOn +
                     "</td>" +
                     "<td>" +
                     value.EndDateTime +
                     "</td>" +
+                    "<td>" +
+                    value.Expense +
+                    " zł</td>" +
                     "<td>";
                 divToAppend +=
-                    '<a id ="GoToSummaryView" class="ui blue button" href="/Order/SummaryView/ ' +
+                    '<a id ="GoToSummaryView" class="ui blue button" href="/Order/SummaryOrder/ ' +
                     value.OrderId +
-                    '">Look Summary</a>';
+                    '">Look Order</a>';
 
                 divToAppend += "</td>" +
                     "</tr>";
@@ -91,10 +105,10 @@ myHub.client.getUserSubmittedOrders = function (result) {
             }
         });
 };
+
 /*
 * Load Active Orders,
 */
-
 myHub.client.loadActivePubOrders = function (result) {
     console.log("Load Active Orders");
     var activeOrdersTable = $("#ActiveOrderTable");
@@ -149,7 +163,7 @@ myHub.client.loadActivePubOrders = function (result) {
                 }
             } else {
                 divToAppend +=
-                    '<a id ="GoToSummaryView" class="ui orange button" href="/Order/SummaryView/ ' +
+                    '<a id ="GoToSummaryView" class="ui orange button" href="/Order/SummaryOrder/ ' +
                     value.OrderId +
                     '">Summary</a>';
             }
@@ -159,14 +173,6 @@ myHub.client.loadActivePubOrders = function (result) {
             activeOrdersTable.append(divToAppend);
         });
 };
-$.when($.connection.hub.start()).then(function () {
-    $("#MealsInOrderTable").ready(function () {
-        if ($("#MealsInOrderTable").data("orderid") !== null) {
-            InJoinedOrderID = $("#MealsInOrderTable").data("orderid");
-        } console.log("dupa z tym" + InJoinedOrderID);
-        myHub.server.getUserOrders(InJoinedOrderID);
-    });
-});
 
 /*
  * Modal, Load Meal In FormModal,
@@ -266,16 +272,20 @@ myHub.client.addNewPubOrder = function (result) {
         result.EndDateTime +
         "</td>" +
         "<td>";
-    if (result.ToSubmitet === false) {
-        if (result.OwnerId === userId) {
-            if (result.IsJoined === false) {
+    if (result.ToSubmitet === false)
+     {
+        if (result.OwnerId === userId) 
+        {
+            if (result.IsJoined === false)
+             {
                 divToAppend += '<a class="ui button" onClick="deletePubOrder(\'' +
                     result.PubOrderId +
                     '\')" >Remove</a>' +
                     '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
                     result.OrderId +
                     '">Join</a>';
-            } else {
+            } else
+             {
                 divToAppend += '<a class="ui button" onClick="deletePubOrder(\'' +
                     result.PubOrderId +
                     '\')" >Remove</a>' +
@@ -283,13 +293,16 @@ myHub.client.addNewPubOrder = function (result) {
                     result.OrderId +
                     '">Continue</a>';
             }
-        } else {
-            if (result.IsJoined === false) {
+        } else 
+        {
+            if (result.IsJoined === false)
+            {
                 divToAppend +=
                     '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
                     result.OrderId +
                     '">Join</a>';
-            } else {
+            } else
+            {
                 divToAppend +=
                     '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
                     result.OrderId +
@@ -306,7 +319,14 @@ myHub.client.addNewPubOrder = function (result) {
     divToAppend += "</td>" +
         "</tr>";
     activeOrdersTable.append(divToAppend);
+if (result.OwnerId === userId) 
+        {
+            var url = 'ActiveOrders'; 
+            window.location.href = url; 
+        }
 };
+
+
 /*
 * Get OrdersMeals,
 */
@@ -330,7 +350,7 @@ myHub.client.getUserOrderMeals = function (result) {
                 "</td>" +
                 "<td>" +
                 value.Expense +
-                "</td>" +
+                " zł</td>" +
                 "<td>";
             if (value.UserId === userId) {
                 divToAppend += '<a class="ui button" onClick="deleteMealFromOrder(\'' + value.Id + '\')">Remove</a>';
@@ -406,9 +426,53 @@ myHub.client.deletedPubOrder = function (result) {
 /*
  * Summary View
  */
-function SummaryView(orderId) {
-    console.log("Przeniesiemy Cię tu ");
+myHub.client.getMealsinCompleteOrder = function (result,id) {
+    console.log("Load Meal in Complete orders");
+var mealsInOrderTable = $("#MealsInCompleteTable");
+    $.each(result,
+        function (index, value) {
+            var divToAppend = "<tr id ='orderMealid' data-usermealid='" +
+                value.Id +
+                "'>" +
+                "<td>" +
+                value.UserName +
+                "</td>" +
+                "<td>" +
+                value.MealName +
+                "</td>" +
+                "<td>" +
+                value.Quantity +
+                "</td>" +
+                "<td>" +
+                value.Expense +
+                " zł</td>" +                
+                "</tr>";
+            mealsInOrderTable.append(divToAppend);
+        });
+    if(userId === id){
+    var OrderCompleteView = $("#OrderMealList");
+    var divToAppend2 ='<a onClick="openSideBar();" class="ui green button"><i class="call icon"></i> Submit Order</a>';
+    OrderCompleteView.append(divToAppend2);
+}   
+};
+
+/*
+*Submit Complete Order
+*/
+$(".ui.sidebar.vertical.inverted.right").first().sidebar();
+function openSideBar(){
+    var sidebar = $(".ui.sidebar.vertical.inverted.right");
+
+    if (sidebar.hasClass("visible")) {
+            sidebar.removeClass("visible");       
+    } else {
+        $("#Rrightbar").html("");
+        sidebar.addClass("visible");
+    }
 }
+
+
+
 
 //***************************************************************************************************************************
 /*

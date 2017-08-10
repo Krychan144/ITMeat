@@ -30,7 +30,8 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                                  CreatedOn = order.CreatedOn,
                                  Id = order.Id,
                                  EndDateTime = order.EndDateTime,
-                                 SubmitDateTime = order.SubmitDateTime
+                                 SubmitDateTime = order.SubmitDateTime,
+                                 Expense = order.Expense
                              },
                              Pub = pub,
                          }).OrderBy(order => order.Order.EndDateTime);
@@ -58,10 +59,11 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                                  CreatedOn = order.CreatedOn,
                                  Id = order.Id,
                                  EndDateTime = order.EndDateTime,
-                                 SubmitDateTime = order.SubmitDateTime
+                                 SubmitDateTime = order.SubmitDateTime,
+                                 Expense = order.Expense
                              },
                              Pub = pub,
-                         }).OrderBy(order => order.Order.EndDateTime);
+                         }).OrderByDescending(order => order.Order.SubmitDateTime);
 
             return !(query.Count() > 0) ? Enumerable.Empty<PubOrder>().AsQueryable() : query;
         }

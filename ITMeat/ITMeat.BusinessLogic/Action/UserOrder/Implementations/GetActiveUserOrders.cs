@@ -17,7 +17,7 @@ namespace ITMeat.BusinessLogic.Action.UserOrder.Implementations
             _userOrderRepository = userOrderRepository;
         }
 
-        public List<Order> Invoke(Guid userId)
+        public List<OrderModel> Invoke(Guid userId)
         {
             var dbOrders = _userOrderRepository.GetActiveUserOrders(userId);
 
@@ -25,7 +25,7 @@ namespace ITMeat.BusinessLogic.Action.UserOrder.Implementations
             {
                 return null;
             }
-            var DbOrderlist = AutoMapper.Mapper.Map<List<Order>>(dbOrders);
+            var DbOrderlist = AutoMapper.Mapper.Map<List<OrderModel>>(dbOrders);
 
             return DbOrderlist;
         }

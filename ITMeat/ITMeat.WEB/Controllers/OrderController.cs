@@ -83,7 +83,7 @@ namespace ITMeat.WEB.Controllers
             return View();
         }
 
-        [HttpGet("SummaryOrderr/{OrderId}")]
+        [HttpGet("SummaryOrder/{OrderId}")]
         public IActionResult SummaryOrder(Guid orderId)
         {
             ViewBag.OrderId = orderId;

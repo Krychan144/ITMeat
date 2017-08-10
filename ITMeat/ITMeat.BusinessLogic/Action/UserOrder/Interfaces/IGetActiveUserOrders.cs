@@ -9,6 +9,6 @@ namespace ITMeat.BusinessLogic.Action.UserOrder.Interfaces
 {
     public interface IGetActiveUserOrders : IAction
     {
-        List<Order> Invoke(Guid userId);
+        List<OrderModel> Invoke(Guid userId);
     }
 }

@@ -5,13 +5,13 @@
         using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new { @class = "navbar-right", id = "logoutForm" }))
         {
 
-            <button type="submit" class="ui green button">Log off</button>
+            <button type="submit" class="ui green button"> <i class="sign out icon"></i> Log off</button>
         }
     }
     else
     {
-        <a class="item" href="@Url.Action("Login", "Auth")"> Log in </a>
-        <a class="item" href="@Url.Action("Register", "Auth")"> Register-> </a>
+        <a class="item" href="@Url.Action("Login", "Auth")"> <i class="sign in icon"></i> Log in </a>
+        <a class="item" href="@Url.Action("Register", "Auth")"><i class="add user icon"></i> Register </a>
 
     }
 }

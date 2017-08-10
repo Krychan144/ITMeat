@@ -29,9 +29,9 @@ namespace ITMeat.BusinessLogic.Action.PubOrder.Implementations
                 return null;
             }
 
-            var submittedOrders = AutoMapper.Mapper.Map<List<PubOrderModel>>(dbSubmittedOrders);
+            var submittedOrdersList = AutoMapper.Mapper.Map<List<PubOrderModel>>(dbSubmittedOrders);
 
-            return submittedOrders;
+            return submittedOrdersList;
         }
     }
 }

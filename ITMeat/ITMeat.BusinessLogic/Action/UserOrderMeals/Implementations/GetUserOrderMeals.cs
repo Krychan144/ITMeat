@@ -24,13 +24,13 @@ namespace ITMeat.BusinessLogic.Action.UserOrderMeals.Implementations
                 return null;
             }
 
-            var dbUserOrderMealDB = _userOrderMealRepository.GetOrderMeals(orderId);
+            var dbUserOrderMealDb = _userOrderMealRepository.GetOrderMeals(orderId);
 
-            if (dbUserOrderMealDB == null)
+            if (dbUserOrderMealDb == null)
             {
                 return null;
             }
-            var mealList = dbUserOrderMealDB.Select(item => new UserOrderMealModel()
+            var mealList = dbUserOrderMealDb.Select(item => new UserOrderMealModel()
             {
                 Id = item.Id,
                 PubMeal = new MealModel

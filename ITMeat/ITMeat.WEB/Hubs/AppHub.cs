@@ -8,14 +8,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ITMeat.BusinessLogic.Action.Meal.Interfaces;
-using ITMeat.BusinessLogic.Action.Pub.Interfaces;
+using ITMeat.BusinessLogic.Action.Order.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrder.Interfaces;
-using ITMeat.BusinessLogic.Action.UserOrderMeals.Implementations;
 using ITMeat.BusinessLogic.Action.UserOrderMeals.Interfaces;
 using ITMeat.WEB.Models.Meal.FormModels;
 using ITMeat.WEB.Models.Order;
 using ITMeat.WEB.Models.UserOrderMeals;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ITMeat.WEB.Hubs
 {
@@ -34,6 +32,7 @@ namespace ITMeat.WEB.Hubs
         private readonly IGetPubOrderByPubOrderId _getPubOrderByPubOrderId;
         private readonly ICreateNewPubOrder _createNewPubOrder;
         private readonly IGetUserSubmittedOrders _getUserSubmittedOrders;
+        private readonly IGetOrderById _getOrderById;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
@@ -49,7 +48,8 @@ namespace ITMeat.WEB.Hubs
             IDeletePubOrderByPubOrderId deletePubOrderByPubOrderId,
             IGetPubOrderByPubOrderId getPubOrderByPubOrderId,
             ICreateNewPubOrder createNewPubOrder,
-            IGetUserSubmittedOrders getUserSubmittedOrders)
+            IGetUserSubmittedOrders getUserSubmittedOrders,
+            IGetOrderById getOrderById)
         {
             _getActiveOrders = getActiveOrders;
             _getPubMealByOrderId = pubMealByPubOrderId;
@@ -64,6 +64,7 @@ namespace ITMeat.WEB.Hubs
             _getPubOrderByPubOrderId = getPubOrderByPubOrderId;
             _createNewPubOrder = createNewPubOrder;
             _getUserSubmittedOrders = getUserSubmittedOrders;
+            _getOrderById = getOrderById;
         }
 
         public override Task OnConnected()
@@ -107,16 +108,17 @@ namespace ITMeat.WEB.Hubs
         {
             var userSubmittedOrderList = _getUserSubmittedOrders.Invoke(Context.Actor());
 
-            var list = userSubmittedOrderList.Select(item => new ActiveOrderViewModel
+            var list = userSubmittedOrderList.Select(item => new GetSubmitedOrderViewModel
             {
                 OwnerId = item.Order.Owner.Id,
                 OwnerName = item.Order.Owner.Name,
                 CreatedOn = item.Order.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation),
-                OrderId = item.Order.Id,              
+                OrderId = item.Order.Id,
                 EndDateTime = item.Order.EndDateTime.ToLocalTime().ToString(TimeStampRepresentation),
                 PubId = item.Pub.Id,
                 PubName = item.Pub.Name,
                 PubOrderId = item.Id,
+                Expense = item.Order.Expense
             });
 
             Clients.Caller.GetUserSubmittedOrders(list);
@@ -151,6 +153,23 @@ namespace ITMeat.WEB.Hubs
             });
 
             Clients.Caller.GetUserOrderMeals(viewList);
+        }
+
+        public void GetMealsinCompleteOrder(Guid orderId)
+        {
+            var userOrderMeal = _getUserOrderMeals.Invoke(orderId);
+            var viewList = userOrderMeal.Select(item => new GetMealInCompleteOrderViewModel
+            {
+                UserName = item.UserOrder.User.Name,
+                UserId = item.UserOrder.User.Id,
+                Quantity = item.Quantity,
+                Expense = item.Quantity * item.PubMeal.Expense,
+                MealName = item.PubMeal.Name,
+                Id = item.Id
+            });
+
+            var orderOwnerId = _getOrderById.Invoke(orderId);
+            Clients.Caller.GetMealsinCompleteOrder(viewList, orderOwnerId.Owner.Id);
         }
 
         public void DeleteUserOrderMeal(Guid userOrderMealId)

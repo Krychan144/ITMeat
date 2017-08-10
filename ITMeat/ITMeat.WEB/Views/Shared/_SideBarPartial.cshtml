@@ -23,7 +23,7 @@
     <div id="logout" class="bottom aligned item">
         @using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new { id = "logoutForm" }))
         {
-            <button type="submit" class="ui fluid button negative">Log off</button>
+            <button type="submit" class="ui fluid button negative"> <i class="sign out icon"></i>Log off</button>
         }
     </div>
 </div>
