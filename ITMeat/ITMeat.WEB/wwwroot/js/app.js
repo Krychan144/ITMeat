@@ -36,16 +36,14 @@ function onLoadView() {
         InJoinedOrderID = $("#MealsInCompleteTable").data("orderid");
         myHub.server.getMealsinCompleteOrder(InJoinedOrderID);
     }
-    if (title.html() === "Please add your meals,Thanks man!") {    
+    if (title.html() === "Please add your meals,Thanks man!") {
         $("#MealsInOrderTable").ready(function () {
-        if ($("#MealsInOrderTable").data("orderid") !== null) {
-            InJoinedOrderID = $("#MealsInOrderTable").data("orderid");
-       } console.log("dupa z tym" + InJoinedOrderID);
-        myHub.server.getUserOrders(InJoinedOrderID);
-    });
+            if ($("#MealsInOrderTable").data("orderid") !== null) {
+                InJoinedOrderID = $("#MealsInOrderTable").data("orderid");
+            } console.log("dupa z tym" + InJoinedOrderID);
+            myHub.server.getUserOrders(InJoinedOrderID);
+        });
     }
-        
-    
 }
 
 /*
@@ -249,7 +247,11 @@ myHub.client.addNewMealToUserOrder = function (result, id) {
 $("#createOrderForm").submit(function (e) {
     e.preventDefault();
     var data = serializeForm($(this));
-    myHub.server.addNewPubOrder(data);
+
+    $.when($.connection.hub.start()).then
+    {
+        myHub.server.addNewPubOrder(data);
+    }
 });
 myHub.client.addNewPubOrder = function (result) {
     console.log("Somebody add Puborder", result.OwnerId);
@@ -272,20 +274,16 @@ myHub.client.addNewPubOrder = function (result) {
         result.EndDateTime +
         "</td>" +
         "<td>";
-    if (result.ToSubmitet === false)
-     {
-        if (result.OwnerId === userId) 
-        {
-            if (result.IsJoined === false)
-             {
+    if (result.ToSubmitet === false) {
+        if (result.OwnerId === userId) {
+            if (result.IsJoined === false) {
                 divToAppend += '<a class="ui button" onClick="deletePubOrder(\'' +
                     result.PubOrderId +
                     '\')" >Remove</a>' +
                     '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
                     result.OrderId +
                     '">Join</a>';
-            } else
-             {
+            } else {
                 divToAppend += '<a class="ui button" onClick="deletePubOrder(\'' +
                     result.PubOrderId +
                     '\')" >Remove</a>' +
@@ -293,16 +291,13 @@ myHub.client.addNewPubOrder = function (result) {
                     result.OrderId +
                     '">Continue</a>';
             }
-        } else 
-        {
-            if (result.IsJoined === false)
-            {
+        } else {
+            if (result.IsJoined === false) {
                 divToAppend +=
                     '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
                     result.OrderId +
                     '">Join</a>';
-            } else
-            {
+            } else {
                 divToAppend +=
                     '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
                     result.OrderId +
@@ -319,13 +314,11 @@ myHub.client.addNewPubOrder = function (result) {
     divToAppend += "</td>" +
         "</tr>";
     activeOrdersTable.append(divToAppend);
-if (result.OwnerId === userId) 
-        {
-            var url = 'ActiveOrders'; 
-            window.location.href = url; 
-        }
+    if (result.OwnerId === userId) {
+        var url = 'ActiveOrders';
+        window.location.href = url;
+    }
 };
-
 
 /*
 * Get OrdersMeals,
@@ -426,9 +419,9 @@ myHub.client.deletedPubOrder = function (result) {
 /*
  * Summary View
  */
-myHub.client.getMealsinCompleteOrder = function (result,id) {
+myHub.client.getMealsinCompleteOrder = function (result, id, orderId) {
     console.log("Load Meal in Complete orders");
-var mealsInOrderTable = $("#MealsInCompleteTable");
+    var mealsInOrderTable = $("#MealsInCompleteTable");
     $.each(result,
         function (index, value) {
             var divToAppend = "<tr id ='orderMealid' data-usermealid='" +
@@ -445,35 +438,53 @@ var mealsInOrderTable = $("#MealsInCompleteTable");
                 "</td>" +
                 "<td>" +
                 value.Expense +
-                " zł</td>" +                
+                " zł</td>" +
                 "</tr>";
             mealsInOrderTable.append(divToAppend);
         });
-    if(userId === id){
-    var OrderCompleteView = $("#OrderMealList");
-    var divToAppend2 ='<a onClick="openSideBar();" class="ui green button"><i class="call icon"></i> Submit Order</a>';
-    OrderCompleteView.append(divToAppend2);
-}   
+    if (userId === id) {
+        var OrderCompleteView = $("#OrderMealList");
+        var divToAppend2 = '<a onClick="openSideBar(\'' + orderId + '\');" class="ui green button"><i class="call icon"></i> Submit Order</a>';
+        OrderCompleteView.append(divToAppend2);
+    }
 };
 
 /*
 *Submit Complete Order
 */
-$(".ui.sidebar.vertical.inverted.right").first().sidebar();
-function openSideBar(){
+$(".ui.sidebar.vertical.inverted.right").first().sidebar('setting', 'transition', 'overlay').sidebar();
+function openSideBar(orderId) {
     var sidebar = $(".ui.sidebar.vertical.inverted.right");
+    var puher = $(".pushable");
 
     if (sidebar.hasClass("visible")) {
-            sidebar.removeClass("visible");       
+        puher.removeAttr("style");
+        sidebar.removeClass("visible");
     } else {
-        $("#Rrightbar").html("");
+        myHub.server.getPubInfo(orderId);
         sidebar.addClass("visible");
+        puher.css("cssText", "margin-left: 200px !important");
     }
 }
+myHub.client.getPubInfo = function (result) {
+    console.log("Load Pub Informations");
+    var name = $("#pubName");
+    var phone = $("#pubPhone");
+    var address = $("#pubAddress");
 
-
-
-
+    name.html(" Name: " + result.Name);
+    phone.html(" Phone: " + result.Phone);
+    address.html(" Adress : " + result.Address);
+};
+function cancelSubmitOrder() {
+    var puher = $(".pushable");
+    var sidebar = $(".ui.sidebar.vertical.inverted.right");
+    puher.removeAttr("style");
+    sidebar.removeClass("visible");
+}
+function submitOrder() {
+    console.log("Zamowienie zostało wysłane");
+}
 //***************************************************************************************************************************
 /*
  * Start the connection,

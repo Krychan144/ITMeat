@@ -9,10 +9,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using ITMeat.BusinessLogic.Action.Meal.Interfaces;
 using ITMeat.BusinessLogic.Action.Order.Interfaces;
+using ITMeat.BusinessLogic.Action.Pub.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrder.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrderMeals.Interfaces;
 using ITMeat.WEB.Models.Meal.FormModels;
 using ITMeat.WEB.Models.Order;
+using ITMeat.WEB.Models.Pub;
 using ITMeat.WEB.Models.UserOrderMeals;
 
 namespace ITMeat.WEB.Hubs
@@ -33,6 +35,7 @@ namespace ITMeat.WEB.Hubs
         private readonly ICreateNewPubOrder _createNewPubOrder;
         private readonly IGetUserSubmittedOrders _getUserSubmittedOrders;
         private readonly IGetOrderById _getOrderById;
+        private readonly IGetPubInfoByOrderId _getPubInfoByOrderId;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
@@ -49,7 +52,8 @@ namespace ITMeat.WEB.Hubs
             IGetPubOrderByPubOrderId getPubOrderByPubOrderId,
             ICreateNewPubOrder createNewPubOrder,
             IGetUserSubmittedOrders getUserSubmittedOrders,
-            IGetOrderById getOrderById)
+            IGetOrderById getOrderById,
+            IGetPubInfoByOrderId getPubInfoByOrderId)
         {
             _getActiveOrders = getActiveOrders;
             _getPubMealByOrderId = pubMealByPubOrderId;
@@ -65,6 +69,7 @@ namespace ITMeat.WEB.Hubs
             _createNewPubOrder = createNewPubOrder;
             _getUserSubmittedOrders = getUserSubmittedOrders;
             _getOrderById = getOrderById;
+            _getPubInfoByOrderId = getPubInfoByOrderId;
         }
 
         public override Task OnConnected()
@@ -80,6 +85,19 @@ namespace ITMeat.WEB.Hubs
             ConnectedClients.Remove(userToDelete);
 
             return base.OnDisconnected(stopCalled);
+        }
+
+        public void GetPubInfo(Guid orderId)
+        {
+            var pubInformation = _getPubInfoByOrderId.Invoke(orderId);
+            var pubInfo = new PubInfoViewModel
+            {
+                PubId = pubInformation.Id,
+                Address = pubInformation.Adress,
+                Name = pubInformation.Name,
+                Phone = pubInformation.Phone
+            };
+            Clients.Caller.GetPubInfo(pubInfo);
         }
 
         public void GetActivePubOrders()
@@ -169,7 +187,7 @@ namespace ITMeat.WEB.Hubs
             });
 
             var orderOwnerId = _getOrderById.Invoke(orderId);
-            Clients.Caller.GetMealsinCompleteOrder(viewList, orderOwnerId.Owner.Id);
+            Clients.Caller.GetMealsinCompleteOrder(viewList, orderOwnerId.Owner.Id, orderId);
         }
 
         public void DeleteUserOrderMeal(Guid userOrderMealId)

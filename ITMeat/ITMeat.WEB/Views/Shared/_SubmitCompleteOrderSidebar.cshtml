@@ -1,2 +1,43 @@
 ﻿<div class="ui sidebar vertical inverted right" id="SubmitCompleteOrderSidebar">
+    <i class=" massive centered aligned call icon"></i>
+    <h1 class="ui header ">
+        <div class="content ">
+            Submit Order
+        </div>
+    </h1>
+    <h2 class="ui header ">
+        <div class="sub header">
+            The completed order is ready. Can you sent this orde to the pub.
+        </div>
+    </h2>
+    <hr />
+    <br/>
+    <h2 class="ui header ">
+        <i class="massive book icon"></i>
+        <div class="content ">
+            Address of Pub
+        </div>
+    </h2>
+    <h3 class="ui header ">
+        <div class="sub header">
+            <p id="pubName">Name :</p>
+            <p id="pubPhone">Phone :</p>
+            <p id="pubAddress"> Address : </p>
+        </div>
+    </h3>
+    <hr />
+    <div class="ui header">
+        <div class="sub header">
+            If the order has been submitted successfully, please press send.
+        </div>
+    </div>
+    <div id="submitButtons">
+
+        <br />
+        <div class="ui buttons">
+            <button class="ui negative button" onclick="cancelSubmitOrder();">No Sent</button>
+            <div class="or"></div>
+            <button class="ui positive button" onclick="submitOrder();">Sent</button>
+        </div>
+    </div>
 </div>

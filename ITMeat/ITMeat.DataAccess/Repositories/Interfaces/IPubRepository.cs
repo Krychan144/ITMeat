@@ -5,5 +5,6 @@ namespace ITMeat.DataAccess.Repositories.Interfaces
 {
     public interface IPubRepository : IGenericRepository<Pub>, IRepository
     {
+        Pub GetPubInfoByOrderId(Guid orderId);
     }
 }

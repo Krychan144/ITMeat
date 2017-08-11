@@ -12,5 +12,7 @@ namespace ITMeat.BusinessLogic.Models
         public string Name { get; set; }
 
         public string Adress { get; set; }
+
+        public decimal Phone { get; set; }
     }
 }
