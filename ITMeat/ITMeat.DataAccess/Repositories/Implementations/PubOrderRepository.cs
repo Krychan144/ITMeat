@@ -44,11 +44,10 @@ namespace ITMeat.DataAccess.Repositories.Implementations
             var query = (from pub in context.Set<Pub>()
                          join puborder in context.Set<PubOrder>() on pub.Id equals puborder.Pub.Id
                          join order in context.Set<Order>() on puborder.Order.Id equals order.Id
-                         join user in context.Set<User>() on order.Owner.Id equals user.Id
-                         join userOrder in context.Set<UserOrder>() on user.Id equals userOrder.User.Id
-                         where order.SubmitDateTime != null
-                         where puborder.DeletedOn == null
-                         where userOrder.User.Id == userId
+                         join userOrder in context.Set<UserOrder>() on order.Id equals userOrder.Order.Id
+                         join user in context.Set<User>() on userOrder.User.Id equals user.Id
+                         where order.SubmitDateTime != null && puborder.DeletedOn == null
+                         where userOrder.User.Id == userId || order.Owner.Id == userId
 
                          select new PubOrder
                          {

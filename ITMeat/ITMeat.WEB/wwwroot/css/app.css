@@ -20,7 +20,7 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-     background-color: #E2FFBF;
+    background-color: #E2FFBF;
 }
 
 .container {
@@ -85,9 +85,11 @@ body {
     width: calc(100% - 260px);
     overflow-y: auto;
 }
-.pushable, .pusher, .ui.main.container{
-     background-color: #E2FFBF;
+
+.pushable, .pusher, .ui.main.container {
+    background-color: #E2FFBF;
 }
+
 .ui.vertical.inverted.sidebar.menu.visible.left {
     color: #61B300;
 }
@@ -153,7 +155,7 @@ form {
     background-color: #E2FFBF;
 }
 
-#ActiveOrderVievs, #MealsInOrderViews, #HistoryOrderVievs, #CompleteOrderViews {
+#ActiveOrderVievs, #MealsInOrderViews, #HistoryOrderVievs, #CompleteOrderViews, #SummaryOrderinHistoryViews {
     background-color: #E2FFBF;
     min-height: 100%;
 }
@@ -168,24 +170,24 @@ form {
     margin-right: 15rem;
 }
 
-
-#ActiveOrderTable, #MealsInOrderTable, #HistoryOrderTable, #MealsInCompleteTable {
+#ActiveOrderTable, #MealsInOrderTable, #HistoryOrderTable, #MealsInCompleteTable, #MealsInSubmitedOrderTable {
     overflow-y: scroll;
 }
 
 .AddNewOrdersMeals {
-
     height: 100px;
     float: right;
     text-align: right;
 }
-.ui.sidebar.vertical.inverted.right{
+
+.ui.sidebar.vertical.inverted.right {
     width: 20rem;
     background-color: #C5FF80;
     padding-left: 2rem;
     padding-right: 2rem;
     padding-top: 2rem;
 }
+
 #submitButtons {
     padding-left: 13%;
 }

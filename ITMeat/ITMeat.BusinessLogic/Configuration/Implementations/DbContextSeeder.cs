@@ -39,6 +39,7 @@ namespace ITMeat.BusinessLogic.Configuration.Implementations
         private readonly string[] users = { "Janusz", "Staszek", "Mietek" };
         private readonly string[] pubs = { "Kantyna", "Schadzka", "Ha-Noi", "Pyszna Bułka", "Donner Kebab" };
         private readonly string[] meals = { "Kaczka", "Kurczak", "Kot", "Pies", "Szablozębna ośmiornica" };
+        private readonly string[] types = { "Dania z obiadowe", "Przekąski", "Desery" };
 
         public void SeedPub(IAddNewPub _addNewPub, IAddNewMeal _addNewMeal)
         {
@@ -52,18 +53,21 @@ namespace ITMeat.BusinessLogic.Configuration.Implementations
                     Adress = $"{pub}@ w Legnicy"
                 };
 
-               var PubModell =  _addNewPub.Invoke(model);
+                var PubModell = _addNewPub.Invoke(model);
 
                 foreach (var meal in meals)
                 {
-                    var mealModel = new MealModel
+                    foreach (var type in types)
                     {
-                        Name = $"{meal}",
-                        Type = "Jedzenie",
-                        Expense = MealExpense,
-                    };
-                    MealExpense += 1.3m;
-                    _addNewMeal.Invoke(mealModel, PubModell.Id);
+                        var mealModel = new MealModel
+                        {
+                            Name = $"{meal}",
+                            Type = $"{type}",
+                            Expense = MealExpense,
+                        };
+                        MealExpense += 6.3m;
+                        _addNewMeal.Invoke(mealModel, PubModell.Id);
+                    }
                 }
             }
         }

@@ -36,6 +36,7 @@ namespace ITMeat.WEB.Hubs
         private readonly IGetUserSubmittedOrders _getUserSubmittedOrders;
         private readonly IGetOrderById _getOrderById;
         private readonly IGetPubInfoByOrderId _getPubInfoByOrderId;
+        private readonly ISubmitOrder _submitOrder;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
@@ -53,7 +54,8 @@ namespace ITMeat.WEB.Hubs
             ICreateNewPubOrder createNewPubOrder,
             IGetUserSubmittedOrders getUserSubmittedOrders,
             IGetOrderById getOrderById,
-            IGetPubInfoByOrderId getPubInfoByOrderId)
+            IGetPubInfoByOrderId getPubInfoByOrderId,
+            ISubmitOrder submitOrder)
         {
             _getActiveOrders = getActiveOrders;
             _getPubMealByOrderId = pubMealByPubOrderId;
@@ -70,6 +72,7 @@ namespace ITMeat.WEB.Hubs
             _getUserSubmittedOrders = getUserSubmittedOrders;
             _getOrderById = getOrderById;
             _getPubInfoByOrderId = getPubInfoByOrderId;
+            _submitOrder = submitOrder;
         }
 
         public override Task OnConnected()
@@ -190,6 +193,22 @@ namespace ITMeat.WEB.Hubs
             Clients.Caller.GetMealsinCompleteOrder(viewList, orderOwnerId.Owner.Id, orderId);
         }
 
+        public void GetMealsInSubmitedOrder(Guid orderId)
+        {
+            var userOrderMeal = _getUserOrderMeals.Invoke(orderId);
+            var viewList = userOrderMeal.Select(item => new GetMealsInSubmitedOrderViewModel
+            {
+                UserName = item.UserOrder.User.Name,
+                UserId = item.UserOrder.User.Id,
+                Quantity = item.Quantity,
+                Expense = item.Quantity * item.PubMeal.Expense,
+                MealName = item.PubMeal.Name,
+                Id = item.Id
+            });
+
+            Clients.Caller.GetMealsInSubmitedOrder(viewList);
+        }
+
         public void DeleteUserOrderMeal(Guid userOrderMealId)
         {
             if (userOrderMealId == Guid.Empty)
@@ -298,6 +317,20 @@ namespace ITMeat.WEB.Hubs
             };
 
             Clients.All.AddNewPubOrder(pubOrder);
+        }
+
+        public void SubmitOrder(Guid orderId)
+        {
+            if (orderId == Guid.Empty)
+            {
+                return;
+            }
+            var submitOrders = _submitOrder.Invoke(orderId);
+            if (submitOrders == false)
+            {
+                return;
+            }
+            Clients.Caller.SubmitOrder(submitOrders);
         }
     }
 }

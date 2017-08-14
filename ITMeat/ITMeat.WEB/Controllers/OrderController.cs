@@ -89,5 +89,12 @@ namespace ITMeat.WEB.Controllers
             ViewBag.OrderId = orderId;
             return View();
         }
+
+        [HttpGet("SummaryOrderInHistory/{OrderId}")]
+        public IActionResult SummaryOrderInHistory(Guid orderId)
+        {
+            ViewBag.OrderId = orderId;
+            return View();
+        }
     }
 }

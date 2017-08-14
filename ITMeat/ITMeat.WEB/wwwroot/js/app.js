@@ -44,6 +44,10 @@ function onLoadView() {
             myHub.server.getUserOrders(InJoinedOrderID);
         });
     }
+    if (title.html() === "Submited Order:") {
+        InJoinedOrderID = $("#MealsInSubmitedOrderTable").data("orderid");
+        myHub.server.getMealsInSubmitedOrder(InJoinedOrderID);
+    }
 }
 
 /*
@@ -69,6 +73,7 @@ function serializeForm(form) {
 /*
  * Order History,
  */
+
 myHub.client.getUserSubmittedOrders = function (result) {
     console.log("Load Orders History");
     var historyOrdersTable = $("#HistoryOrderTable");
@@ -93,7 +98,7 @@ myHub.client.getUserSubmittedOrders = function (result) {
                     " zł</td>" +
                     "<td>";
                 divToAppend +=
-                    '<a id ="GoToSummaryView" class="ui blue button" href="/Order/SummaryOrder/ ' +
+                    '<a id ="GoToSummaryView" class="ui blue button" href="/Order/SummaryOrderInHistory/ ' +
                     value.OrderId +
                     '">Look Order</a>';
 
@@ -101,6 +106,30 @@ myHub.client.getUserSubmittedOrders = function (result) {
                     "</tr>";
                 historyOrdersTable.append(divToAppend);
             }
+        });
+};
+myHub.client.getMealsInSubmitedOrder = function (result) {
+    console.log("Load Meal in Complete orders in History");
+    var mealsInOrderTable = $("#MealsInSubmitedOrderTable");
+    $.each(result,
+        function (index, value) {
+            var divToAppend = "<tr id ='orderMealid' data-usermealid='" +
+                value.Id +
+                "'>" +
+                "<td>" +
+                value.UserName +
+                "</td>" +
+                "<td>" +
+                value.MealName +
+                "</td>" +
+                "<td>" +
+                value.Quantity +
+                "</td>" +
+                "<td>" +
+                value.Expense +
+                " zł</td>" +
+                "</tr>";
+            mealsInOrderTable.append(divToAppend);
         });
 };
 
@@ -465,6 +494,7 @@ function openSideBar(orderId) {
         sidebar.addClass("visible");
         puher.css("cssText", "margin-left: 200px !important");
     }
+    InJoinedOrderID = orderId;
 }
 myHub.client.getPubInfo = function (result) {
     console.log("Load Pub Informations");
@@ -483,8 +513,16 @@ function cancelSubmitOrder() {
     sidebar.removeClass("visible");
 }
 function submitOrder() {
-    console.log("Zamowienie zostało wysłane");
+    console.log("Wysyłam zamowienie o id:", InJoinedOrderID);
+    myHub.server.submitOrder(InJoinedOrderID);
 }
+myHub.client.submitOrder = function (result) {
+    if (result === true) {
+        console.log("Zamowienie zostało wysłane");
+    } else {
+        console.log("Coś poszło nie tak z wysłaniem zamowienia");
+    }
+};
 //***************************************************************************************************************************
 /*
  * Start the connection,

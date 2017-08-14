@@ -1,0 +1,20 @@
+﻿@{
+    Layout = "_AppLayout";
+
+}
+<div class="titlename">Submited Order:</div>
+<div id="SummaryOrderinHistoryViews">
+    <div id="OrderMealList">
+        <table class="ui single line table">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Meals Name</th>
+                    <th>Quantity</th>
+                    <th>Expense</th>
+                </tr>
+            </thead>
+            <tbody id="MealsInSubmitedOrderTable" data-OrderId="@ViewBag.OrderId"></tbody>
+        </table>
+    </div>
+</div>
