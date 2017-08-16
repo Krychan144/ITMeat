@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using ITMeat.DataAccess.Context;
 using ITMeat.DataAccess.Models;
 using ITMeat.DataAccess.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace ITMeat.DataAccess.Repositories.Implementations
 {
@@ -24,7 +26,6 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                             Pub = pub,
                             Expense = meal.Expense,
                             Name = meal.Name,
-                            Type = meal.Type,
                         };
 
             return !(query.Count() > 0) ? Enumerable.Empty<Meal>().AsQueryable() : query;
@@ -43,7 +44,6 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                             Pub = pub,
                             Expense = meal.Expense,
                             Name = meal.Name,
-                            Type = meal.Type,
                         };
 
             return !(query.Count() > 0) ? Enumerable.Empty<Meal>().AsQueryable() : query;
@@ -58,7 +58,6 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                          {
                              Id = meal.Id,
                              Name = meal.Name,
-                             Type = meal.Type,
                              Expense = meal.Expense,
                          }).SingleOrDefault();
 

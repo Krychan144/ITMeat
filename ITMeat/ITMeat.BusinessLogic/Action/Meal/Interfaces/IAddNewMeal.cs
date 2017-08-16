@@ -9,6 +9,6 @@ namespace ITMeat.BusinessLogic.Action.Meal.Interfaces
 {
     public interface IAddNewMeal : IAction
     {
-        Guid Invoke(MealModel meal, Guid pubId);
+        Guid Invoke(MealModel meal, Guid pubId, Guid mealType);
     }
 }

@@ -14,10 +14,9 @@ namespace ITMeat.DataAccess.Models
         public decimal Expense { get; set; }
 
         [Required]
-        [Column(TypeName = "NVARCHAR(100)")]
-        public string Type { get; set; }
+        public Pub Pub { get; set; }
 
         [Required]
-        public Pub Pub { get; set; }
+        public MealType MealType { get; set; }
     }
 }

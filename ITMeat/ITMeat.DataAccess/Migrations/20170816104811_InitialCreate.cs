@@ -30,6 +30,21 @@ namespace ITMeat.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MealType",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MealType", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Pub",
                 columns: table => new
                 {
@@ -74,14 +89,20 @@ namespace ITMeat.DataAccess.Migrations
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Expense = table.Column<decimal>(type: "DECIMAL(16,2)", nullable: false),
+                    MealTypeId = table.Column<Guid>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false),
-                    PubId = table.Column<Guid>(nullable: false),
-                    Type = table.Column<string>(type: "NVARCHAR(100)", nullable: false)
+                    PubId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Meals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Meals_MealType_MealTypeId",
+                        column: x => x.MealTypeId,
+                        principalTable: "MealType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Meals_Pub_PubId",
                         column: x => x.PubId,
@@ -224,9 +245,20 @@ namespace ITMeat.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Meals_MealTypeId",
+                table: "Meals",
+                column: "MealTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Meals_PubId",
                 table: "Meals",
                 column: "PubId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MealType_Name",
+                table: "MealType",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_OwnerId",
@@ -288,6 +320,9 @@ namespace ITMeat.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserOrders");
+
+            migrationBuilder.DropTable(
+                name: "MealType");
 
             migrationBuilder.DropTable(
                 name: "Pub");

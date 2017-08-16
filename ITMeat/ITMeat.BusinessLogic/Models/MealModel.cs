@@ -11,5 +11,7 @@
         public decimal Phone { get; set; }
 
         public PubModel Pub { get; set; }
+
+        public MealTypeModel MealType { get; set; }
     }
 }

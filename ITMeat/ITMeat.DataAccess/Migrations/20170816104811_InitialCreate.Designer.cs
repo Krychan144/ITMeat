@@ -8,7 +8,7 @@ using ITMeat.DataAccess.Context;
 namespace ITMeat.DataAccess.Migrations
 {
     [DbContext(typeof(ITMeatDbContext))]
-    [Migration("20170809130227_InitialCreate")]
+    [Migration("20170816104811_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,6 +62,8 @@ namespace ITMeat.DataAccess.Migrations
                     b.Property<decimal>("Expense")
                         .HasColumnType("DECIMAL(16,2)");
 
+                    b.Property<Guid>("MealTypeId");
+
                     b.Property<DateTime>("ModifiedOn");
 
                     b.Property<string>("Name")
@@ -70,15 +72,36 @@ namespace ITMeat.DataAccess.Migrations
 
                     b.Property<Guid>("PubId");
 
-                    b.Property<string>("Type")
+                    b.HasKey("Id");
+
+                    b.HasIndex("MealTypeId");
+
+                    b.HasIndex("PubId");
+
+                    b.ToTable("Meals");
+                });
+
+            modelBuilder.Entity("ITMeat.DataAccess.Models.MealType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<DateTime>("ModifiedOn");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("NVARCHAR(100)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PubId");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
-                    b.ToTable("Meals");
+                    b.ToTable("MealType");
                 });
 
             modelBuilder.Entity("ITMeat.DataAccess.Models.Order", b =>
@@ -276,6 +299,10 @@ namespace ITMeat.DataAccess.Migrations
 
             modelBuilder.Entity("ITMeat.DataAccess.Models.Meal", b =>
                 {
+                    b.HasOne("ITMeat.DataAccess.Models.MealType", "MealType")
+                        .WithMany()
+                        .HasForeignKey("MealTypeId");
+
                     b.HasOne("ITMeat.DataAccess.Models.Pub", "Pub")
                         .WithMany("Meals")
                         .HasForeignKey("PubId");

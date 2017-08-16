@@ -34,7 +34,6 @@ namespace ITMeat.BusinessLogic.Action.Meal.Implementations
                 Id = item.Id,
                 Expense = item.Expense,
                 Name = item.Name,
-                Type = item.Type
             }).ToList();
 
             return mealsList;

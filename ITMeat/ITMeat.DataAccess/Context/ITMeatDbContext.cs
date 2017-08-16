@@ -29,6 +29,7 @@ namespace ITMeat.DataAccess.Context
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+            modelBuilder.Entity<MealType>().HasIndex(u => u.Name).IsUnique();
         }
 
         public new DbSet<TEntity> Set<TEntity>() where TEntity : BaseEntity
@@ -53,6 +54,7 @@ namespace ITMeat.DataAccess.Context
         public DbSet<UserToken> UserTokens { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<UserOrderMeal> UserOrderMeal { get; set; }
+        public DbSet<MealType> MealType { get; set; }
         public DbSet<Meal> Meals { get; set; }
         public DbSet<EmailMessage> EmailMessages { get; set; }
         public DbSet<Pub> Pub { get; set; }
