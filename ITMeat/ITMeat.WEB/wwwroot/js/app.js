@@ -6,6 +6,7 @@ var userName = $("#SignedDiv").data("name");
 var now = new Date();
 var InJoinedOrderID;
 var MealsToDeleteID;
+var MealList;
 
 //View Settings,
 $(".ui.sidebar.left").sidebar("setting", {
@@ -41,7 +42,12 @@ function onLoadView() {
             if ($("#MealsInOrderTable").data("orderid") !== null) {
                 InJoinedOrderID = $("#MealsInOrderTable").data("orderid");
             } console.log("dupa z tym" + InJoinedOrderID);
-            myHub.server.getUserOrders(InJoinedOrderID);
+
+            var mealsInOrder = myHub.server.getUserOrders(InJoinedOrderID);
+            $.when(mealsInOrder).then(function() {
+                myHub.server.getMealfromPub(InJoinedOrderID);
+            });
+
         });
     }
     if (title.html() === "Submited Order:") {
@@ -49,6 +55,8 @@ function onLoadView() {
         myHub.server.getMealsInSubmitedOrder(InJoinedOrderID);
     }
 }
+
+
 
 /*
  * Create connection SignalR,
@@ -204,19 +212,35 @@ myHub.client.loadActivePubOrders = function (result) {
 /*
  * Modal, Load Meal In FormModal,
  */
-myHub.client.pubMealLoadedAction = function (result) {
+myHub.client.pubMealLoadedAction = function (mealList, mealTypeList) {
     console.log("Load PubMeal");
-    $("#newMealinOrderSelect").find("option")
+    MealList = mealList;
+    $("#MealTypeinOrderSelect").find("option")
         .remove()
         .end();
-    $.each(result,
+    $.each(mealTypeList,
         function (index, item) {
-            $("#newMealinOrderSelect").append($("<option>",
-                { text: item.MealName, value: item.MealId, selected: false },
+            $("#MealTypeinOrderSelect").append($("<option>",
+                { text: item.MealTypeName, value: item.MealTypeId, selected: false },
                 "</option>"));
         });
 };
 
+function SendListToView(selectedType) {
+
+    console.log("Load Meal when Type is Selected",selectedType);
+    $("#newMealinOrderSelect").find("option")
+        .remove()
+        .end();
+    $.each(MealList,
+        function (index, item) {
+            if (item.TypeMealId === selectedType) {
+                $("#newMealinOrderSelect").append($("<option>",
+                    { text: item.MealName, value: item.MealId, selected: false },
+                    "</option>"));
+            }
+        });
+}
 /*
  * Add new Meal to Order
  */
@@ -228,12 +252,6 @@ function AddNewMeal(orderId) {
      */
     $(addMealModal).modal("setting", "closable", false)
         .modal("show");
-    /*
-     * Load PubMealsfromDataBase
-     */
-    $.when($.connection.hub.start()).then(function () {
-        myHub.server.getMealfromPub(orderId);
-    });
 }
 $("#addMealToOrderForm").submit(function (e) {
     e.preventDefault();
@@ -259,7 +277,7 @@ myHub.client.addNewMealToUserOrder = function (result, id) {
             "</td>" +
             "<td>" +
             result.Expense +
-            "</td>" +
+            " zł</td>" +
             "<td>";
         if (result.UserId === userId) {
             divToAppend += '<a class="ui button" onClick="deleteMealFromOrder(\'' + result.Id + '\')">Remove</a>';
@@ -518,6 +536,8 @@ function submitOrder() {
 }
 myHub.client.submitOrder = function (result) {
     if (result === true) {
+        $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
+        $(".pushable").removeAttr("style");
         console.log("Zamowienie zostało wysłane");
     } else {
         console.log("Coś poszło nie tak z wysłaniem zamowienia");

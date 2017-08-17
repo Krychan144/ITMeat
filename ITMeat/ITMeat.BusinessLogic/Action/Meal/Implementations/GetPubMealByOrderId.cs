@@ -40,6 +40,11 @@ namespace ITMeat.BusinessLogic.Action.Meal.Implementations
                     Id = item.Pub.Id,
                     Adress = item.Pub.Adress,
                     Name = item.Pub.Name
+                },
+                MealType = new MealTypeModel
+                {
+                    Id = item.MealType.Id,
+                    Name = item.MealType.Name
                 }
             }).ToList();
 

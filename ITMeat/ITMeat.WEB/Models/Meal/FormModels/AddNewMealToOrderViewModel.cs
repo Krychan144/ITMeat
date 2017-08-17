@@ -11,5 +11,7 @@ namespace ITMeat.WEB.Models.Meal.FormModels
         public int Quantity { get; set; }
 
         public Guid MealId { get; set; }
+
+        public Guid MealType { get; set; }
     }
 }

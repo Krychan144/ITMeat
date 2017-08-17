@@ -90,6 +90,12 @@ namespace ITMeat.WEB.Controllers
             return View();
         }
 
+        [HttpGet("Statistic")]
+        public IActionResult Statistic()
+        {
+            return View();
+        }
+
         [HttpGet("SummaryOrderInHistory/{OrderId}")]
         public IActionResult SummaryOrderInHistory(Guid orderId)
         {

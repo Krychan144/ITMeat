@@ -58,7 +58,8 @@ namespace ITMeat.BusinessLogic.Configuration.Implementations
                 var model = new PubModel
                 {
                     Name = $"{pub}",
-                    Adress = $"{pub}@ w Legnicy"
+                    Adress = $"{pub}@ w Legnicy",
+                    Phone = 533532578
                 };
                 var pubModell = _addNewPub.Invoke(model);
 

@@ -191,3 +191,7 @@ form {
 #submitButtons {
     padding-left: 13%;
 }
+.statisticView {
+    height: 100%;
+    background-color: #E2FFBF;
+}

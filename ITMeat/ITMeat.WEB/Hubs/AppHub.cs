@@ -8,11 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ITMeat.BusinessLogic.Action.Meal.Interfaces;
+using ITMeat.BusinessLogic.Action.MealType.Interfaces;
 using ITMeat.BusinessLogic.Action.Order.Interfaces;
 using ITMeat.BusinessLogic.Action.Pub.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrder.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrderMeals.Interfaces;
 using ITMeat.WEB.Models.Meal.FormModels;
+using ITMeat.WEB.Models.MealType.FormModels;
 using ITMeat.WEB.Models.Order;
 using ITMeat.WEB.Models.Pub;
 using ITMeat.WEB.Models.UserOrderMeals;
@@ -37,6 +39,7 @@ namespace ITMeat.WEB.Hubs
         private readonly IGetOrderById _getOrderById;
         private readonly IGetPubInfoByOrderId _getPubInfoByOrderId;
         private readonly ISubmitOrder _submitOrder;
+        private readonly IGetMealTypeByPubId _getMealTypeByPubId;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
@@ -55,7 +58,8 @@ namespace ITMeat.WEB.Hubs
             IGetUserSubmittedOrders getUserSubmittedOrders,
             IGetOrderById getOrderById,
             IGetPubInfoByOrderId getPubInfoByOrderId,
-            ISubmitOrder submitOrder)
+            ISubmitOrder submitOrder,
+            IGetMealTypeByPubId getMealTypeByPubId)
         {
             _getActiveOrders = getActiveOrders;
             _getPubMealByOrderId = pubMealByPubOrderId;
@@ -73,6 +77,7 @@ namespace ITMeat.WEB.Hubs
             _getOrderById = getOrderById;
             _getPubInfoByOrderId = getPubInfoByOrderId;
             _submitOrder = submitOrder;
+            _getMealTypeByPubId = getMealTypeByPubId;
         }
 
         public override Task OnConnected()
@@ -148,16 +153,23 @@ namespace ITMeat.WEB.Hubs
         public void GetMealfromPub(Guid orderId)
         {
             var mealList = _getPubMealByOrderId.Invoke(orderId);
-
-            var viewList = mealList.Select(item => new LoadPubOrderMealViewModel
+            var mealViewList = mealList.Select(item => new LoadPubOrderMealViewModel
             {
                 PubId = item.Pub.Id,
                 MealName = item.Name,
                 Expense = item.Expense,
                 MealId = item.Id,
+                TypeMealId = item.MealType.Id
             });
 
-            Clients.Caller.PubMealLoadedAction(viewList);
+            var mealTypeList = _getMealTypeByPubId.Invoke(mealViewList.First().PubId);
+            var mealTypeViewList = mealTypeList.Select(item => new MealTypeInAddMealToOrder
+            {
+                MealTypeId = item.Id,
+                MealTypeName = item.Name
+            });
+
+            Clients.Caller.PubMealLoadedAction(mealViewList, mealTypeViewList);
         }
 
         public void GetUserOrders(Guid orderId)

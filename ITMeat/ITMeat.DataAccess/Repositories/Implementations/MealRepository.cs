@@ -37,6 +37,7 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                         join pub in context.Set<Pub>() on meal.Pub.Id equals pub.Id
                         join pubOrder in context.Set<PubOrder>() on pub.Id equals pubOrder.Pub.Id
                         join order in context.Set<Order>() on pubOrder.Order.Id equals order.Id
+                        join mealType in context.Set<MealType>() on meal.MealType.Id equals mealType.Id
                         where order.Id == orderId
                         select new Meal
                         {
@@ -44,6 +45,7 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                             Pub = pub,
                             Expense = meal.Expense,
                             Name = meal.Name,
+                            MealType = mealType
                         };
 
             return !(query.Count() > 0) ? Enumerable.Empty<Meal>().AsQueryable() : query;
