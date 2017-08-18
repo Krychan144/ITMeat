@@ -12,6 +12,8 @@ namespace ITMeat.WEB.Models.PubOrder
 
         public string EndDateTime { get; set; }
 
+        public Double EndDateTimeData { get; set; }
+
         public bool ToSubmitet { get; set; }
 
         public Guid PubId { get; set; }

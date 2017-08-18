@@ -4,23 +4,26 @@
 }
 @Html.Partial("_AddMealToOrderModal")
 @Html.Partial("_DeleteMealModal")
-    <div class="titlename">Please add your meals,Thanks man!</div>
-    <div id="MealsInOrderViews">
-        <div id="MealsList">
-            <table class="ui single line table">
-                <thead>
-                    <tr>
-                        <th>User Name</th>
-                        <th>Meals Name</th>
-                        <th>Quantity</th>
-                        <th>Expense</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="MealsInOrderTable" data-OrderId="@ViewBag.OrderId"></tbody>
-            </table>
-            <div class="AddNewOrdersMeals">
-                <div id="AddMealCircleButton" onclick="AddNewMeal('@ViewBag.OrderId')"> <i class="huge green add circle icon"></i> </div>
-            </div>
+<div class="titlename">Please add your meals,Thanks man!</div>
+<p>Time when ou can add new Meal to order: </p><p id="demo"></p>
+<br />
+<hr />
+<div id="MealsInOrderViews">
+    <div id="MealsList">
+        <table class="ui single line table">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Meals Name</th>
+                    <th>Quantity</th>
+                    <th>Expense</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="MealsInOrderTable" data-OrderEndTime="@ViewBag.OrderEndDateTime" data-OrderId="@ViewBag.OrderId"></tbody>
+        </table>
+        <div class="AddNewOrdersMeals">
+            <div id="AddMealCircleButton" onclick="AddNewMeal('@ViewBag.OrderId')"> <i class="huge green add circle icon"></i> </div>
         </div>
     </div>
+</div>

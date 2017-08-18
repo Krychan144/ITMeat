@@ -7,6 +7,8 @@ var now = new Date();
 var InJoinedOrderID;
 var MealsToDeleteID;
 var MealList;
+var listoRDER;
+var dateEndTime;
 
 //View Settings,
 $(".ui.sidebar.left").sidebar("setting", {
@@ -44,10 +46,9 @@ function onLoadView() {
             } console.log("dupa z tym" + InJoinedOrderID);
 
             var mealsInOrder = myHub.server.getUserOrders(InJoinedOrderID);
-            $.when(mealsInOrder).then(function() {
+            $.when(mealsInOrder).then(function () {
                 myHub.server.getMealfromPub(InJoinedOrderID);
             });
-
         });
     }
     if (title.html() === "Submited Order:") {
@@ -55,8 +56,6 @@ function onLoadView() {
         myHub.server.getMealsInSubmitedOrder(InJoinedOrderID);
     }
 }
-
-
 
 /*
  * Create connection SignalR,
@@ -81,7 +80,6 @@ function serializeForm(form) {
 /*
  * Order History,
  */
-
 myHub.client.getUserSubmittedOrders = function (result) {
     console.log("Load Orders History");
     var historyOrdersTable = $("#HistoryOrderTable");
@@ -146,11 +144,14 @@ myHub.client.getMealsInSubmitedOrder = function (result) {
 */
 myHub.client.loadActivePubOrders = function (result) {
     console.log("Load Active Orders");
+    listoRDER = result;
     var activeOrdersTable = $("#ActiveOrderTable");
     $.each(result,
         function (index, value) {
             InJoinedOrderID = value.OrderId;
-            var divToAppend = "<tr id='ActiveOrderTable' data-PubOrderId='" +
+            var divToAppend = "<tr id='ActiveOrderTable'data-OrderId='" +
+                value.OrderId +
+                "' data-PubOrderId='" +
                 value.PubOrderId +
                 "'>" +
                 "<td>" +
@@ -162,10 +163,10 @@ myHub.client.loadActivePubOrders = function (result) {
                 "<td>" +
                 value.CreatedOn +
                 "</td>" +
-                "<td>" +
+                "<td id='EndTimeInActive' data-value='" + value.EndDateTimeData + "'>" +
                 value.EndDateTime +
                 "</td>" +
-                "<td>";
+                "<td id='ActionsInActive'>";
             if (value.ToSubmitet === false) {
                 if (value.OwnerId === userId) {
                     if (value.IsJoined === false) {
@@ -208,7 +209,18 @@ myHub.client.loadActivePubOrders = function (result) {
             activeOrdersTable.append(divToAppend);
         });
 };
+setInterval(doSomething, 5000);
 
+function doSomething() {
+    $('#ActiveOrdersTableRow tr').each(function () {
+        var dateTimeNow = new Date();
+        var dateTime = $(this).find("#EndTimeInActive").data("value");
+        var orderId = $("#ActiveOrderTable").data("OrderId");
+        if (dateTime < dateTimeNow) {
+            $(this).find("#ActionsInActive").html('<a id ="GoToSummaryView" class="ui orange button" href="/Order/SummaryOrder/ ' + orderId + '">Summary</a>');
+        }
+    });
+}
 /*
  * Modal, Load Meal In FormModal,
  */
@@ -225,10 +237,8 @@ myHub.client.pubMealLoadedAction = function (mealList, mealTypeList) {
                 "</option>"));
         });
 };
-
 function SendListToView(selectedType) {
-
-    console.log("Load Meal when Type is Selected",selectedType);
+    console.log("Load Meal when Type is Selected", selectedType);
     $("#newMealinOrderSelect").find("option")
         .remove()
         .end();
@@ -288,6 +298,35 @@ myHub.client.addNewMealToUserOrder = function (result, id) {
     }
 };
 
+// Set the date we're counting down to
+dateEndTime = $("#MealsInOrderTable").data("orderendtime");
+//var countDownDate =new Date(dateEndTime).getTime();
+var countDownDate = new Date("Jan 5, 2018 15:37:25").getTime();
+// Update the count down every 1 second
+var x = setInterval(function () {
+    // Get todays date and time
+    console.log(countDownDate);
+    var now = new Date().getTime();
+
+    // Find the distance between now an the count down date
+    var distance = countDownDate - now;
+
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Output the result in an element with id="demo"
+    document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+        + minutes + "m " + seconds + "s ";
+
+    // If the count down is over, write some text
+    if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("demo").innerHTML = "EXPIRED";
+    }
+}, 1000);
 /*
  * Add new PubOrder
  */
@@ -295,10 +334,9 @@ $("#createOrderForm").submit(function (e) {
     e.preventDefault();
     var data = serializeForm($(this));
 
-    $.when($.connection.hub.start()).then
-    {
+    $.when($.connection.hub.start()).then(function () {
         myHub.server.addNewPubOrder(data);
-    }
+    });
 });
 myHub.client.addNewPubOrder = function (result) {
     console.log("Somebody add Puborder", result.OwnerId);

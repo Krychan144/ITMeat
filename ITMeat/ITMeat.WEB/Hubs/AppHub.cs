@@ -87,6 +87,15 @@ namespace ITMeat.WEB.Hubs
             return base.OnConnected();
         }
 
+        public double MilliTimeStamp(DateTime TheDate)
+        {
+            DateTime d1 = new DateTime(1970, 1, 1);
+            DateTime d2 = TheDate.ToUniversalTime();
+            TimeSpan ts = new TimeSpan(d2.Ticks - d1.Ticks);
+
+            return ts.TotalMilliseconds;
+        }
+
         public override Task OnDisconnected(bool stopCalled)
         {
             var userToDelete = ConnectedClients.FirstOrDefault(x => x.UserId == Context.Actor());
@@ -124,7 +133,8 @@ namespace ITMeat.WEB.Hubs
                 PubId = item.Pub.Id,
                 PubName = item.Pub.Name,
                 PubOrderId = item.Id,
-                IsJoined = userOrderList.Any(x => x.Id == item.Order.Id)
+                IsJoined = userOrderList.Any(x => x.Id == item.Order.Id),
+                EndDateTimeData = MilliTimeStamp(item.Order.EndDateTime.ToLocalTime())
             });
 
             Clients.Caller.LoadActivePubOrders(list);

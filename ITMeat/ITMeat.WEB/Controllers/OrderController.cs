@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using ITMeat.BusinessLogic.Action.Order.Interfaces;
 using ITMeat.BusinessLogic.Action.PubOrder.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrder.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrderMeals.Interfaces;
@@ -19,14 +20,19 @@ namespace ITMeat.WEB.Controllers
         private readonly IGetAllPubs _getAllPubs;
         private readonly ICreateNewPubOrder _createNewPubOrder;
         private readonly ICreateUserOrder _createUserOrder;
+        private readonly IGetOrderEndDateTimeById _getOrderEndDateTimeById;
+
+        private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm:SS";
 
         public OrderController(IGetAllPubs getAllPubs,
             ICreateNewPubOrder createNewPubOrder,
-            ICreateUserOrder createUserOrder)
+            ICreateUserOrder createUserOrder,
+            IGetOrderEndDateTimeById getOrderEndDateTimeById)
         {
             _getAllPubs = getAllPubs;
             _createNewPubOrder = createNewPubOrder;
             _createUserOrder = createUserOrder;
+            _getOrderEndDateTimeById = getOrderEndDateTimeById;
         }
 
         public IActionResult Index()
@@ -58,6 +64,8 @@ namespace ITMeat.WEB.Controllers
         public IActionResult SubmitOrder(Guid orderId)
         {
             ViewBag.OrderId = orderId;
+            var dateEnd = _getOrderEndDateTimeById.Invoke(orderId);
+            ViewBag.OrderEndDateTime = dateEnd.ToLocalTime().ToString(TimeStampRepresentation);
             return View();
         }
 

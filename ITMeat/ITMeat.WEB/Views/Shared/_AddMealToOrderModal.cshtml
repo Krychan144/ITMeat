@@ -30,6 +30,7 @@
     <label>Choose your food, then the number, by default one. It will appear in the team order. </label>
     <br />
     <hr />
+  
     @using (Html.BeginForm(FormMethod.Post, false, new { id = "addMealToOrderForm", @class = "ui form center aligned" }))
     {
         <div class="content">
@@ -41,7 +42,7 @@
                         }, "value", "text", 1), new { id = "MealTypeinOrderSelect", onchange = "SendListToView(this.value)" })
             </div>
             <hr />
-            <br/>
+            <br />
             <div class="field">
                 @Html.DropDownListFor(x => x.MealId,
                     new SelectList(
