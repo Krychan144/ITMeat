@@ -13,6 +13,7 @@ using ITMeat.BusinessLogic.Action.Order.Interfaces;
 using ITMeat.BusinessLogic.Action.Pub.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrder.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrderMeals.Interfaces;
+using ITMeat.BusinessLogic.Helpers.Interfaces;
 using ITMeat.WEB.Models.Meal.FormModels;
 using ITMeat.WEB.Models.MealType.FormModels;
 using ITMeat.WEB.Models.Order;
@@ -40,6 +41,7 @@ namespace ITMeat.WEB.Hubs
         private readonly IGetPubInfoByOrderId _getPubInfoByOrderId;
         private readonly ISubmitOrder _submitOrder;
         private readonly IGetMealTypeByPubId _getMealTypeByPubId;
+        private readonly IConvertDateTime _convertDateTime;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
@@ -59,7 +61,8 @@ namespace ITMeat.WEB.Hubs
             IGetOrderById getOrderById,
             IGetPubInfoByOrderId getPubInfoByOrderId,
             ISubmitOrder submitOrder,
-            IGetMealTypeByPubId getMealTypeByPubId)
+            IGetMealTypeByPubId getMealTypeByPubId,
+            IConvertDateTime convertDateTime)
         {
             _getActiveOrders = getActiveOrders;
             _getPubMealByOrderId = pubMealByPubOrderId;
@@ -78,6 +81,7 @@ namespace ITMeat.WEB.Hubs
             _getPubInfoByOrderId = getPubInfoByOrderId;
             _submitOrder = submitOrder;
             _getMealTypeByPubId = getMealTypeByPubId;
+            _convertDateTime = convertDateTime;
         }
 
         public override Task OnConnected()
@@ -85,15 +89,6 @@ namespace ITMeat.WEB.Hubs
             ConnectedClients.Add(new UserConnection { ConnectionId = Context.ConnectionId, UserId = Context.Actor() });
 
             return base.OnConnected();
-        }
-
-        public double MilliTimeStamp(DateTime TheDate)
-        {
-            DateTime d1 = new DateTime(1970, 1, 1);
-            DateTime d2 = TheDate.ToUniversalTime();
-            TimeSpan ts = new TimeSpan(d2.Ticks - d1.Ticks);
-
-            return ts.TotalMilliseconds;
         }
 
         public override Task OnDisconnected(bool stopCalled)
@@ -134,7 +129,7 @@ namespace ITMeat.WEB.Hubs
                 PubName = item.Pub.Name,
                 PubOrderId = item.Id,
                 IsJoined = userOrderList.Any(x => x.Id == item.Order.Id),
-                EndDateTimeData = MilliTimeStamp(item.Order.EndDateTime.ToLocalTime())
+                EndDateTimeData = _convertDateTime.MilliTimeStamp(item.Order.EndDateTime.ToLocalTime())
             });
 
             Clients.Caller.LoadActivePubOrders(list);

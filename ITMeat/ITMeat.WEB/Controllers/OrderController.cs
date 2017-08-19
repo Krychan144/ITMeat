@@ -9,6 +9,7 @@ using ITMeat.BusinessLogic.Action.Order.Interfaces;
 using ITMeat.BusinessLogic.Action.PubOrder.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrder.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrderMeals.Interfaces;
+using ITMeat.BusinessLogic.Helpers.Interfaces;
 using ITMeat.WEB.Models.Meal.FormModels;
 using ITMeat.WEB.Models.PubOrder;
 
@@ -21,18 +22,21 @@ namespace ITMeat.WEB.Controllers
         private readonly ICreateNewPubOrder _createNewPubOrder;
         private readonly ICreateUserOrder _createUserOrder;
         private readonly IGetOrderEndDateTimeById _getOrderEndDateTimeById;
+        private readonly IConvertDateTime _convertDateTime;
 
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm:SS";
 
         public OrderController(IGetAllPubs getAllPubs,
             ICreateNewPubOrder createNewPubOrder,
             ICreateUserOrder createUserOrder,
-            IGetOrderEndDateTimeById getOrderEndDateTimeById)
+            IGetOrderEndDateTimeById getOrderEndDateTimeById,
+            IConvertDateTime convertDateTime)
         {
             _getAllPubs = getAllPubs;
             _createNewPubOrder = createNewPubOrder;
             _createUserOrder = createUserOrder;
             _getOrderEndDateTimeById = getOrderEndDateTimeById;
+            _convertDateTime = convertDateTime;
         }
 
         public IActionResult Index()
@@ -64,8 +68,8 @@ namespace ITMeat.WEB.Controllers
         public IActionResult SubmitOrder(Guid orderId)
         {
             ViewBag.OrderId = orderId;
-            var dateEnd = _getOrderEndDateTimeById.Invoke(orderId);
-            ViewBag.OrderEndDateTime = dateEnd.ToLocalTime().ToString(TimeStampRepresentation);
+            var dateEnd = _getOrderEndDateTimeById.Invoke(orderId).ToLocalTime();
+            ViewBag.OrderEndDateTime = _convertDateTime.MilliTimeStamp(dateEnd);
             return View();
         }
 

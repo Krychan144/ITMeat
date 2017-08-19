@@ -191,7 +191,46 @@ form {
 #submitButtons {
     padding-left: 13%;
 }
+
 .statisticView {
     height: 100%;
     background-color: #E2FFBF;
+}
+
+.coldownOrder {
+    background-color: #E2FFBF;
+    text-align: center;
+    width: 100%;
+    padding-left: 50px;
+    margin-right: auto;
+}
+
+.text {
+    font-weight: 700;
+    text-align: left;
+    color: #e30613;
+    margin-bottom: 15px;
+}
+
+.itemCountDown {
+    padding-top: 0.85rem;
+    width: 70px;
+    height: 40px;
+    background-color: #e5e8ea;
+    float: left;
+    border-radius: 5px;
+    font-size: 24px;
+    color: #61B300;
+}
+
+.separator {
+    padding-top: 0.85rem;
+    float: left;
+    width: 20px;
+    height: 40px;
+    font-size: 20px;
+    color: black
+}
+.highseparator {
+    height: 60px;
 }

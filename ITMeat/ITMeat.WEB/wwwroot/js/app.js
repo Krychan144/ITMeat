@@ -300,8 +300,8 @@ myHub.client.addNewMealToUserOrder = function (result, id) {
 
 // Set the date we're counting down to
 dateEndTime = $("#MealsInOrderTable").data("orderendtime");
-//var countDownDate =new Date(dateEndTime).getTime();
-var countDownDate = new Date("Jan 5, 2018 15:37:25").getTime();
+var countDownDate = dateEndTime;
+
 // Update the count down every 1 second
 var x = setInterval(function () {
     // Get todays date and time
@@ -318,13 +318,38 @@ var x = setInterval(function () {
     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
     // Output the result in an element with id="demo"
-    document.getElementById("demo").innerHTML = days + "d " + hours + "h "
-        + minutes + "m " + seconds + "s ";
+    if (days === 0) {
+        $("#daysCountDown").css("cssText", "color:#e30613");
+        document.getElementById("daysCountDown").innerHTML = days + " D ";
+    } else {
+        $("#daysCountDown").css("cssText", "color:black");
+        document.getElementById("daysCountDown").innerHTML = days + " D ";
+    }
+    if (hours === 0) {
+        $("#hoursCountDown").css("cssText", "color:#e30613");
+        document.getElementById("hoursCountDown").innerHTML = hours + " H ";
+    } else {
+        $("#hoursCountDown").css("cssText", "color:black");
+        document.getElementById("hoursCountDown").innerHTML = hours + " H ";
+    }
+    if (minutes === 0) {
+        $("#minutesCountDown").css("cssText", "color:#e30613");
+        document.getElementById("minutesCountDown").innerHTML = minutes + " M ";
+    } else {
+        document.getElementById("minutesCountDown").innerHTML = minutes + " M ";
+        $("#minutesCountDown").css("cssText", "color:black");
+    } if (seconds === 0) {
+        $("#secondsCountDown").css("cssText", "color:#e30613");
+        document.getElementById("secondsCountDown").innerHTML = seconds + " S ";
+    } else {
+        $("#secondsCountDown").css("cssText", "color:black");
+        document.getElementById("secondsCountDown").innerHTML = seconds + " S ";
+    }
 
     // If the count down is over, write some text
     if (distance < 0) {
-        clearInterval(x);
-        document.getElementById("demo").innerHTML = "EXPIRED";
+        var url = '@Url.Action("ActiveOrders", "Order")';
+        window.location.href = url;
     }
 }, 1000);
 /*
