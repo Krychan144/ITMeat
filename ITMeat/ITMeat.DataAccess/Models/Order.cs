@@ -15,6 +15,9 @@ namespace ITMeat.DataAccess.Models
         public User Owner { get; set; }
 
         [Required]
+        public string Name { get; set; }
+
+        [Required]
         public DateTime EndDateTime { get; set; }
 
         public DateTime? SubmitDateTime { get; set; }

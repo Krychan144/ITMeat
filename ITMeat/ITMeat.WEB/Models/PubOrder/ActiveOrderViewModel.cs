@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace ITMeat.WEB.Models.PubOrder
 {
@@ -15,6 +16,8 @@ namespace ITMeat.WEB.Models.PubOrder
         public Double EndDateTimeData { get; set; }
 
         public bool ToSubmitet { get; set; }
+
+        public string OrderName { get; set; }
 
         public Guid PubId { get; set; }
 

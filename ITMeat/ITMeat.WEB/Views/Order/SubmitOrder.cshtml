@@ -4,19 +4,32 @@
 }
 @Html.Partial("_AddMealToOrderModal")
 @Html.Partial("_DeleteMealModal")
-<div class="titlename">Please add your meals,Thanks man!</div>
-<div class="coldownOrder">
-    <div class="text">
+<div class="titlename smallTitle">Please add your meals,Thanks man!</div>
+<div class="coldownOrder ">
+    <div class="text " >
         Time remaining to end order:
     </div>
-    <div class="itemCountDown" id="daysCountDown"></div>
+    <div class="itemGroupDays">
+        <div class="itemCountDown" id="daysCountDown"></div>
+        <div class="labelDays"> DAY</div>
+    </div>
     <div class="separator"> : </div>
-    <div class="itemCountDown" id="hoursCountDown"></div>
+    <div class="itemGroupHours">
+        <div class="itemCountDown" id="hoursCountDown"></div>
+        <div class="labelhours"> HOUR</div>
+    </div>
     <div class="separator"> : </div>
-    <div class="itemCountDown" id="minutesCountDown"></div>
+    <div class="itemGroupMinutes">
+        <div class="itemCountDown" id="minutesCountDown"></div>
+        <div class="labelMinutes"> MIN</div>
+    </div>
     <div class="separator"> : </div>
-    <div class="itemCountDown" id="secondsCountDown"></div>
-    <div class="highseparator"> </div>
+    <div class="itemGroupSeconds">
+        <div class="itemCountDown" id="secondsCountDown"></div>
+        <div class="labelSeconds"> SEC</div>
+    </div>
+
+ 
 </div>
 
 <div id="MealsInOrderViews">

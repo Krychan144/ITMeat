@@ -24,9 +24,9 @@ namespace ITMeat.BusinessLogic.Action.PubOrder.Implementations
             _orderRepository = orderRepository;
         }
 
-        public Guid Invoke(DateTime endDateTime, Guid userId, Guid pubId)
+        public Guid Invoke(DateTime endDateTime, string orderName, Guid userId, Guid pubId)
         {
-            if (userId == Guid.Empty)
+            if (userId == Guid.Empty || pubId == Guid.Empty || orderName == string.Empty)
             {
                 return Guid.Empty;
             }
@@ -49,6 +49,7 @@ namespace ITMeat.BusinessLogic.Action.PubOrder.Implementations
             {
                 CreatedOn = DateTime.UtcNow,
                 EndDateTime = endDateTime,
+                Name = orderName
             };
 
             var orderToAdd = order;

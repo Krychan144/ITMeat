@@ -31,7 +31,8 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                                  Id = order.Id,
                                  EndDateTime = order.EndDateTime,
                                  SubmitDateTime = order.SubmitDateTime,
-                                 Expense = order.Expense
+                                 Expense = order.Expense,
+                                 Name = order.Name
                              },
                              Pub = pub,
                          }).OrderBy(order => order.Order.EndDateTime);

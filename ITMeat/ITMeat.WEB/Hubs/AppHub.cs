@@ -128,6 +128,7 @@ namespace ITMeat.WEB.Hubs
                 PubId = item.Pub.Id,
                 PubName = item.Pub.Name,
                 PubOrderId = item.Id,
+                OrderName = item.Order.Name,
                 IsJoined = userOrderList.Any(x => x.Id == item.Order.Id),
                 EndDateTimeData = _convertDateTime.MilliTimeStamp(item.Order.EndDateTime.ToLocalTime())
             });
@@ -310,7 +311,7 @@ namespace ITMeat.WEB.Hubs
 
         public void AddNewPubOrder(AddNewOrderViewModel model)
         {
-            var orderAddAction = _createNewPubOrder.Invoke(model.EndOrders, Context.Actor(), model.PubId);
+            var orderAddAction = _createNewPubOrder.Invoke(model.EndOrders, model.OrderName, Context.Actor(), model.PubId);
 
             if (orderAddAction == Guid.Empty)
             {
@@ -330,6 +331,7 @@ namespace ITMeat.WEB.Hubs
                 PubId = addedPubOrder.Pub.Id,
                 PubName = addedPubOrder.Pub.Name,
                 PubOrderId = addedPubOrder.Id,
+                OrderName = addedPubOrder.Order.Name,
                 IsJoined = false
             };
 

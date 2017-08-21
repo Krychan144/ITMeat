@@ -13,6 +13,12 @@
                 <div class="field " style="left: 40%;">
                     <div class="your-clock"></div>
                 </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        @Html.TextBoxFor(m => m.OrderName, new { @class = "form-control", placeholder = "Name", type = "name", required = "required" })
+                        <i class="sticky note icon"></i>
+                    </div>
+                </div>
                 <div class="field ">
                     @Html.DropDownListFor(x => x.PubId, new List<SelectListItem>(Model.Pubs))
                 </div>

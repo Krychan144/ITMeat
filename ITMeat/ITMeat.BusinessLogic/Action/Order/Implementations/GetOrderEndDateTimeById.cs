@@ -15,8 +15,12 @@ namespace ITMeat.BusinessLogic.Action.Order.Implementations
             _orderRepository = orderRepository;
         }
 
-        public DateTime Invoke(Guid orderId)
+        public DateTime? Invoke(Guid orderId)
         {
+            if (orderId == Guid.Empty)
+            {
+                return null;
+            }
             var dbOrder = _orderRepository.GetById(orderId);
 
             var dateEnd = dbOrder.EndDateTime;

@@ -121,6 +121,7 @@ namespace ITMeat.DataAccess.Migrations
                     EndDateTime = table.Column<DateTime>(nullable: false),
                     Expense = table.Column<decimal>(type: "DECIMAL(16 ,2)", nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     OwnerId = table.Column<Guid>(nullable: false),
                     SubmitDateTime = table.Column<DateTime>(nullable: true)
                 },

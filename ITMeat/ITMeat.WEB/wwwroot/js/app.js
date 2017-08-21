@@ -48,6 +48,64 @@ function onLoadView() {
             var mealsInOrder = myHub.server.getUserOrders(InJoinedOrderID);
             $.when(mealsInOrder).then(function () {
                 myHub.server.getMealfromPub(InJoinedOrderID);
+                // Set the date we're counting down to
+                dateEndTime = $("#MealsInOrderTable").data("orderendtime");
+                var countDownDate = dateEndTime;
+
+                // Update the count down every 1 second
+                var x = setInterval(function () {
+                    // Get todays date and time
+                    console.log(countDownDate);
+                    var now = new Date().getTime();
+
+                    // Find the distance between now an the count down date
+                    var distance = countDownDate - now;
+
+                    // Time calculations for days, hours, minutes and seconds
+                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    // Output the result in an element with id="demo"
+                    if (days === 0) {
+                        $("#daysCountDown").css("cssText", "color:#e30613");
+                        document.getElementById("daysCountDown").innerHTML = days;
+                    } else {
+                        $("#daysCountDown").css("cssText", "color:black");
+                        document.getElementById("daysCountDown").innerHTML = days;
+                    }
+
+                    if (hours === 0) {
+                        $("#hoursCountDown").css("cssText", "color:#e30613");
+                        document.getElementById("hoursCountDown").innerHTML = hours;
+                    } else {
+                        $("#hoursCountDown").css("cssText", "color:black");
+                        document.getElementById("hoursCountDown").innerHTML = hours;
+                    }
+
+                    if (minutes === 0) {
+                        $("#minutesCountDown").css("cssText", "color:#e30613");
+                        document.getElementById("minutesCountDown").innerHTML = minutes;
+                    } else {
+                        $("#minutesCountDown").css("cssText", "color:black");
+                        document.getElementById("minutesCountDown").innerHTML = minutes;
+                    }
+
+                    if (seconds === 0) {
+                        $("#secondsCountDown").css("cssText", "color:#e30613");
+                        document.getElementById("secondsCountDown").innerHTML = seconds;
+                    } else {
+                        $("#secondsCountDown").css("cssText", "color:black");
+                        document.getElementById("secondsCountDown").innerHTML = seconds;
+                    }
+
+                    // If the count down is over, write some text
+                    if (distance < 0) {
+                        var urlss = "/Order/ActiveOrders";
+                        window.location.href = urlss;
+                    }
+                }, 1000);
             });
         });
     }
@@ -149,23 +207,12 @@ myHub.client.loadActivePubOrders = function (result) {
     $.each(result,
         function (index, value) {
             InJoinedOrderID = value.OrderId;
-            var divToAppend = "<tr id='ActiveOrderTable'data-OrderId='" +
-                value.OrderId +
-                "' data-PubOrderId='" +
-                value.PubOrderId +
-                "'>" +
-                "<td>" +
-                value.PubName +
-                "</td>" +
-                "<td>" +
-                value.OwnerName +
-                "</td>" +
-                "<td>" +
-                value.CreatedOn +
-                "</td>" +
-                "<td id='EndTimeInActive' data-value='" + value.EndDateTimeData + "'>" +
-                value.EndDateTime +
-                "</td>" +
+            var divToAppend = '<tr id="ActiveOrderTableRow" data-orderid="' + value.OrderId + '" data-PubOrderId="' + value.PubOrderId + '">' +
+                "<td>" + value.OrderName + "</td>" +
+                "<td>" + value.PubName + "</td>" +
+                "<td>" + value.OwnerName + "</td>" +
+                "<td>" + value.CreatedOn + "</td>" +
+                "<td id='EndTimeInActive' data-value='" + value.EndDateTimeData + "'>" + value.EndDateTime + "</td>" +
                 "<td id='ActionsInActive'>";
             if (value.ToSubmitet === false) {
                 if (value.OwnerId === userId) {
@@ -192,16 +239,12 @@ myHub.client.loadActivePubOrders = function (result) {
                             '">Join</a>';
                     } else {
                         divToAppend +=
-                            '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
-                            value.OrderId +
-                            '">Continue</a>';
+                            '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' + value.OrderId + '">Continue</a>';
                     }
                 }
             } else {
                 divToAppend +=
-                    '<a id ="GoToSummaryView" class="ui orange button" href="/Order/SummaryOrder/ ' +
-                    value.OrderId +
-                    '">Summary</a>';
+                    '<a id ="GoToSummaryView" class="ui orange button" href="/Order/SummaryOrder/ ' + value.OrderId + '">Summary</a>';
             }
 
             divToAppend += "</td>" +
@@ -212,10 +255,10 @@ myHub.client.loadActivePubOrders = function (result) {
 setInterval(doSomething, 5000);
 
 function doSomething() {
+    var dateTimeNow = new Date();
     $('#ActiveOrdersTableRow tr').each(function () {
-        var dateTimeNow = new Date();
         var dateTime = $(this).find("#EndTimeInActive").data("value");
-        var orderId = $("#ActiveOrderTable").data("OrderId");
+        var orderId = $(this).data("orderid");
         if (dateTime < dateTimeNow) {
             $(this).find("#ActionsInActive").html('<a id ="GoToSummaryView" class="ui orange button" href="/Order/SummaryOrder/ ' + orderId + '">Summary</a>');
         }
@@ -298,69 +341,21 @@ myHub.client.addNewMealToUserOrder = function (result, id) {
     }
 };
 
-// Set the date we're counting down to
-dateEndTime = $("#MealsInOrderTable").data("orderendtime");
-var countDownDate = dateEndTime;
-
-// Update the count down every 1 second
-var x = setInterval(function () {
-    // Get todays date and time
-    console.log(countDownDate);
-    var now = new Date().getTime();
-
-    // Find the distance between now an the count down date
-    var distance = countDownDate - now;
-
-    // Time calculations for days, hours, minutes and seconds
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    // Output the result in an element with id="demo"
-    if (days === 0) {
-        $("#daysCountDown").css("cssText", "color:#e30613");
-        document.getElementById("daysCountDown").innerHTML = days + " D ";
-    } else {
-        $("#daysCountDown").css("cssText", "color:black");
-        document.getElementById("daysCountDown").innerHTML = days + " D ";
-    }
-    if (hours === 0) {
-        $("#hoursCountDown").css("cssText", "color:#e30613");
-        document.getElementById("hoursCountDown").innerHTML = hours + " H ";
-    } else {
-        $("#hoursCountDown").css("cssText", "color:black");
-        document.getElementById("hoursCountDown").innerHTML = hours + " H ";
-    }
-    if (minutes === 0) {
-        $("#minutesCountDown").css("cssText", "color:#e30613");
-        document.getElementById("minutesCountDown").innerHTML = minutes + " M ";
-    } else {
-        document.getElementById("minutesCountDown").innerHTML = minutes + " M ";
-        $("#minutesCountDown").css("cssText", "color:black");
-    } if (seconds === 0) {
-        $("#secondsCountDown").css("cssText", "color:#e30613");
-        document.getElementById("secondsCountDown").innerHTML = seconds + " S ";
-    } else {
-        $("#secondsCountDown").css("cssText", "color:black");
-        document.getElementById("secondsCountDown").innerHTML = seconds + " S ";
-    }
-
-    // If the count down is over, write some text
-    if (distance < 0) {
-        var url = '@Url.Action("ActiveOrders", "Order")';
-        window.location.href = url;
-    }
-}, 1000);
 /*
  * Add new PubOrder
  */
+var executed = false;
 $("#createOrderForm").submit(function (e) {
     e.preventDefault();
     var data = serializeForm($(this));
-
-    $.when($.connection.hub.start()).then(function () {
-        myHub.server.addNewPubOrder(data);
+    var hubIsReadyNow = $.connection.hub.start();
+    $.when(hubIsReadyNow).then(function () {
+        if (!executed)
+        {
+            myHub.server.addNewPubOrder(data);
+            executed = true;
+            console.log ("Order is added.");
+        }
     });
 });
 myHub.client.addNewPubOrder = function (result) {
@@ -371,6 +366,9 @@ myHub.client.addNewPubOrder = function (result) {
     var divToAppend = "<tr id='ActiveOrderTable' data-PubOrderId='" +
         result.PubOrderId +
         "'>" +
+        "<td>" +
+        result.OrderName +
+        "</td>" +
         "<td>" +
         result.PubName +
         "</td>" +
@@ -515,8 +513,8 @@ function deletePubOrder(value) {
 }
 myHub.client.deletedPubOrder = function (result) {
     if (result !== null) {
-        var deletedOrder = $("#ActiveOrderTable[data-puborderid='" + result + "']");
-        console.log("Klient usuwa zamowienie o id = " + deletedOrder.data("puborderid"));
+        var deletedOrder = $('#ActiveOrderTable tr[data-puborderid="' + result + '"]');
+        console.log("Klient usuwa zamowienie o id = ", result);
         deletedOrder.hide("slow",
             function () {
                 deletedOrder.remove();

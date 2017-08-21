@@ -12,6 +12,8 @@ namespace ITMeat.BusinessLogic.Models
 
         public DateTime EndDateTime { get; set; }
 
+        public string Name { get; set; }
+
         public DateTime? SubmitDateTime { get; set; }
     }
 }

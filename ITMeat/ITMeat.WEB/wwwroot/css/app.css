@@ -123,7 +123,9 @@ body {
     font-weight: bold;
     background-color: #E2FFBF;
 }
-
+.smallTitle {
+    padding-top: 80px;   
+}
 .center_side {
     background-color: #E2FFBF;
     min-height: 100%;
@@ -203,6 +205,7 @@ form {
     width: 100%;
     padding-left: 50px;
     margin-right: auto;
+    height: 120px;
 }
 
 .text {
@@ -214,7 +217,7 @@ form {
 
 .itemCountDown {
     padding-top: 0.85rem;
-    width: 70px;
+    width: 50px;
     height: 40px;
     background-color: #e5e8ea;
     float: left;
@@ -231,6 +234,23 @@ form {
     font-size: 20px;
     color: black
 }
+
 .highseparator {
     height: 60px;
+}
+
+.itemGroupDays, .itemGroupHours, .itemGroupMinutes, .itemGroupSeconds {
+    height: 80px;
+    width: 60px;
+    float: left;
+}
+
+.labelDays, .labelhours, .labelSeconds, .labelMinutes {
+    font-size: 14px;
+    width: 60px;
+    height: 40px;
+    color: black;
+    float: inherit;
+    padding-top: 0.3rem;
+    padding-right: 0.5rem;
 }

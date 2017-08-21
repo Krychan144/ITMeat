@@ -119,6 +119,9 @@ namespace ITMeat.DataAccess.Migrations
 
                     b.Property<DateTime>("ModifiedOn");
 
+                    b.Property<string>("Name")
+                        .IsRequired();
+
                     b.Property<Guid>("OwnerId");
 
                     b.Property<DateTime?>("SubmitDateTime");

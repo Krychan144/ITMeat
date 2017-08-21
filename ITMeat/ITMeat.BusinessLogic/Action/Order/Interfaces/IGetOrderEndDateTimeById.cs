@@ -7,6 +7,6 @@ namespace ITMeat.BusinessLogic.Action.Order.Interfaces
 {
     public interface IGetOrderEndDateTimeById : IAction
     {
-        DateTime Invoke(Guid orderId);
+        DateTime? Invoke(Guid orderId);
     }
 }

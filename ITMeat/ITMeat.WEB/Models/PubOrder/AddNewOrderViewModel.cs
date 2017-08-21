@@ -12,5 +12,7 @@ namespace ITMeat.WEB.Models.PubOrder
         public Guid PubId { get; set; }
 
         public List<SelectListItem> Pubs { get; set; }
+
+        public string OrderName { get; set; }
     }
 }

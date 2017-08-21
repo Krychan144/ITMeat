@@ -23,6 +23,7 @@ namespace ITMeat.WEB.Controllers
         private readonly ICreateUserOrder _createUserOrder;
         private readonly IGetOrderEndDateTimeById _getOrderEndDateTimeById;
         private readonly IConvertDateTime _convertDateTime;
+        private readonly IGetOrderById _getOrderById;
 
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm:SS";
 
@@ -30,13 +31,15 @@ namespace ITMeat.WEB.Controllers
             ICreateNewPubOrder createNewPubOrder,
             ICreateUserOrder createUserOrder,
             IGetOrderEndDateTimeById getOrderEndDateTimeById,
-            IConvertDateTime convertDateTime)
+            IConvertDateTime convertDateTime,
+            IGetOrderById getOrderById)
         {
             _getAllPubs = getAllPubs;
             _createNewPubOrder = createNewPubOrder;
             _createUserOrder = createUserOrder;
             _getOrderEndDateTimeById = getOrderEndDateTimeById;
             _convertDateTime = convertDateTime;
+            _getOrderById = getOrderById;
         }
 
         public IActionResult Index()
@@ -68,7 +71,8 @@ namespace ITMeat.WEB.Controllers
         public IActionResult SubmitOrder(Guid orderId)
         {
             ViewBag.OrderId = orderId;
-            var dateEnd = _getOrderEndDateTimeById.Invoke(orderId).ToLocalTime();
+
+            var dateEnd = _getOrderById.Invoke(orderId).EndDateTime.ToLocalTime();
             ViewBag.OrderEndDateTime = _convertDateTime.MilliTimeStamp(dateEnd);
             return View();
         }
