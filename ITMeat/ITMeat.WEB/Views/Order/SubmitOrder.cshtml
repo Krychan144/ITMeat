@@ -5,31 +5,44 @@
 @Html.Partial("_AddMealToOrderModal")
 @Html.Partial("_DeleteMealModal")
 <div class="titlename smallTitle">Please add your meals,Thanks man!</div>
-<div class="coldownOrder ">
-    <div class="text " >
-        Time remaining to end order:
+<div class="ui grid backgroundMain">
+    <div class="eight wide column">
+        <div  class="coldownOrder ">
+            <div class="text ">
+                Time remaining to end order:
+            </div>
+            <div class="itemGroupDays">
+                <div class="itemCountDown" id="daysCountDown"></div>
+                <div class="labelDays"> DAY</div>
+            </div>
+            <div class="separator"> : </div>
+            <div class="itemGroupHours">
+                <div class="itemCountDown" id="hoursCountDown"></div>
+                <div class="labelhours"> HOUR</div>
+            </div>
+            <div class="separator"> : </div>
+            <div class="itemGroupMinutes">
+                <div class="itemCountDown" id="minutesCountDown"></div>
+                <div class="labelMinutes"> MIN</div>
+            </div>
+            <div class="separator"> : </div>
+            <div class="itemGroupSeconds">
+                <div class="itemCountDown" id="secondsCountDown"></div>
+                <div class="labelSeconds"> SEC</div>
+            </div>
+        </div>
     </div>
-    <div class="itemGroupDays">
-        <div class="itemCountDown" id="daysCountDown"></div>
-        <div class="labelDays"> DAY</div>
+    <div class=" eight wide column">
+        <div class=" freeDelivey">
+            <div class="text ">
+                Required order quantity to obtain free delivery :
+            </div>
+            <div class="itemGroupExpense">
+                <div class="itemCountDown" id="ExpenseCountDown"></div>
+                <div class="labelExpense"> Zł</div>
+            </div>
+        </div>
     </div>
-    <div class="separator"> : </div>
-    <div class="itemGroupHours">
-        <div class="itemCountDown" id="hoursCountDown"></div>
-        <div class="labelhours"> HOUR</div>
-    </div>
-    <div class="separator"> : </div>
-    <div class="itemGroupMinutes">
-        <div class="itemCountDown" id="minutesCountDown"></div>
-        <div class="labelMinutes"> MIN</div>
-    </div>
-    <div class="separator"> : </div>
-    <div class="itemGroupSeconds">
-        <div class="itemCountDown" id="secondsCountDown"></div>
-        <div class="labelSeconds"> SEC</div>
-    </div>
-
- 
 </div>
 
 <div id="MealsInOrderViews">

@@ -162,6 +162,7 @@ namespace ITMeat.WEB.Hubs
             var mealViewList = mealList.Select(item => new LoadPubOrderMealViewModel
             {
                 PubId = item.Pub.Id,
+                FreeDeivert = item.Pub.FreeDelivery,
                 MealName = item.Name,
                 Expense = item.Expense,
                 MealId = item.Id,
@@ -174,8 +175,8 @@ namespace ITMeat.WEB.Hubs
                 MealTypeId = item.Id,
                 MealTypeName = item.Name
             });
-
-            Clients.Caller.PubMealLoadedAction(mealViewList, mealTypeViewList);
+            var freeDeliveryInPub = mealViewList.Select(i => i.FreeDeivert).FirstOrDefault();
+            Clients.Caller.PubMealLoadedAction(mealViewList, mealTypeViewList, freeDeliveryInPub);
         }
 
         public void GetUserOrders(Guid orderId)
@@ -349,7 +350,7 @@ namespace ITMeat.WEB.Hubs
             {
                 return;
             }
-            Clients.Caller.SubmitOrder(submitOrders);
+            Clients.All.SubmitOrder(submitOrders, orderId);
         }
     }
 }

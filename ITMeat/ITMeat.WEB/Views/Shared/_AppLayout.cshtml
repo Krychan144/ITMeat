@@ -4,7 +4,7 @@
 }
 
 @section CSS
-{
+    {
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/flipclock/compiled/flipclock.css" />
         <link rel="stylesheet" href="~/lib/semantic-ui-calendar/dist/calendar.css" />
@@ -16,10 +16,10 @@
     </environment>
 }
 @section Pre_Body
-{
+    {
     @Html.Partial("_SideBarPartial")
     @Html.Partial("_SubmitCompleteOrderSidebar")
-  
+
     @if (TempData.ContainsKey("alertMessages"))
     {
         @Html.Partial("_AlertsPartial")
@@ -27,11 +27,11 @@
 }
 
 @section Post_Body
-{
+    {
 }
 
 @section Scripts
-{
+    {
     <environment names="Development">
         <script src="~/lib/flipclock/compiled/flipclock.js"></script>
         <script src="~/lib/semantic-ui-calendar/dist/calendar.js"></script>

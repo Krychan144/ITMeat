@@ -39,7 +39,8 @@ namespace ITMeat.BusinessLogic.Action.Meal.Implementations
                 {
                     Id = item.Pub.Id,
                     Adress = item.Pub.Adress,
-                    Name = item.Pub.Name
+                    Name = item.Pub.Name,
+                    FreeDelivery = item.Pub.FreeDelivery
                 },
                 MealType = new MealTypeModel
                 {

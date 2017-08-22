@@ -9,6 +9,7 @@ var MealsToDeleteID;
 var MealList;
 var listoRDER;
 var dateEndTime;
+var execute = false;
 
 //View Settings,
 $(".ui.sidebar.left").sidebar("setting", {
@@ -37,7 +38,10 @@ function onLoadView() {
     }
     if (title.html() === "Order is complete!") {
         InJoinedOrderID = $("#MealsInCompleteTable").data("orderid");
-        myHub.server.getMealsinCompleteOrder(InJoinedOrderID);
+        if (execute !== true) {
+            myHub.server.getMealsinCompleteOrder(InJoinedOrderID);
+            executed = true;
+        }
     }
     if (title.html() === "Please add your meals,Thanks man!") {
         $("#MealsInOrderTable").ready(function () {
@@ -158,7 +162,7 @@ myHub.client.getUserSubmittedOrders = function (result) {
                     value.EndDateTime +
                     "</td>" +
                     "<td>" +
-                    value.Expense +
+                    value.Expense.toFixed(2) +
                     " zł</td>" +
                     "<td>";
                 divToAppend +=
@@ -190,7 +194,7 @@ myHub.client.getMealsInSubmitedOrder = function (result) {
                 value.Quantity +
                 "</td>" +
                 "<td>" +
-                value.Expense +
+                value.Expense.toFixed(2) +
                 " zł</td>" +
                 "</tr>";
             mealsInOrderTable.append(divToAppend);
@@ -267,8 +271,11 @@ function doSomething() {
 /*
  * Modal, Load Meal In FormModal,
  */
-myHub.client.pubMealLoadedAction = function (mealList, mealTypeList) {
+myHub.client.pubMealLoadedAction = function (mealList, mealTypeList, freeDeliveryInPub) {
     console.log("Load PubMeal");
+    console.log("Darmowa dostawa od", freeDeliveryInPub);
+
+    document.getElementById("ExpenseCountDown").innerHTML = freeDeliveryInPub;
     MealList = mealList;
     $("#MealTypeinOrderSelect").find("option")
         .remove()
@@ -289,7 +296,7 @@ function SendListToView(selectedType) {
         function (index, item) {
             if (item.TypeMealId === selectedType) {
                 $("#newMealinOrderSelect").append($("<option>",
-                    { text: item.MealName, value: item.MealId, selected: false },
+                    { text: (item.MealName + " " + item.Expense + " zł"), value: item.MealId, selected: false },
                     "</option>"));
             }
         });
@@ -329,7 +336,7 @@ myHub.client.addNewMealToUserOrder = function (result, id) {
             result.Quantity +
             "</td>" +
             "<td>" +
-            result.Expense +
+            result.Expense.toFixed(2) +
             " zł</td>" +
             "<td>";
         if (result.UserId === userId) {
@@ -350,11 +357,10 @@ $("#createOrderForm").submit(function (e) {
     var data = serializeForm($(this));
     var hubIsReadyNow = $.connection.hub.start();
     $.when(hubIsReadyNow).then(function () {
-        if (!executed)
-        {
+        if (!executed) {
             myHub.server.addNewPubOrder(data);
             executed = true;
-            console.log ("Order is added.");
+            console.log("Order is added.");
         }
     });
 });
@@ -450,7 +456,7 @@ myHub.client.getUserOrderMeals = function (result) {
                 value.Quantity +
                 "</td>" +
                 "<td>" +
-                value.Expense +
+                value.Expense.toFixed(2) +
                 " zł</td>" +
                 "<td>";
             if (value.UserId === userId) {
@@ -529,7 +535,9 @@ myHub.client.deletedPubOrder = function (result) {
  */
 myHub.client.getMealsinCompleteOrder = function (result, id, orderId) {
     console.log("Load Meal in Complete orders");
+
     var mealsInOrderTable = $("#MealsInCompleteTable");
+    var userExpense = 0;
     $.each(result,
         function (index, value) {
             var divToAppend = "<tr id ='orderMealid' data-usermealid='" +
@@ -545,18 +553,32 @@ myHub.client.getMealsinCompleteOrder = function (result, id, orderId) {
                 value.Quantity +
                 "</td>" +
                 "<td>" +
-                value.Expense +
+                value.Expense.toFixed(2) +
                 " zł</td>" +
                 "</tr>";
             mealsInOrderTable.append(divToAppend);
+
+            if (userId === value.UserId) {
+                userExpense = userExpense += value.Expense;
+            }
         });
+
+    var divSecendToAppend = "<tr id ='orderMealid' >" +
+        "<td></td>" +
+        "<td></td>" +
+        "<td></td>" +
+        "<td style='color: red;'> User cost: " + userExpense.toFixed(2) + " zł</td>" +
+        "</tr>";
+    mealsInOrderTable.append(divSecendToAppend);
+
     if (userId === id) {
-        var OrderCompleteView = $("#OrderMealList");
+        var orderCompleteView = $("#OrderMealList");
         var divToAppend2 = '<a onClick="openSideBar(\'' + orderId + '\');" class="ui green button"><i class="call icon"></i> Submit Order</a>';
-        OrderCompleteView.append(divToAppend2);
+        orderCompleteView.append(divToAppend2);
+        var divToAppend3 = '<a  onClick="openAditionalSidebar();"class="ui blue button"><i class="call icon">  </i> Additional cost</a>';
+        orderCompleteView.append(divToAppend3);
     }
 };
-
 /*
 *Submit Complete Order
 */
@@ -595,11 +617,15 @@ function submitOrder() {
     console.log("Wysyłam zamowienie o id:", InJoinedOrderID);
     myHub.server.submitOrder(InJoinedOrderID);
 }
-myHub.client.submitOrder = function (result) {
+myHub.client.submitOrder = function (result, orderid) {
     if (result === true) {
-        $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
-        $(".pushable").removeAttr("style");
-        console.log("Zamowienie zostało wysłane");
+        if (InJoinedOrderID === orderid) {
+            $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
+            $(".pushable").removeAttr("style");
+            console.log("Zamowienie zostało wysłane");
+            var urlss = "/Order/OrdersHistory";
+            window.location.href = urlss;
+        }
     } else {
         console.log("Coś poszło nie tak z wysłaniem zamowienia");
     }

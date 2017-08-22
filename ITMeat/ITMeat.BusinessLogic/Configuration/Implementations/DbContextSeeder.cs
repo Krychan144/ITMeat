@@ -52,15 +52,17 @@ namespace ITMeat.BusinessLogic.Configuration.Implementations
         public void SeedPub(IAddNewPub _addNewPub, IAddNewMeal _addNewMeal, IAddNewMealType _addNewMealType)
         {
             var mealExpense = 10.5m;
-
+            var freeDelivery = 50.0m;
             foreach (var pub in _pubs)
             {
                 var model = new PubModel
                 {
                     Name = $"{pub}",
                     Adress = $"{pub}@ w Legnicy",
-                    Phone = 533532578
+                    Phone = 533532578,
+                    FreeDelivery = freeDelivery
                 };
+                freeDelivery += 20.0m;
                 var pubModell = _addNewPub.Invoke(model);
 
                 var dinnerMealTypeModel = new MealTypeModel

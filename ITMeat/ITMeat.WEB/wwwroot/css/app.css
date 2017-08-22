@@ -199,10 +199,9 @@ form {
     background-color: #E2FFBF;
 }
 
-.coldownOrder {
+.coldownOrder, .freeDelivey {
     background-color: #E2FFBF;
     text-align: center;
-    width: 100%;
     padding-left: 50px;
     margin-right: auto;
     height: 120px;
@@ -253,4 +252,31 @@ form {
     float: inherit;
     padding-top: 0.3rem;
     padding-right: 0.5rem;
+}
+.labelExpense {
+    font-size: 14px;
+    width: 80px;
+    height: 60px;
+    color: black;
+    float: inherit;
+    padding-top: 0.3rem;
+    padding-right: 4.5rem;
+}
+.itemGroupExpense {
+    height: 120px;
+    width: 100px;
+    float: right; 
+}
+#ExpenseCountDown {
+    color: black;
+}
+.backgroundMain {
+    background-color: #E2FFBF;
+}
+.informationsInOrderDiv {
+    float: left;
+    width: 100%;
+}
+.freeDelivey {
+    float: left;
 }

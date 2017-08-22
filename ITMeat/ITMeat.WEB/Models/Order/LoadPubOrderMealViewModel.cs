@@ -13,5 +13,7 @@ namespace ITMeat.WEB.Models.Order
         public Decimal Expense { get; set; }
 
         public Guid TypeMealId { get; set; }
+
+        public decimal FreeDeivert { get; set; }
     }
 }

@@ -23,7 +23,12 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                         select new Meal
                         {
                             Id = meal.Id,
-                            Pub = pub,
+                            Pub = new Pub
+                            {
+                              Id  = pub.Id,
+                              Adress = pub.Adress,
+                              FreeDelivery = pub.FreeDelivery
+                            },
                             Expense = meal.Expense,
                             Name = meal.Name,
                         };
