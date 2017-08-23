@@ -573,7 +573,7 @@ myHub.client.getMealsinCompleteOrder = function (result, id, orderId) {
 
     if (userId === id) {
         var orderCompleteView = $("#OrderMealList");
-        var divToAppend2 = '<a onClick="openSideBar(\'' + orderId + '\');" class="ui green button"><i class="call icon"></i> Submit Order</a>';
+        var divToAppend2 = '<a onClick="openSubmittSideBar(\'' + orderId + '\');" class="ui green button"><i class="call icon"></i> Submit Order</a>';
         orderCompleteView.append(divToAppend2);
         var divToAppend3 = '<a  onClick="openAditionalSidebar();"class="ui blue button"><i class="call icon">  </i> Additional cost</a>';
         orderCompleteView.append(divToAppend3);
@@ -582,9 +582,9 @@ myHub.client.getMealsinCompleteOrder = function (result, id, orderId) {
 /*
 *Submit Complete Order
 */
-$(".ui.sidebar.vertical.inverted.right").first().sidebar('setting', 'transition', 'overlay').sidebar();
-function openSideBar(orderId) {
-    var sidebar = $(".ui.sidebar.vertical.inverted.right");
+$("#SubmitCompleteOrderSidebar").first().sidebar('setting', 'transition', 'overlay').sidebar();
+function openSubmittSideBar(orderId) {
+    var sidebar = $("#SubmitCompleteOrderSidebar");
     var puher = $(".pushable");
 
     if (sidebar.hasClass("visible")) {
@@ -609,7 +609,7 @@ myHub.client.getPubInfo = function (result) {
 };
 function cancelSubmitOrder() {
     var puher = $(".pushable");
-    var sidebar = $(".ui.sidebar.vertical.inverted.right");
+    var sidebar = $("#SubmitCompleteOrderSidebar");
     puher.removeAttr("style");
     sidebar.removeClass("visible");
 }
@@ -620,7 +620,7 @@ function submitOrder() {
 myHub.client.submitOrder = function (result, orderid) {
     if (result === true) {
         if (InJoinedOrderID === orderid) {
-            $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
+            $("#SubmitCompleteOrderSidebar").removeClass("visible");
             $(".pushable").removeAttr("style");
             console.log("Zamowienie zostało wysłane");
             var urlss = "/Order/OrdersHistory";
@@ -630,6 +630,17 @@ myHub.client.submitOrder = function (result, orderid) {
         console.log("Coś poszło nie tak z wysłaniem zamowienia");
     }
 };
+/*
+ *Edit pub
+ */
+$(".ui.accordion").accordion();
+
+function SelectedPubToEdit() {
+    var selectedpub = $("#SelectPubToEdit").value();
+    var urlss = '/Order/EditPubInformations/' + selectedpub;
+    window.location.href = urlss;
+}
+
 //***************************************************************************************************************************
 /*
  * Start the connection,

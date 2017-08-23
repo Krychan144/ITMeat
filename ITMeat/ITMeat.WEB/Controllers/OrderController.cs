@@ -5,12 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ITMeat.BusinessLogic.Action.Order.Interfaces;
 using ITMeat.BusinessLogic.Action.PubOrder.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrder.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrderMeals.Interfaces;
 using ITMeat.BusinessLogic.Helpers.Interfaces;
 using ITMeat.WEB.Models.Meal.FormModels;
+using ITMeat.WEB.Models.Pub;
+using ITMeat.WEB.Models.Pub.FormModels;
 using ITMeat.WEB.Models.PubOrder;
 
 namespace ITMeat.WEB.Controllers
@@ -24,15 +27,14 @@ namespace ITMeat.WEB.Controllers
         private readonly IGetOrderEndDateTimeById _getOrderEndDateTimeById;
         private readonly IConvertDateTime _convertDateTime;
         private readonly IGetOrderById _getOrderById;
-
-        private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm:SS";
+        private readonly IAddNewPub _addNewPub;
 
         public OrderController(IGetAllPubs getAllPubs,
             ICreateNewPubOrder createNewPubOrder,
             ICreateUserOrder createUserOrder,
             IGetOrderEndDateTimeById getOrderEndDateTimeById,
             IConvertDateTime convertDateTime,
-            IGetOrderById getOrderById)
+            IGetOrderById getOrderById, IAddNewPub addNewPub)
         {
             _getAllPubs = getAllPubs;
             _createNewPubOrder = createNewPubOrder;
@@ -40,6 +42,7 @@ namespace ITMeat.WEB.Controllers
             _getOrderEndDateTimeById = getOrderEndDateTimeById;
             _convertDateTime = convertDateTime;
             _getOrderById = getOrderById;
+            _addNewPub = addNewPub;
         }
 
         public IActionResult Index()
@@ -117,6 +120,59 @@ namespace ITMeat.WEB.Controllers
         {
             ViewBag.OrderId = orderId;
             return View();
+        }
+
+        [HttpGet("AddNewPub")]
+        public IActionResult AddNewPub()
+        {
+            return View();
+        }
+
+        [HttpPost("AddNewPub")]
+        public IActionResult AddNewPub(AddNewPubViewModel model)
+        {
+            var pubToAddModel = new PubModel
+            {
+                Adress = model.Adress,
+                Name = model.Name,
+                Phone = model.Phone,
+                FreeDelivery = model.FreeDelivery
+            };
+            var addPubAction = _addNewPub.Invoke(pubToAddModel);
+
+            if (addPubAction != null)
+            {
+                Alert.Success("Pub are added.");
+                return RedirectToAction("Index", "Order");
+            };
+            Alert.Danger("Error. Pub are not added.");
+            return RedirectToAction("AddNewPub", "Order");
+        }
+
+        [HttpGet("EditPubInformations/{PubId}")]
+        public IActionResult EditPubInformations()
+        {
+            return View();
+        }
+
+        [HttpGet("PubOferts")]
+        public IActionResult PubOferts()
+        {
+            return View();
+        }
+
+        [HttpGet("SelectPubToEdit")]
+        public IActionResult SelectPubToEdit()
+        {
+            var pubList = _getAllPubs.Invoke();
+            var model = new SelectPubToEditViewModel { Pubs = new List<SelectListItem>() };
+
+            foreach (var item in pubList)
+            {
+                model.Pubs.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+            }
+
+            return View(model);
         }
     }
 }

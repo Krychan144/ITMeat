@@ -1,0 +1,23 @@
+﻿@{
+    Layout = "_AppLayout";
+}
+@model ITMeat.WEB.Models.Pub.SelectPubToEditViewModel
+<div class="center_side">
+    <div class="titlename">Select Pub to edit</div>
+    <h4 class="ui dividing header" style="text-align: center;">Pub list</h4>
+    <div class="ui two column centered grid">
+        <div class="column">
+            <div class="ui inverted segment">
+                @using (Html.BeginForm(FormMethod.Post, false, new { id = "SelectPubToEdit", @class = "ui inverted form" }))
+                {
+                    <div class="field">
+                        @Html.DropDownListFor(x => x.Pubs, new List<SelectListItem>(Model.Pubs), new { id = "SelectPubToEdit" })
+                    </div>
+                    <div class="field">
+                        <button class="ui positive button" onClick="SelectedPubToEdit();">Select</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

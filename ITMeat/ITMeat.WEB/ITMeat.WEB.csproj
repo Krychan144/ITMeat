@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Models\Order\FormModels\" />
-    <Folder Include="Models\Pub\FormModels\" />
     <Folder Include="Models\User\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>

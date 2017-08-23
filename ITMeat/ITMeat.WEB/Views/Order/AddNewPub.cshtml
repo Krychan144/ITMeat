@@ -1,0 +1,40 @@
+﻿@{
+    Layout = "_AppLayout";
+}
+@model ITMeat.WEB.Models.Pub.FormModels.AddNewPubViewModel
+<div class="center_side">
+    <div class="titlename">Add new Pub </div>
+    <div class="ui two column centered grid ">
+        <div class="column ">
+            @using (Html.BeginForm("AddNewPub", "Order", FormMethod.Post, new { id = "AddNewPubForm", @class = "ui form center aligned" }))
+            {
+                <div class="field">
+                    <div class="ui left icon input">
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Name", type = "name", required = "required" })
+                        <i class="sticky note icon"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        @Html.TextBoxFor(m => m.FreeDelivery, new { @class = "form-control", placeholder = "FreeDelivery", type = "name", required = "required" })
+                        <i class="money icon"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        @Html.TextBoxFor(m => m.Adress, new { @class = "form-control", placeholder = "Address", type = "text", required = "required" })
+                        <i class="book icon"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", placeholder = "Phone Number/format{XXX-XXX-XXX}", type = "tel", pattern = "^\\d{3}-\\d{3}-\\d{3}$", required = "required" })
+                        <i class="call icon"></i>
+                    </div>
+                </div>
+
+                <button id="CreateButton" class="ui positive button menubutton" tabindex="0" type="submit">Create</button>
+            }
+        </div>
+    </div>
+</div>

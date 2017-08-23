@@ -99,6 +99,11 @@ body {
     text-align: left;
 }
 
+.ui.accordion {
+    text-align: left;
+    padding-left: 7%;
+}
+
 .menubutton {
     min-width: 220px;
     text-align: left;
@@ -123,9 +128,11 @@ body {
     font-weight: bold;
     background-color: #E2FFBF;
 }
+
 .smallTitle {
-    padding-top: 80px;   
+    padding-top: 80px;
 }
+
 .center_side {
     background-color: #E2FFBF;
     min-height: 100%;
@@ -157,12 +164,12 @@ form {
     background-color: #E2FFBF;
 }
 
-#ActiveOrderVievs, #MealsInOrderViews, #HistoryOrderVievs, #CompleteOrderViews, #SummaryOrderinHistoryViews {
+#ActiveOrderVievs, #MealsInOrderViews, #HistoryOrderVievs, #CompleteOrderViews, #SummaryOrderinHistoryViews, #MealInPubOferts {
     background-color: #E2FFBF;
     min-height: 100%;
 }
 
-#OrderList, #MealsList {
+#OrderList, #MealsList, #OfertsMealList {
     margin-left: 5rem;
     margin-right: 5rem;
 }
@@ -172,7 +179,7 @@ form {
     margin-right: 15rem;
 }
 
-#ActiveOrderTable, #MealsInOrderTable, #HistoryOrderTable, #MealsInCompleteTable, #MealsInSubmitedOrderTable {
+#ActiveOrderTable, #MealsInOrderTable, #HistoryOrderTable, #MealsInCompleteTable, #MealsInSubmitedOrderTable, #OfertsMealTable {
     overflow-y: scroll;
 }
 
@@ -198,7 +205,9 @@ form {
     height: 100%;
     background-color: #E2FFBF;
 }
-
+/*
+    Timeritp/ Addmeal;
+*/
 .coldownOrder, .freeDelivey {
     background-color: #E2FFBF;
     text-align: center;
@@ -253,6 +262,7 @@ form {
     padding-top: 0.3rem;
     padding-right: 0.5rem;
 }
+
 .labelExpense {
     font-size: 14px;
     width: 80px;
@@ -262,21 +272,47 @@ form {
     padding-top: 0.3rem;
     padding-right: 4.5rem;
 }
+
 .itemGroupExpense {
     height: 120px;
     width: 100px;
-    float: right; 
+    float: right;
 }
+
 #ExpenseCountDown {
     color: black;
 }
+
 .backgroundMain {
     background-color: #E2FFBF;
 }
+
 .informationsInOrderDiv {
     float: left;
     width: 100%;
 }
+
 .freeDelivey {
     float: left;
+}
+
+.ui.button.green.menubutton.twist {
+    margin: 3px;
+}
+
+.oferts {
+    height: 100%;
+}
+.ui.inverted.segment {
+    background-color: #E2FFBF;
+
+}
+#informationsPubTitle {
+    font-size: 15px;
+    text-align: left;
+    min-height: 150px;
+    padding-left: 10px;
+    color: #3A3E42;
+    font-weight: bold;
+    background-color: #E2FFBF;   
 }

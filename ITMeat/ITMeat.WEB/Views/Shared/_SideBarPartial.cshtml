@@ -16,8 +16,16 @@
         <a class="item" href="@Url.Action("NewOrder", "Order")"> <button class="ui button green menubutton"><i class="plus square outline icon"></i> Create new Orders</button></a>
         <a class="item" href="@Url.Action("ActiveOrders", "Order")"> <button class="ui button green menubutton"><i class="hourglass empty icon"></i> Active Order</button></a>
         <a class="item" href="@Url.Action("OrdersHistory", "Order")"> <button class="ui button green menubutton" id="OrderHistoryButton"><i class="history icon"></i> Order History</button></a>
-        <a class="item" href="@Url.Action("Statistic", "Order")"> <b> <button class="ui button green menubutton"><i class="bar chart icon"></i> Statistics</button></a>
-        <a class="item"> <button class="ui button green menubutton"><i class="settings icon"></i>Settings</button></a>
+        <a class="item" href="@Url.Action("Statistic", "Order")"> <button class="ui button green menubutton"><i class="bar chart icon"></i> Statistics</button></a>
+        <div class="ui accordion">
+            <div class="title">
+                <button class="ui button green menubutton"><i class="settings icon"></i> Pub Management</button>
+            </div>
+            <div class="content">
+                <a href="@Url.Action("AddNewPub", "Order")"><button class="ui button green menubutton twist"><i class="add icon"></i>Add Pub</button></a>
+                <a href="@Url.Action("SelectPubToEdit", "Order")"><bu><button class="ui button green menubutton twist"><i class="edit icon"></i>Edit Pub</button></a>
+            </div>
+        </div>
     </div>
 
     <div id="logout" class="bottom aligned item">
