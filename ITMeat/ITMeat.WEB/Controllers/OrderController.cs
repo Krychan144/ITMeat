@@ -26,6 +26,7 @@ namespace ITMeat.WEB.Controllers
         private readonly ICreateUserOrder _createUserOrder;
         private readonly IGetOrderEndDateTimeById _getOrderEndDateTimeById;
         private readonly IConvertDateTime _convertDateTime;
+        private readonly IGetPubInfoById _getPubInfoById;
         private readonly IGetOrderById _getOrderById;
         private readonly IAddNewPub _addNewPub;
 
@@ -34,7 +35,8 @@ namespace ITMeat.WEB.Controllers
             ICreateUserOrder createUserOrder,
             IGetOrderEndDateTimeById getOrderEndDateTimeById,
             IConvertDateTime convertDateTime,
-            IGetOrderById getOrderById, IAddNewPub addNewPub)
+            IGetOrderById getOrderById, IAddNewPub addNewPub,
+            IGetPubInfoById getPubInfoById)
         {
             _getAllPubs = getAllPubs;
             _createNewPubOrder = createNewPubOrder;
@@ -43,6 +45,7 @@ namespace ITMeat.WEB.Controllers
             _convertDateTime = convertDateTime;
             _getOrderById = getOrderById;
             _addNewPub = addNewPub;
+            _getPubInfoById = getPubInfoById;
         }
 
         public IActionResult Index()
@@ -149,18 +152,6 @@ namespace ITMeat.WEB.Controllers
             return RedirectToAction("AddNewPub", "Order");
         }
 
-        [HttpGet("EditPubInformations/{PubId}")]
-        public IActionResult EditPubInformations()
-        {
-            return View();
-        }
-
-        [HttpGet("PubOferts")]
-        public IActionResult PubOferts()
-        {
-            return View();
-        }
-
         [HttpGet("SelectPubToEdit")]
         public IActionResult SelectPubToEdit()
         {
@@ -173,6 +164,40 @@ namespace ITMeat.WEB.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpPost("SelectPubToEdit")]
+        public IActionResult SelectPubToEdit(SelectPubToEditViewModel model)
+        {
+            return RedirectToAction("EditPubInformations", "Order", new { model.PubId });
+        }
+
+        [HttpGet("EditPubInformations/{PubId}")]
+        public IActionResult EditPubInformations(Guid pubId)
+        {
+            var pubView = _getPubInfoById.Invoke(pubId);
+            var model = new PubInfoViewModel
+            {
+                PubId = pubView.Id,
+                FreeDelivery = pubView.FreeDelivery,
+                Phone = pubView.Phone,
+                Name = pubView.Name,
+                Address = pubView.Adress
+            };
+            return View(model);
+        }
+
+        [HttpPost("EditPubInformations/{PubId}")]
+        public IActionResult EditPubInformations(PubInfoViewModel model)
+        {
+            Alert.Success("Success! Pub are edited.");
+            return View();
+        }
+
+        [HttpGet("PubOferts")]
+        public IActionResult PubOferts()
+        {
+            return View();
         }
     }
 }

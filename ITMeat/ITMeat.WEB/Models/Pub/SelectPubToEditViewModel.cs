@@ -8,6 +8,8 @@ namespace ITMeat.WEB.Models.Pub
 {
     public class SelectPubToEditViewModel
     {
+        public Guid PubId { get; set; }
+
         public List<SelectListItem> Pubs { get; set; }
     }
 }

@@ -28,7 +28,7 @@
                 </div>
                 <div class="field">
                     <div class="ui left icon input">
-                        @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", placeholder = "Phone Number/format{XXX-XXX-XXX}", type = "tel", pattern = "^\\d{3}-\\d{3}-\\d{3}$", required = "required" })
+                        @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", placeholder = "Phone Number/format{XXXXXXXXX}", type = "tel", pattern = "^\\d{9}$", required = "required" })
                         <i class="call icon"></i>
                     </div>
                 </div>

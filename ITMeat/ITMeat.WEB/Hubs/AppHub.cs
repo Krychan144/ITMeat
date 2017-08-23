@@ -42,6 +42,7 @@ namespace ITMeat.WEB.Hubs
         private readonly ISubmitOrder _submitOrder;
         private readonly IGetMealTypeByPubId _getMealTypeByPubId;
         private readonly IConvertDateTime _convertDateTime;
+        private readonly IGetPubByOrderId _getPubByOrderId;
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const string TimeStampRepresentation = "dd-MM-yyyy HH:mm";
 
@@ -62,7 +63,8 @@ namespace ITMeat.WEB.Hubs
             IGetPubInfoByOrderId getPubInfoByOrderId,
             ISubmitOrder submitOrder,
             IGetMealTypeByPubId getMealTypeByPubId,
-            IConvertDateTime convertDateTime)
+            IConvertDateTime convertDateTime,
+            IGetPubByOrderId getPubByOrderId)
         {
             _getActiveOrders = getActiveOrders;
             _getPubMealByOrderId = pubMealByPubOrderId;
@@ -82,6 +84,7 @@ namespace ITMeat.WEB.Hubs
             _submitOrder = submitOrder;
             _getMealTypeByPubId = getMealTypeByPubId;
             _convertDateTime = convertDateTime;
+            _getPubByOrderId = getPubByOrderId;
         }
 
         public override Task OnConnected()
@@ -169,14 +172,14 @@ namespace ITMeat.WEB.Hubs
                 TypeMealId = item.MealType.Id
             });
 
-            var mealTypeList = _getMealTypeByPubId.Invoke(mealViewList.First().PubId);
+            var pub = _getPubByOrderId.Invoke(orderId);
+            var mealTypeList = _getMealTypeByPubId.Invoke(pub.Id);
             var mealTypeViewList = mealTypeList.Select(item => new MealTypeInAddMealToOrder
             {
                 MealTypeId = item.Id,
                 MealTypeName = item.Name
             });
-            var freeDeliveryInPub = mealViewList.Select(i => i.FreeDeivert).FirstOrDefault();
-            Clients.Caller.PubMealLoadedAction(mealViewList, mealTypeViewList, freeDeliveryInPub);
+            Clients.Caller.PubMealLoadedAction(mealViewList, mealTypeViewList, pub.FreeDelivery);
         }
 
         public void GetUserOrders(Guid orderId)

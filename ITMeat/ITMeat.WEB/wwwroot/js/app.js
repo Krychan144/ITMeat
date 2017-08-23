@@ -5,6 +5,7 @@ var userId = $("#SignedDiv").data("id");
 var userName = $("#SignedDiv").data("name");
 var now = new Date();
 var InJoinedOrderID;
+var InJoinedOrderPubID;
 var MealsToDeleteID;
 var MealList;
 var listoRDER;
@@ -634,12 +635,6 @@ myHub.client.submitOrder = function (result, orderid) {
  *Edit pub
  */
 $(".ui.accordion").accordion();
-
-function SelectedPubToEdit() {
-    var selectedpub = $("#SelectPubToEdit").value();
-    var urlss = '/Order/EditPubInformations/' + selectedpub;
-    window.location.href = urlss;
-}
 
 //***************************************************************************************************************************
 /*
