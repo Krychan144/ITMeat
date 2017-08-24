@@ -9,7 +9,7 @@
     <div class="ui two column centered grid">
         <div class="column">
             <div class="ui inverted segment">
-                @using (Html.BeginForm("EditPubInformations", "Order", FormMethod.Post, new { id = "EditPubForm", @class = "ui inverted form" }))
+                @using (Html.BeginForm("EditPubInformations", "Pub", FormMethod.Post, new { id = "EditPubForm", @class = "ui inverted form" }))
                 {
                     <div class="field">
                         <div class="ui left icon input">
@@ -34,10 +34,19 @@
                             @Html.TextBoxFor(m => m.Address, new { @class = "form-control", placeholder = "Address", type = "text", required = "required" })
                             <i class="book icon"></i>
                         </div>
-                    </div>
-                    <button class="ui green button" type="submit">Edit Pub</button>
+                    </div>                   
                 }
-                <a href="@Url.Action("PubOferts", "Order", new { Model.PubId})"><button class="ui blue button">Edit Pub Oferts -></button></a>
+                <div class="ui two column grid">
+                    <div class="right floated column">
+                        <div class="ui inverted segment" id="Action EdiPub">
+                            <a href="@Url.Action("PubOferts", "Pub", new { Model.PubId})"><button class="ui blue button">Edit Pub Oferts -></button></a>
+                            <button class="ui green button" type="submit" form="EditPubForm">Edit Pub</button>
+                        </div>
+                    </div>
+                </div>
+              
+            
+            
             </div>
         </div>
     </div>

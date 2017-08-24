@@ -8,6 +8,8 @@ namespace ITMeat.DataAccess.Repositories.Interfaces
 {
     public interface IMealTypeRepository : IGenericRepository<MealType>, IRepository
     {
-        IQueryable<MealType> GetMealTypes (Guid pubId);
+        IQueryable<MealType> GetMealTypes(Guid pubId);
+
+        IQueryable<MealType> GetMealTypeByMealId(Guid mealId);
     }
 }

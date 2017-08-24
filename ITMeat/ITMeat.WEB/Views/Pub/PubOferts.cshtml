@@ -10,8 +10,8 @@
     <div class="ui two column grid">
         <div class="right floated column">
             <div class="ui inverted segment" id="ActionPubOferts">
-                <a href="@Url.Action("AddNewMealTypeToPub", "Order", new {Model.FirstOrDefault().PubId})"><button class="ui grey button floated right"><i class="add icon"></i> Add new Meal type</button></a>
-                <a href="@Url.Action("AddNewMealToPub", "Order", new {Model.FirstOrDefault().PubId})"><button class="ui grey button floated right"><i class="add icon"></i> Add new Meal </button></a>
+                <a href="@Url.Action("AddNewMealTypeToPub", "Meal", new {Model.FirstOrDefault().PubId})"><button class="ui grey button floated right"><i class="add icon"></i> Add new Meal type</button></a>
+                <a href="@Url.Action("AddNewMealToPub", "Meal", new {Model.FirstOrDefault().PubId})"><button class="ui grey button floated right"><i class="add icon"></i> Add new Meal </button></a>
             </div>
         </div>
     </div>
@@ -37,7 +37,7 @@
                             <td>@Html.DisplayFor(m => item.MealExpense)</td>
                             <td>
                                 <button class="ui grey button" data-id="item.MealId"><i class="remove icon"> </i>Remove</button>
-                                <a href="@Url.Action( "EditSelectedMeal","Order")"><button class="ui grey button" data-id="item.MealId"><i class="edit icon"> </i>Edit</button></a>
+                                <a href="@Url.Action("EditSelectedMeal", "Meal", new { item.MealId, item.PubId })"><button class="ui grey button" data-id="item.MealId"><i class="edit icon"> </i>Edit</button></a>
                             </td>
                         </tr>
                     }
