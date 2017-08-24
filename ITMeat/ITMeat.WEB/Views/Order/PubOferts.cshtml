@@ -1,8 +1,21 @@
 ﻿@{
     Layout = "_AppLayout";
 }
+@using System.Collections.Generic
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model  System.Collections.Generic.List<ITMeat.WEB.Models.Pub.PubOfertsViewModel>
 <div class="center_side">
     <div class="titlename">Pub Oferts</div>
+
+    <div class="ui two column grid">
+        <div class="right floated column">
+            <div class="ui inverted segment" id="ActionPubOferts">
+                <a href="@Url.Action("AddNewMealTypeToPub", "Order", new {Model.FirstOrDefault().PubId})"><button class="ui grey button floated right"><i class="add icon"></i> Add new Meal type</button></a>
+                <a href="@Url.Action("AddNewMealToPub", "Order", new {Model.FirstOrDefault().PubId})"><button class="ui grey button floated right"><i class="add icon"></i> Add new Meal </button></a>
+            </div>
+        </div>
+    </div>
+
     <div id="MealInPubOferts">
         <div id="OfertsMealList">
             <table class="ui single line table" id="OfertsMealTableRow">
@@ -11,10 +24,24 @@
                         <th>Type</th>
                         <th>Name</th>
                         <th>Expense</th>
-                        <th>Action</th>
+                        <th class="four wide">Action</th>
                     </tr>
                 </thead>
-                <tbody id="OfertsMealTable"></tbody>
+                <tbody id="OfertsMealTable">
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(m => item.MealTypeName)</td>
+                            <td>@Html.DisplayFor(m => item.MealName)</td>
+                            <td>@Html.DisplayFor(m => item.MealExpense)</td>
+                            <td>
+                                <button class="ui grey button" data-id="item.MealId"><i class="remove icon"> </i>Remove</button>
+                                <a href="@Url.Action( "EditSelectedMeal","Order")"><button class="ui grey button" data-id="item.MealId"><i class="edit icon"> </i>Edit</button></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
             </table>
         </div>
     </div>

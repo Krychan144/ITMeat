@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ITMeat.BusinessLogic.Action.MealType.Interfaces;
 using ITMeat.BusinessLogic.Action.Order.Interfaces;
 using ITMeat.BusinessLogic.Action.PubOrder.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrder.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrderMeals.Interfaces;
 using ITMeat.BusinessLogic.Helpers.Interfaces;
+using ITMeat.WEB.Models.Meal;
 using ITMeat.WEB.Models.Meal.FormModels;
 using ITMeat.WEB.Models.Pub;
 using ITMeat.WEB.Models.Pub.FormModels;
@@ -29,14 +31,21 @@ namespace ITMeat.WEB.Controllers
         private readonly IGetPubInfoById _getPubInfoById;
         private readonly IGetOrderById _getOrderById;
         private readonly IAddNewPub _addNewPub;
+        private readonly IEditPub _editPub;
+        private readonly IGetPubOferts _getPubOferts;
+        private readonly IGetMealTypeByPubId _getMealTypeByPubId;
 
         public OrderController(IGetAllPubs getAllPubs,
             ICreateNewPubOrder createNewPubOrder,
             ICreateUserOrder createUserOrder,
             IGetOrderEndDateTimeById getOrderEndDateTimeById,
             IConvertDateTime convertDateTime,
-            IGetOrderById getOrderById, IAddNewPub addNewPub,
-            IGetPubInfoById getPubInfoById)
+            IGetOrderById getOrderById,
+            IAddNewPub addNewPub,
+            IGetPubInfoById getPubInfoById,
+            IEditPub editPub,
+            IGetPubOferts getPubOferts,
+            IGetMealTypeByPubId getMealTypeByPubId)
         {
             _getAllPubs = getAllPubs;
             _createNewPubOrder = createNewPubOrder;
@@ -46,6 +55,9 @@ namespace ITMeat.WEB.Controllers
             _getOrderById = getOrderById;
             _addNewPub = addNewPub;
             _getPubInfoById = getPubInfoById;
+            _editPub = editPub;
+            _getPubOferts = getPubOferts;
+            _getMealTypeByPubId = getMealTypeByPubId;
         }
 
         public IActionResult Index()
@@ -190,12 +202,69 @@ namespace ITMeat.WEB.Controllers
         [HttpPost("EditPubInformations/{PubId}")]
         public IActionResult EditPubInformations(PubInfoViewModel model)
         {
-            Alert.Success("Success! Pub are edited.");
+            var pubToEdit = new PubModel
+            {
+                Id = model.PubId,
+                Name = model.Name,
+                Phone = model.Phone,
+                FreeDelivery = model.FreeDelivery,
+                Adress = model.Address
+            };
+            var EditPub = _editPub.Invoke(pubToEdit);
+            if (EditPub == true)
+            {
+                Alert.Success("Success! Pub are edited.");
+                return RedirectToAction("EditPubInformations", "Order", new { model.PubId });
+            }
+            Alert.Danger("Error. Pub are not edited");
+            return RedirectToAction("EditPubInformations", "Order", new { model.PubId });
+        }
+
+        [HttpGet("PubOferts/{PubId}")]
+        public IActionResult PubOferts(Guid pubId)
+        {
+            var pubOferts = _getPubOferts.Invoke(pubId);
+            var model = pubOferts.Select(item => new PubOfertsViewModel
+            {
+                MealId = item.Id,
+                MealName = item.Name,
+                MealExpense = item.Expense,
+                MealTypeId = item.MealType.Id,
+                MealTypeName = item.MealType.Name,
+                PubId = item.Pub.Id,
+                PubName = item.Pub.Name
+            }).ToList();
+            return View(model);
+        }
+
+        [HttpGet("AddNewMealToPub/{PubId}")]
+        public IActionResult AddNewMealToPub(Guid pubId)
+        {
+            var mealType = _getMealTypeByPubId.Invoke(pubId);
+            var model = new MealToAddViewModel() { MealTypes = new List<SelectListItem>() };
+
+            foreach (var item in mealType)
+            {
+                model.MealTypes.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+            }
+            return View(model);
+        }
+
+        [HttpPost("AddNewMealToPub/{PubId}")]
+        public IActionResult AddNewMealToPub(MealToAddViewModel model, Guid pubId)
+        {
+            Alert.Success("Success! Meal are added.");
+            return RedirectToAction("PubOferts", "Order");
+        }
+
+        [HttpGet("EditSelectedMeal")]
+        public IActionResult EditSelectedMeal()
+        {
             return View();
         }
 
-        [HttpGet("PubOferts")]
-        public IActionResult PubOferts()
+        [HttpGet("AddNewMealTypeToPub/{PubId}")]
+        public IActionResult AddNewMealTypeToPub(Guid pubId)
         {
             return View();
         }

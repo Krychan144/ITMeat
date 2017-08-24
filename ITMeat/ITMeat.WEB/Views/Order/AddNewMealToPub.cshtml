@@ -1,0 +1,35 @@
+﻿@{
+    Layout = "_AppLayout";
+}
+@using System.Collections.Generic
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model  ITMeat.WEB.Models.Meal.MealToAddViewModel
+<div class="center_side">
+    <div class="titlename">Add new Meal </div>
+    <div class="ui two column centered grid ">
+        <div class="column ">
+            @using (Html.BeginForm("AddNewMealToPub", "Order", FormMethod.Post, new { id = "AddNewMealToPubForm", @class = "ui form center aligned" }))
+            {
+                <div class="field">
+                    <div class="ui left icon input">
+                        @Html.TextBoxFor(m => m.MealName, new { @class = "form-control", placeholder = "Name", type = "name", required = "required" })
+                        <i class="sticky note icon"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        @Html.TextBoxFor(m => m.MealExpense, new { @class = "form-control", placeholder = "FreeDelivery", type = "name", required = "required" })
+                        <i class="money icon"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        @Html.DropDownListFor(x => x.MealTypeId, new List<SelectListItem>(Model.MealTypes))
+                    </div>
+                </div>
+
+                <button id="CreateButton" class="ui positive button menubutton" tabindex="0" type="submit">Create</button>
+            }
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ITMeat.DataAccess.Models;
 
 namespace ITMeat.DataAccess.Repositories.Interfaces
@@ -8,5 +9,7 @@ namespace ITMeat.DataAccess.Repositories.Interfaces
         Pub GetPubInfoByOrderId(Guid orderId);
 
         Pub GetPubByOrderId(Guid orderId);
+
+        IQueryable<Meal> GetPubOferts(Guid pubId);
     }
 }

@@ -25,9 +25,9 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                             Id = meal.Id,
                             Pub = new Pub
                             {
-                              Id  = pub.Id,
-                              Adress = pub.Adress,
-                              FreeDelivery = pub.FreeDelivery
+                                Id = pub.Id,
+                                Adress = pub.Adress,
+                                FreeDelivery = pub.FreeDelivery
                             },
                             Expense = meal.Expense,
                             Name = meal.Name,
