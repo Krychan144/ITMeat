@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "_AppLayout";
+}
+@using System.Collections.Generic
+@using System.Linq
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model  System.Collections.Generic.List<ITMeat.WEB.Models.MealType.AllMealType>
+<div class="center_side">
+    <div class="titlename">Meal Type</div>
+
+    <div class="ui two column grid">
+        <div class="right floated column">
+            <div class="ui inverted segment" id="ActionPubOferts">
+                <a href="@Url.Action("AddNewMealType", "MealType")"><button class="ui grey button floated ><button class="ui grey button floated right"><i class="add icon"></i> Add new Meal Type </button></a>
+            </div>
+        </div>
+    </div>
+
+    <div id="MealTypeView">
+        <div id="MealTypeList">
+            <table class="ui single line table" id="MealTypeTableRow">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th class="four wide">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="MealTypeTable">
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(m => item.MealTypeName)</td>
+                            <td>
+                                <button class="ui grey button" data-id="item.MealTypeId"><i class="remove icon"> </i>Remove</button>
+                                <a href="@Url.Action("EditMealType", "MealType", new { mealTypeId = item.MealTypeId })"><button class="ui grey button" data-id="item.MealId"><i class="edit icon"> </i>Edit</button></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

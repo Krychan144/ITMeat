@@ -1,0 +1,31 @@
+﻿@{
+    Layout = "_AppLayout";
+}
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model ITMeat.WEB.Models.MealType.MealTypeToEditViewModel
+<div class="center_side">
+    <div class="titlename">Edit Meal Type</div>
+    <h4 class="ui dividing header" style="text-align: center;">Meal Type Name</h4>
+    <div class="ui two column centered grid">
+        <div class="column">
+            <div class="ui inverted segment">
+                @using (Html.BeginForm("EditMealType", "MealType", FormMethod.Post, new { id = "EditMealTypeForm", @class = "ui inverted form" }))
+                {
+                    <div class="field">
+                        <div class="ui left icon input">
+                            @Html.TextBoxFor(m => m.MealtypeName, new { @class = "form-control", placeholder = "Name", type = "name", required = "required" })
+                            <i class="sticky note icon"></i>
+                        </div>
+                    </div>
+                }
+                <div class="ui two column grid">
+                    <div class="right floated column">
+                        <div class="ui inverted segment" id="ActioneditMealType">
+                            <button class="ui green button" type="submit" form="EditMealTypeForm">Edit Meal Type</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

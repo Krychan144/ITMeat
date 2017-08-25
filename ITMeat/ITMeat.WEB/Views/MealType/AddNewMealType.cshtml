@@ -1,0 +1,22 @@
+﻿@{
+    Layout = "_AppLayout";
+}
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model ITMeat.WEB.Models.MealType.MealTypeToAdd
+<div class="center_side">
+    <div class="titlename">Add new Pub </div>
+    <div class="ui two column centered grid ">
+        <div class="column ">
+            @using (Html.BeginForm("AddNewMealType", "MealType", FormMethod.Post, new { id = "AddNewMealTypeForm", @class = "ui form center aligned" }))
+            {
+                <div class="field">
+                    <div class="ui left icon input">
+                        @Html.TextBoxFor(m => m.MealTypeName, new { @class = "form-control", placeholder = "Name", type = "name", required = "required" })
+                        <i class="sticky note icon"></i>
+                    </div>
+                </div>
+                <button id="CreateButton" class="ui positive button menubutton" tabindex="0" type="submit">Create</button>
+            }
+        </div>
+    </div>
+</div>

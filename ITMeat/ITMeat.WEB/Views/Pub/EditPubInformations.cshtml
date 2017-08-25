@@ -34,19 +34,16 @@
                             @Html.TextBoxFor(m => m.Address, new { @class = "form-control", placeholder = "Address", type = "text", required = "required" })
                             <i class="book icon"></i>
                         </div>
-                    </div>                   
+                    </div>
                 }
                 <div class="ui two column grid">
                     <div class="right floated column">
                         <div class="ui inverted segment" id="Action EdiPub">
-                            <a href="@Url.Action("PubOferts", "Pub", new { Model.PubId})"><button class="ui blue button">Edit Pub Oferts -></button></a>
+                            <a href="@Url.Action("Meals", "Meal", new { Model.PubId})"><b><button class="ui blue button">Edit Pub Oferts -></button></a>
                             <button class="ui green button" type="submit" form="EditPubForm">Edit Pub</button>
                         </div>
                     </div>
                 </div>
-              
-            
-            
             </div>
         </div>
     </div>

@@ -74,5 +74,19 @@ namespace ITMeat.DataAccess.Repositories.Implementations
 
             return query;
         }
+
+        public Pub GetPubByMealId(Guid mealId)
+        {
+            var query = (from meal in context.Set<Meal>()
+                         join pub in context.Set<Pub>() on meal.Pub.Id equals pub.Id
+                         where mealId == meal.Id
+                         select new Pub
+                         {
+                             Id = pub.Id,
+                             Name = pub.Name
+                         }).FirstOrDefault();
+
+            return query;
+        }
     }
 }

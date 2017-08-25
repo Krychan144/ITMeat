@@ -70,5 +70,21 @@ namespace ITMeat.DataAccess.Repositories.Implementations
 
             return query;
         }
+
+        public Meal GetMealbyId(Guid mealId)
+        {
+            var query = (from meal in context.Set<Meal>()
+                         join mealType in context.Set<MealType>() on meal.MealType.Id equals mealType.Id
+                         where meal.Id == mealId
+                         select new Meal
+                         {
+                             Id = meal.Id,
+                             Expense = meal.Expense,
+                             MealType = mealType,
+                             Name = meal.Name
+                         }).FirstOrDefault();
+
+            return query;
+        }
     }
 }

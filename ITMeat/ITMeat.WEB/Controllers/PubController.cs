@@ -115,22 +115,5 @@ namespace ITMeat.WEB.Controllers
             Alert.Danger("Error. Pub are not edited");
             return RedirectToAction("EditPubInformations", "Pub", new { model.PubId });
         }
-
-        [HttpGet("PubOferts/{PubId}")]
-        public IActionResult PubOferts(Guid pubId)
-        {
-            var pubOferts = _getPubOferts.Invoke(pubId);
-            var model = pubOferts.Select(item => new PubOfertsViewModel
-            {
-                MealId = item.Id,
-                MealName = item.Name,
-                MealExpense = item.Expense,
-                MealTypeId = item.MealType.Id,
-                MealTypeName = item.MealType.Name,
-                PubId = item.Pub.Id,
-                PubName = item.Pub.Name
-            }).ToList();
-            return View(model);
-        }
     }
 }

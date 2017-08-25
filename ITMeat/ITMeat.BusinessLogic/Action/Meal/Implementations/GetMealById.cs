@@ -22,7 +22,7 @@ namespace ITMeat.BusinessLogic.Action.Meal.Implementations
             {
                 return null;
             }
-            var dbMeal = _mealRepository.GetById(mealId);
+            var dbMeal = _mealRepository.GetMealbyId(mealId);
             if (dbMeal == null)
             {
                 return null;

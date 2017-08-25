@@ -1,6 +1,7 @@
 ﻿@{
     Layout = "_AppLayout";
 }
+@using System.Collections.Generic
 @using Microsoft.AspNetCore.Mvc.Rendering
 @model ITMeat.WEB.Models.Meal.MealToEditViewModel
 <div class="center_side">
@@ -26,6 +27,7 @@
                         @Html.DropDownListFor(x => x.MealTypeId, new List<SelectListItem>(Model.MealTypes))
                     </div>
                 </div>
+                <button id="CreateButton" class="ui positive button menubutton" tabindex="0" type="submit">Edit</button>
             }
         </div>
     </div>

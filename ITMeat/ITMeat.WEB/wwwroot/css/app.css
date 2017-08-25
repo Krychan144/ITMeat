@@ -164,12 +164,12 @@ form {
     background-color: #E2FFBF;
 }
 
-#ActiveOrderVievs, #MealsInOrderViews, #HistoryOrderVievs, #CompleteOrderViews, #SummaryOrderinHistoryViews, #MealInPubOferts {
+#ActiveOrderVievs, #MealsInOrderViews, #HistoryOrderVievs, #CompleteOrderViews, #SummaryOrderinHistoryViews, #MealInPubOferts, #MealTypeView {
     background-color: #E2FFBF;
     min-height: 100%;
 }
 
-#OrderList, #MealsList, #OfertsMealList {
+#OrderList, #MealsList, #OfertsMealList, #MealTypeList {
     margin-left: 5rem;
     margin-right: 5rem;
 }
@@ -179,7 +179,7 @@ form {
     margin-right: 15rem;
 }
 
-#ActiveOrderTable, #MealsInOrderTable, #HistoryOrderTable, #MealsInCompleteTable, #MealsInSubmitedOrderTable, #OfertsMealTable {
+#ActiveOrderTable, #MealsInOrderTable, #HistoryOrderTable, #MealsInCompleteTable, #MealsInSubmitedOrderTable, #OfertsMealTable, #MealTypeTable {
     overflow-y: scroll;
 }
 

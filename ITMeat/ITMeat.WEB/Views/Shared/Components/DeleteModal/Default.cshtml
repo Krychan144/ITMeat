@@ -1,0 +1,39 @@
+﻿@using ITMeat.WEB.Models.Common
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model ITMeat.WEB.Models.Common.DeleteModalViewModel
+<div class="ui basic delete small modal">
+    @using (Html.BeginForm(Model.Action, Model.ControllerName, FormMethod.Post, new { name = "modalDeleteConfirm", @class = "ui form center aligned" }))
+    {
+        @Html.Hidden("id", 0)
+
+    <div class="ui icon header">
+        <i class="remove red icon"></i>
+        Delete Message
+    </div>
+    <div class="content">
+        <p>@Model.Text</p>
+    </div>
+        <div class="actions">
+            <div class="ui red cancel inverted button">
+                <i class="angle double left icon"></i>
+                No
+            </div>
+            <div class="ui green basic positive inverted button">
+                <i class="remove icon"></i>
+                Yes
+            </div>
+        </div>
+    }
+</div>
+<script>
+    $(document).on("click", ".deleteItem", function (e) {
+        $(".ui.modal").modal({
+            onApprove: function () {
+                var idValue = $(this).find('input[name=id]');
+                var callerId = $(e.target).data('id');
+                idValue.val(callerId);
+                $("[name='modalDeleteConfirm']").submit();
+            }
+        }).modal("show");
+    });
+</script>

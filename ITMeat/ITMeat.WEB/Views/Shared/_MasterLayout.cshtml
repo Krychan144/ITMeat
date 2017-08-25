@@ -11,14 +11,6 @@
     <environment names="Staging,Production">
         <link rel="stylesheet" href="~/lib/semantic/dist/semantic.min.css" />
     </environment>
-    @RenderSection("CSS", required: false)
-</head>
-
-<body>
-    @RenderSection("Pre_Body", required: false)
-    @RenderBody()
-    @RenderSection("Post_Body", required: false)
-
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/semantic/dist/semantic.js"></script>
@@ -29,6 +21,15 @@
         <script src="~/lib/semantic/dist/semantic.min.js"></script>
         <script src="~/js/alert.min.js"></script>
     </environment>
+    @RenderSection("CSS", required: false)
+</head>
+
+<body>
+    @RenderSection("Pre_Body", required: false)
+    @RenderBody()
+    @RenderSection("Post_Body", required: false)
+
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>
