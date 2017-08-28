@@ -26,7 +26,9 @@ namespace ITMeat.WEB.Controllers
         public IActionResult Index()
         {
             _dbContextSeeder.Seed();
-            return Json("Database seeded");
+            Alert.Success("Succes! Database seeded.");
+            return RedirectToAction("Index", "Order");
+            //   return Json("Database seeded");
         }
     }
 }

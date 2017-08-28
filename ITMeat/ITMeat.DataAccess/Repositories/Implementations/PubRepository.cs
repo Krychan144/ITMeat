@@ -20,6 +20,8 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                         join mealtype in context.Set<MealType>() on meal.MealType.Id equals mealtype.Id
                         join pub in context.Set<Pub>() on meal.Pub.Id equals pub.Id
                         where pubId == pub.Id
+                        where meal.DeletedOn == null
+                        where meal.DeletedOn == null
                         select new Meal
                         {
                             Id = meal.Id,

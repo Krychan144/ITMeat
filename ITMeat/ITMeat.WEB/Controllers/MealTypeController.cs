@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ITMeat.BusinessLogic.Action.MealType.Interfaces;
 using ITMeat.BusinessLogic.Action.Pub.Interfaces;
 using ITMeat.BusinessLogic.Models;
+using ITMeat.WEB.Models.Meal;
 using ITMeat.WEB.Models.MealType;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,16 +20,19 @@ namespace ITMeat.WEB.Controllers
         private readonly IAddNewMealType _addNewMeal;
         private readonly IGetMealTypeById _getMealTypeById;
         private readonly IEditMealType _editMealType;
+        private readonly IDeleteMealType _deleteMealType;
 
         public MealTypeController(IGetAllMealtype getAllMealtype,
             IAddNewMealType addNewMeal,
             IGetMealTypeById getMealTypeById,
-            IEditMealType editMealType)
+            IEditMealType editMealType,
+            IDeleteMealType deleteMealType)
         {
             _getAllMealtype = getAllMealtype;
             _addNewMeal = addNewMeal;
             _getMealTypeById = getMealTypeById;
             _editMealType = editMealType;
+            _deleteMealType = deleteMealType;
         }
 
         [HttpGet("MealType")]
@@ -62,7 +66,7 @@ namespace ITMeat.WEB.Controllers
             {
                 Alert.Success("Meal Type are added.");
                 return RedirectToAction("MealType", "MealType");
-            };
+            }
             Alert.Danger("Error. Meal Type not added.");
             return RedirectToAction("MealType", "MealType");
         }
@@ -94,6 +98,19 @@ namespace ITMeat.WEB.Controllers
                 return RedirectToAction("MealType", "MealType");
             }
             Alert.Danger("Error. Meal Type about this name are exist! ");
+            return RedirectToAction("MealType", "MealType");
+        }
+
+        [HttpPost("Delete")]
+        public IActionResult Delete(DeleteItemViewModel model)
+        {
+            var deleteMealTypeAction = _deleteMealType.Invoke(model.id);
+            if (deleteMealTypeAction == false)
+            {
+                Alert.Danger("Error! Meal are not deleted. You must first remove the meals where is use this meal type.");
+                return RedirectToAction("MealType", "MealType");
+            }
+            Alert.Success("Success! Meal are deleted.");
             return RedirectToAction("MealType", "MealType");
         }
     }

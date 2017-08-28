@@ -15,11 +15,26 @@ namespace ITMeat.DataAccess.Repositories.Implementations
         {
         }
 
+        public IQueryable<Meal> GetMealInMealType(Guid mealTypeId)
+        {
+            var query = from meal in context.Set<Meal>()
+                        join mealtype in context.Set<MealType>() on meal.MealType.Id equals mealtype.Id
+                        where mealTypeId == mealtype.Id
+                        where meal.DeletedOn == null
+                        select new Meal
+                        {
+                            Id = meal.Id,
+                        };
+
+            return !(query.Count() > 0) ? Enumerable.Empty<Meal>().AsQueryable() : query;
+        }
+
         public IQueryable<Meal> GetPubMeals(Guid pubId)
         {
             var query = from meal in context.Set<Meal>()
                         join pub in context.Set<Pub>() on meal.Pub.Id equals pub.Id
                         where meal.Pub.Id == pubId
+                        where meal.DeletedOn == null
                         select new Meal
                         {
                             Id = meal.Id,
@@ -44,6 +59,7 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                         join order in context.Set<Order>() on pubOrder.Order.Id equals order.Id
                         join mealType in context.Set<MealType>() on meal.MealType.Id equals mealType.Id
                         where order.Id == orderId
+                        where meal.DeletedOn == null
                         select new Meal
                         {
                             Id = meal.Id,
@@ -61,6 +77,7 @@ namespace ITMeat.DataAccess.Repositories.Implementations
             var query = (from meal in context.Set<Meal>()
                          join userOrderMeal in context.Set<UserOrderMeal>() on meal.Id equals userOrderMeal.Meal.Id
                          where userOrderMealId == userOrderMeal.Id
+                         where meal.DeletedOn == null
                          select new Meal
                          {
                              Id = meal.Id,
@@ -76,6 +93,7 @@ namespace ITMeat.DataAccess.Repositories.Implementations
             var query = (from meal in context.Set<Meal>()
                          join mealType in context.Set<MealType>() on meal.MealType.Id equals mealType.Id
                          where meal.Id == mealId
+                         where meal.DeletedOn == null
                          select new Meal
                          {
                              Id = meal.Id,

@@ -21,6 +21,7 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                         join meal in context.Set<Meal>() on mealType.Id equals meal.MealType.Id
                         join pub in context.Set<Pub>() on meal.Pub.Id equals pub.Id
                         where pub.Id == pubId
+                        where mealType.DeletedOn == null
                         group mealType by mealType.Name
                 into g
                         select g.FirstOrDefault();
@@ -33,6 +34,7 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                          join meal in context.Set<Meal>() on pub.Id equals meal.Pub.Id
                          join mealType in context.Set<MealType>() on meal.MealType.Id equals mealType.Id
                          where meal.Id == mealId
+                         where mealType.DeletedOn == null
                          select new MealType
                          {
                              Id = mealType.Id,

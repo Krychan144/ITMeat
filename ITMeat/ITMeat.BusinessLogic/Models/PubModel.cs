@@ -7,6 +7,8 @@ namespace ITMeat.BusinessLogic.Models
     {
         public List<MealModel> Meals { get; set; }
 
+        public List<AddsModel> Adds { get; set; }
+
         public List<PubOrder> PubOrder { get; set; }
 
         public string Name { get; set; }

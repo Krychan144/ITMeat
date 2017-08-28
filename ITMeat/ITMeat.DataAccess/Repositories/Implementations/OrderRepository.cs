@@ -19,6 +19,7 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                          join pubOrder in context.Set<PubOrder>() on order.Id equals pubOrder.Order.Id
                          join user in context.Set<User>() on order.Owner.Id equals user.Id
                          where pubOrder.Id == pubOrdrId
+                         where order.DeletedOn == null
                          select new Order
                          {
                              Id = order.Id,

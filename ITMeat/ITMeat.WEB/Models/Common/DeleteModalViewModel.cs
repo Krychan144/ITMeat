@@ -12,5 +12,7 @@ namespace ITMeat.WEB.Models.Common
         public string Action { get; set; }
 
         public string Text { get; set; }
+
+        public Guid IdToDelete { get; set; }
     }
 }

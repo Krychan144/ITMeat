@@ -16,6 +16,33 @@ namespace ITMeat.DataAccess.Migrations
                 .HasAnnotation("ProductVersion", "1.1.2")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("ITMeat.DataAccess.Models.Adds", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<decimal>("Expense")
+                        .HasColumnType("DECIMAL(16,2)");
+
+                    b.Property<DateTime>("ModifiedOn");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(100)");
+
+                    b.Property<Guid>("PubId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PubId");
+
+                    b.ToTable("Adds");
+                });
+
             modelBuilder.Entity("ITMeat.DataAccess.Models.EmailMessage", b =>
                 {
                     b.Property<Guid>("Id")
@@ -250,6 +277,32 @@ namespace ITMeat.DataAccess.Migrations
                     b.ToTable("UserOrders");
                 });
 
+            modelBuilder.Entity("ITMeat.DataAccess.Models.UserOrderAdds", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("AddsId");
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<DateTime>("ModifiedOn");
+
+                    b.Property<int>("Quantity");
+
+                    b.Property<Guid>("UserOrderId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddsId");
+
+                    b.HasIndex("UserOrderId");
+
+                    b.ToTable("UserOrderAdds");
+                });
+
             modelBuilder.Entity("ITMeat.DataAccess.Models.UserOrderMeal", b =>
                 {
                     b.Property<Guid>("Id")
@@ -302,6 +355,13 @@ namespace ITMeat.DataAccess.Migrations
                     b.ToTable("UserTokens");
                 });
 
+            modelBuilder.Entity("ITMeat.DataAccess.Models.Adds", b =>
+                {
+                    b.HasOne("ITMeat.DataAccess.Models.Pub", "Pub")
+                        .WithMany()
+                        .HasForeignKey("PubId");
+                });
+
             modelBuilder.Entity("ITMeat.DataAccess.Models.Meal", b =>
                 {
                     b.HasOne("ITMeat.DataAccess.Models.MealType", "MealType")
@@ -340,6 +400,17 @@ namespace ITMeat.DataAccess.Migrations
                     b.HasOne("ITMeat.DataAccess.Models.User", "User")
                         .WithMany("UserOrders")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("ITMeat.DataAccess.Models.UserOrderAdds", b =>
+                {
+                    b.HasOne("ITMeat.DataAccess.Models.Adds", "Adds")
+                        .WithMany()
+                        .HasForeignKey("AddsId");
+
+                    b.HasOne("ITMeat.DataAccess.Models.UserOrder", "UserOrder")
+                        .WithMany("OrdersAdds")
+                        .HasForeignKey("UserOrderId");
                 });
 
             modelBuilder.Entity("ITMeat.DataAccess.Models.UserOrderMeal", b =>

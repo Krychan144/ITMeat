@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
+using ITMeat.BusinessLogic.Action.Adds.Interfaces;
 using ITMeat.BusinessLogic.Action.Meal.Interfaces;
 using ITMeat.BusinessLogic.Action.MealType.Interfaces;
 using ITMeat.BusinessLogic.Action.Pub.Interfaces;
@@ -22,18 +23,21 @@ namespace ITMeat.BusinessLogic.Configuration.Implementations
         private readonly IAddNewUser _addNewUser;
         private readonly IAddNewMeal _addNewMeal;
         private readonly IAddNewMealType _addNewMealType;
+        private readonly IAddNewAdds _addNewAdds;
 
         public DbContextSeeder(IAddNewPub addNewPub,
             IConfirmUserEmailByToken confirmUserEmailByToken,
             IAddNewUser addNewUser,
             IAddNewMeal addNewMeal,
-            IAddNewMealType addNewMealType)
+            IAddNewMealType addNewMealType,
+            IAddNewAdds addNewAdds)
         {
             _addNewPub = addNewPub;
             _confirmUserEmailByToken = confirmUserEmailByToken;
             _addNewUser = addNewUser;
             _addNewMeal = addNewMeal;
             _addNewMealType = addNewMealType;
+            _addNewAdds = addNewAdds;
         }
 
         public void Seed()
@@ -48,11 +52,13 @@ namespace ITMeat.BusinessLogic.Configuration.Implementations
         private readonly string[] _mealsBreakfast = { "Jajecznica", "Naleśniki", "Omlet", "Kełbaski", "Parówki" };
         private readonly string[] _mealsSupper = { "Jajecznica", "Tosty", "Racuchy", "Kanapki", "Naleśniki" };
         private readonly string[] _types = { "Obiad", "Sniadanie", "Kolacja" };
+        private readonly string[] _adds = { "Ketchup", "ser", "jajko", "pojemniki" };
 
         public void SeedPub(IAddNewPub _addNewPub, IAddNewMeal _addNewMeal, IAddNewMealType _addNewMealType)
         {
             var mealExpense = 10.5m;
             var freeDelivery = 50.0m;
+            var addsExpense = 1.0m;
             foreach (var pub in _pubs)
             {
                 var model = new PubModel
@@ -125,6 +131,21 @@ namespace ITMeat.BusinessLogic.Configuration.Implementations
                     if (breakfastMealType != Guid.Empty)
                     {
                         _addNewMeal.Invoke(mealsBreakfastModel, pubModell.Id, breakfastMealType);
+                    }
+                }
+
+                foreach (var add in _adds)
+                {
+                    var addsModel = new AddsModel
+                    {
+                        Name = $"{add}",
+                        Expense = addsExpense,
+                    };
+                    addsExpense += 0.3m;
+
+                    if (breakfastMealType != Guid.Empty)
+                    {
+                        _addNewAdds.Invoke(addsModel, pubModell.Id);
                     }
                 }
             }

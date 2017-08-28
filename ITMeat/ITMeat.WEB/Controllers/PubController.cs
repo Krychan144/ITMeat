@@ -77,7 +77,7 @@ namespace ITMeat.WEB.Controllers
         [HttpPost("SelectPubToEdit")]
         public IActionResult SelectPubToEdit(SelectPubToEditViewModel model)
         {
-            return RedirectToAction("EditPubInformations", "Pub", new { model.PubId });
+            return RedirectToAction("Meals", "Meal", new { model.PubId });
         }
 
         [HttpGet("EditPubInformations/{PubId}")]
@@ -106,14 +106,14 @@ namespace ITMeat.WEB.Controllers
                 FreeDelivery = model.FreeDelivery,
                 Adress = model.Address
             };
-            var EditPub = _editPub.Invoke(pubToEdit);
-            if (EditPub == true)
+            var editPub = _editPub.Invoke(pubToEdit);
+            if (editPub == true)
             {
                 Alert.Success("Success! Pub are edited.");
-                return RedirectToAction("EditPubInformations", "Pub", new { model.PubId });
+                return RedirectToAction("Meals", "Meal", new { model.PubId });
             }
             Alert.Danger("Error. Pub are not edited");
-            return RedirectToAction("EditPubInformations", "Pub", new { model.PubId });
+            return RedirectToAction("Meals", "Meal", new { model.PubId });
         }
     }
 }

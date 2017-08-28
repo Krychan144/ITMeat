@@ -24,12 +24,13 @@ namespace ITMeat.WEB.Controllers
         private readonly IEditMeal _editMeal;
         private readonly IGetAllMealtype _getAllMealtype;
         private readonly IGetPubOferts _getPubOferts;
+        private readonly IDeleteMeal _deleteMeal;
 
         public MealController(IGetMealTypeByPubId getMealTypeByPubId,
             IGetMealById getMealById,
             IGetPubByMealId getPubByMealId,
             IEditMeal editMeal,
-            IGetAllMealtype getAllMealtype, IGetPubOferts getPubOferts)
+            IGetAllMealtype getAllMealtype, IGetPubOferts getPubOferts, IDeleteMeal deleteMeal)
         {
             _getMealTypeByPubId = getMealTypeByPubId;
             _getMealById = getMealById;
@@ -37,6 +38,7 @@ namespace ITMeat.WEB.Controllers
             _editMeal = editMeal;
             _getAllMealtype = getAllMealtype;
             _getPubOferts = getPubOferts;
+            _deleteMeal = deleteMeal;
         }
 
         [HttpGet("AddNewMealToPub/{PubId}")]
@@ -100,10 +102,10 @@ namespace ITMeat.WEB.Controllers
             if (editMealAction == false)
             {
                 Alert.Danger("Error! Meal are not edited.");
-                return RedirectToAction("PubOferts", "Pub", new { PubId = pub });
+                return RedirectToAction("Meals", "Meal", new { PubId = pub });
             }
             Alert.Success("Success! Meal are edited.");
-            return RedirectToAction("PubOferts", "Pub", new { PubId = pub });
+            return RedirectToAction("Meals", "Meal", new { PubId = pub });
         }
 
         [HttpGet("Meals/{PubId}")]
@@ -124,10 +126,17 @@ namespace ITMeat.WEB.Controllers
         }
 
         [HttpPost("Delete")]
-        public IActionResult Delete(Guid id)
+        public IActionResult Delete(DeleteItemViewModel model)
         {
-            var pubid = _getPubByMealId.Invoke(id).Id;
-            return RedirectToAction("Meals", "Meal", new { PubId = pubid });
+            var pubId = _getPubByMealId.Invoke(model.id).Id;
+            var deleteMealAction = _deleteMeal.Invoke(model.id);
+            if (deleteMealAction == false)
+            {
+                Alert.Danger("Error! Meal are not deleted.");
+                return RedirectToAction("Meals", "Meal", new { PubId = pubId });
+            }
+            Alert.Success("Success! Meal are deleted.");
+            return RedirectToAction("Meals", "Meal", new { PubId = pubId });
         }
     }
 }

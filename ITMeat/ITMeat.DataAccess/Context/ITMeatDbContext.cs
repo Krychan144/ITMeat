@@ -59,6 +59,8 @@ namespace ITMeat.DataAccess.Context
         public DbSet<EmailMessage> EmailMessages { get; set; }
         public DbSet<Pub> Pub { get; set; }
         public DbSet<PubOrder> PubOrder { get; set; }
+        public DbSet<Adds> Adds { get; set; }
+        public DbSet<UserOrderAdds> UserOrderAdds { get; set; }
 
         #endregion DbSet
     }

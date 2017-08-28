@@ -4,13 +4,14 @@
     Layout = "_MasterLayout";
 }
 @section Scripts
-{
+    {
     <environment names="Development">
         <script src="~/lib/flipclock/compiled/flipclock.js"></script>
         <script src="~/lib/semantic-ui-calendar/dist/calendar.js"></script>
         <script src="~/lib/signalr/jquery.signalR.js" asp-append-version="true"></script>
         <script src="~/signalr/hubs"></script>
         <script src="~/js/app.js" asp-append-version="true"></script>
+        <script src="~/js/alert.js"></script>
     </environment>
 
     <environment names="Staging,Production">
@@ -47,6 +48,5 @@
 @section Post_Body
     {
 }
-
 
 @RenderBody()
