@@ -1,6 +1,7 @@
 ﻿namespace ITMeat.BusinessLogic.Models
 {
     public class UserOrderMealModel : BaseModel
+
     {
         public UserOrderModel UserOrder { get; set; }
 

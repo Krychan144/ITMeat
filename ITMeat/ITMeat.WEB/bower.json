@@ -5,6 +5,7 @@
     "semantic": "2.2.10",
     "flipclock": "FlipClock#0.7.0",
     "semantic-ui-calendar": "0.0.8",
-    "signalr": "v2.2.2"
+    "signalr": "v2.2.2",
+    "chart.js": "Chart.js#v2.6.0"
   }
 }

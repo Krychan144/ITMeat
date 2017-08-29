@@ -316,3 +316,10 @@ form {
     font-weight: bold;
     background-color: #E2FFBF;   
 }
+/*
+    Chart 
+*/
+#myChart {
+    width: 300px;
+    height: 300px;
+}

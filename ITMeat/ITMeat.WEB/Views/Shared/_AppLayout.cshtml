@@ -6,6 +6,7 @@
 @section Scripts
     {
     <environment names="Development">
+        <script src="~/lib/chart.js/dist/Chart.js"></script>
         <script src="~/lib/flipclock/compiled/flipclock.js"></script>
         <script src="~/lib/semantic-ui-calendar/dist/calendar.js"></script>
         <script src="~/lib/signalr/jquery.signalR.js" asp-append-version="true"></script>
@@ -15,6 +16,7 @@
     </environment>
 
     <environment names="Staging,Production">
+        <script src="~/lib/chart.js/dist/Chart.min.js"></script>
         <script src="~/lib/flipclock/compiled/flipclock.min.js"></script>
         <script src="~/lib/semantic-ui-calendar/dist/calendar.min.js"></script>
         <script src="~/lib/signalr/jquery.signalR.min.js" asp-append-version="true"></script>

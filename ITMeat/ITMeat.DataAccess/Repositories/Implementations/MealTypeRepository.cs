@@ -42,5 +42,20 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                          });
             return !(query.Count() > 0) ? Enumerable.Empty<MealType>().AsQueryable() : query;
         }
+
+        public IQueryable<MealType> GetMealTypesInUserOrder(Guid userId)
+        {
+            var query = from userOrderMeal in context.Set<UserOrderMeal>()
+                        join userOrder in context.Set<UserOrder>() on userOrderMeal.UserOrder.Id equals userOrder.Id
+                        join user in context.Set<User>() on userOrder.User.Id equals user.Id
+                        join meal in context.Set<Meal>() on userOrderMeal.Meal.Id equals meal.Id
+                        join mealType in context.Set<MealType>() on meal.MealType.Id equals mealType.Id
+                        where userId == user.Id
+                        where mealType.DeletedOn == null
+                        group mealType by mealType.Name
+                into g
+                        select g.FirstOrDefault();
+            return !(query.Count() > 0) ? Enumerable.Empty<MealType>().AsQueryable() : query;
+        }
     }
 }

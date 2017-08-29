@@ -11,5 +11,7 @@ namespace ITMeat.DataAccess.Repositories.Interfaces
         IQueryable<MealType> GetMealTypes(Guid pubId);
 
         IQueryable<MealType> GetMealTypeByMealId(Guid mealId);
+
+        IQueryable<MealType> GetMealTypesInUserOrder(Guid userId);
     }
 }
