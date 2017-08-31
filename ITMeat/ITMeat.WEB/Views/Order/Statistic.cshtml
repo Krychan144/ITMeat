@@ -2,7 +2,59 @@
     Layout = "_AppLayout";
 
 }
-<div class="titlename ">User Statistic</div>
+@model List<ITMeat.WEB.Models.MealType.SumExpenseByMealType>
+<environment names="Development">
+    <script src="~/lib/chart.js/dist/Chart.js"></script>
+</environment>
+
+<environment names="Staging,Production">
+    <script src="~/lib/chart.js/dist/Chart.min.js"></script>
+</environment>
+
 <div class="statisticView">
+    <div class="titlename ">User Statistic</div>
+    <h2>Expenditure by Meal Type </h2>
     <canvas id="myChart"></canvas>
+
 </div>
+
+<script>
+    
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+    console.log(getRandomColor());
+
+    var labelArray = [];
+    var dateArray = [];
+    var colorArray = [];
+    var expense;
+
+    @foreach (var item in Model)
+    {
+        @:labelArray.push("@item.MealTypeName");
+        @:expense = @item.SumExpense;
+        @:dateArray.push(expense.toFixed());
+        @:colorArray.push(getRandomColor());
+    }
+    console.log(labelArray);
+    console.log(dateArray);
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labelArray,
+            datasets: [{
+                label: "zł",
+                backgroundColor: colorArray,
+                data: dateArray,
+                
+            }]
+        },
+    });
+</script>

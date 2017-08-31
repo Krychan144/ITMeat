@@ -14,6 +14,7 @@ using ITMeat.BusinessLogic.Action.UserOrderMeals.Interfaces;
 using ITMeat.BusinessLogic.Helpers.Interfaces;
 using ITMeat.WEB.Models.Meal;
 using ITMeat.WEB.Models.Meal.FormModels;
+using ITMeat.WEB.Models.MealType;
 using ITMeat.WEB.Models.Pub;
 using ITMeat.WEB.Models.Pub.FormModels;
 using ITMeat.WEB.Models.PubOrder;
@@ -27,16 +28,19 @@ namespace ITMeat.WEB.Controllers
         private readonly ICreateUserOrder _createUserOrder;
         private readonly IConvertDateTime _convertDateTime;
         private readonly IGetOrderById _getOrderById;
+        private readonly IGetSumExpenseByMealTypeAndUserId _sumExpenseByMealTypeAndUserId;
 
         public OrderController(IGetAllPubs getAllPubs,
             ICreateUserOrder createUserOrder,
             IConvertDateTime convertDateTime,
-            IGetOrderById getOrderById)
+            IGetOrderById getOrderById,
+            IGetSumExpenseByMealTypeAndUserId sumExpenseByMealTypeAndUserId)
         {
             _getAllPubs = getAllPubs;
             _createUserOrder = createUserOrder;
             _convertDateTime = convertDateTime;
             _getOrderById = getOrderById;
+            _sumExpenseByMealTypeAndUserId = sumExpenseByMealTypeAndUserId;
         }
 
         public IActionResult Index()
@@ -106,7 +110,13 @@ namespace ITMeat.WEB.Controllers
         [HttpGet("Statistic")]
         public IActionResult Statistic()
         {
-            return View();
+            var sumExpenseByMealType = _sumExpenseByMealTypeAndUserId.Invoke(ControllerContext.HttpContext.Actor());
+            var model = sumExpenseByMealType.Select(item => new SumExpenseByMealType
+            {
+                MealTypeName = item.ItemName,
+                SumExpense = item.Expense
+            }).ToList();
+            return View(model);
         }
 
         [HttpGet("SummaryOrderInHistory/{OrderId}")]

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using ITMeat.DataAccess.Context;
 using ITMeat.DataAccess.Models;
 using ITMeat.DataAccess.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Remotion.Linq.Clauses;
 
 namespace ITMeat.DataAccess.Repositories.Implementations
 {
@@ -56,6 +59,21 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                 into g
                         select g.FirstOrDefault();
             return !(query.Count() > 0) ? Enumerable.Empty<MealType>().AsQueryable() : query;
+        }
+
+        public IQueryable<MealExpenseSum> GetMealTypeSumeExpense(Guid userId)
+        {
+            var idQuery = context.Set<UserOrderMeal>()
+                .Where(uo => uo.UserOrder.User.Id == userId)
+                .Include(m => m.Meal)
+                .ThenInclude(mt => mt.MealType)
+                .GroupBy(e => e.Meal.MealType.Name)
+                .Select(g => new MealExpenseSum
+                {
+                    ItemName = g.Key,
+                    Expense = g.Sum(d => d.Meal.Expense * d.Quantity),
+                });
+            return !(idQuery.Count() > 0) ? Enumerable.Empty<MealExpenseSum>().AsQueryable() : idQuery;
         }
     }
 }
