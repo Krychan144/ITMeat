@@ -5,10 +5,10 @@ using ITMeat.BusinessLogic.Action.Base;
 using ITMeat.BusinessLogic.Models;
 using ITMeat.BusinessLogic.Models.AditionalsModels;
 
-namespace ITMeat.BusinessLogic.Action.UserOrderMeals.Interfaces
+namespace ITMeat.BusinessLogic.Action.MealType.Interfaces
 {
-    public interface IGetSumExpenseByMealTypeAndUserId : IAction
+    public interface IGetMealCountByMealType : IAction
     {
-        List<MealExpenseSumModel> Invoke(Guid userId);
+        List<MealCountForAllUsersModel> Invoke();
     }
 }

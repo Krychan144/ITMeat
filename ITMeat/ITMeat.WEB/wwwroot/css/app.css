@@ -164,9 +164,10 @@ form {
     background-color: #E2FFBF;
 }
 
-#ActiveOrderVievs, #MealsInOrderViews, #HistoryOrderVievs, #CompleteOrderViews, #SummaryOrderinHistoryViews, #MealInPubOferts, #MealTypeView {
+#ActiveOrderVievs, #MealsInOrderViews, #HistoryOrderVievs, #CompleteOrderViews, #SummaryOrderinHistoryViews, #statisticView, #MealInPubOferts, #MealTypeView {
     background-color: #E2FFBF;
     min-height: 100%;
+    text-align: center;
 }
 
 #OrderList, #MealsList, #OfertsMealList, #MealTypeList {
@@ -201,10 +202,6 @@ form {
     padding-left: 13%;
 }
 
-.statisticView {
-    height: 100%;
-    background-color: #E2FFBF;
-}
 /*
     Timeritp/ Addmeal;
 */
@@ -319,8 +316,3 @@ form {
 /*
     Chart 
 */
-#myChart {
-    max-width: 400px ;
-    max-height: 400px ;
-    background-color: #E2FFBF;
-}

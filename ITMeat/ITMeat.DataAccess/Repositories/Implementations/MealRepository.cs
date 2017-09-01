@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using ITMeat.DataAccess.Context;
 using ITMeat.DataAccess.Models;
+using ITMeat.DataAccess.Models.Aditionals;
 using ITMeat.DataAccess.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore.Internal;
 
@@ -103,6 +104,20 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                          }).FirstOrDefault();
 
             return query;
+        }
+
+        public IQueryable<MostlySelectedMealInOrder> GetMealCountForAllUsers()
+        {
+            var idQuery = context.Set<UserOrderMeal>()
+                .GroupBy(e => e.Meal.Name)
+                .Select(g => new MostlySelectedMealInOrder
+                {
+                    MealName = g.Key,
+                    CountValue = g.Sum(e => e.Quantity)
+                })
+                .OrderByDescending(g => g.CountValue)
+                .Take(6);
+            return !(idQuery.Count() > 0) ? Enumerable.Empty<MostlySelectedMealInOrder>().AsQueryable() : idQuery;
         }
     }
 }

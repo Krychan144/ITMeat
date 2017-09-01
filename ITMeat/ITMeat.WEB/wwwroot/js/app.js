@@ -145,37 +145,43 @@ function serializeForm(form) {
  */
 myHub.client.getUserSubmittedOrders = function (result) {
     console.log("Load Orders History");
-    var historyOrdersTable = $("#HistoryOrderTable");
-    $.each(result,
-        function (index, value) {
-            InJoinedOrderID = value.OrderId;
-            if (value.OwnerId === userId) {
-                var divToAppend = "<tr id='HistoryOrderTable' data-PubOrderId='" +
-                    value.PubOrderId +
-                    "'>" +
-                    "<td>" +
-                    value.PubName +
-                    "</td>" +
-                    "<td>" +
-                    value.CreatedOn +
-                    "</td>" +
-                    "<td>" +
-                    value.EndDateTime +
-                    "</td>" +
-                    "<td>" +
-                    value.Expense.toFixed(2) +
-                    " zł</td>" +
-                    "<td>";
-                divToAppend +=
-                    '<a id ="GoToSummaryView" class="ui blue button" href="/Order/SummaryOrderInHistory/ ' +
-                    value.OrderId +
-                    '">Look Order</a>';
+    if (result.length === 0) {
+        var jaka = $("#HistoryOrderVievs");
+        var added = "<i class='massive black ban icon' style='height: 400px; padding-top:100px;'></i>";
+        jaka.append(added);
+    } else {
+        var historyOrdersTable = $("#HistoryOrderTable");
+        $.each(result,
+            function(index, value) {
+                InJoinedOrderID = value.OrderId;
+                if (value.OwnerId === userId) {
+                    var divToAppend = "<tr id='HistoryOrderTable' data-PubOrderId='" +
+                        value.PubOrderId +
+                        "'>" +
+                        "<td>" +
+                        value.PubName +
+                        "</td>" +
+                        "<td>" +
+                        value.CreatedOn +
+                        "</td>" +
+                        "<td>" +
+                        value.EndDateTime +
+                        "</td>" +
+                        "<td>" +
+                        value.Expense.toFixed(2) +
+                        " zł</td>" +
+                        "<td>";
+                    divToAppend +=
+                        '<a id ="GoToSummaryView" class="ui blue button" href="/Order/SummaryOrderInHistory/ ' +
+                        value.OrderId +
+                        '">Look Order</a>';
 
-                divToAppend += "</td>" +
-                    "</tr>";
-                historyOrdersTable.append(divToAppend);
-            }
-        });
+                    divToAppend += "</td>" +
+                        "</tr>";
+                    historyOrdersTable.append(divToAppend);
+                }
+            });
+    }
 };
 myHub.client.getMealsInSubmitedOrder = function (result) {
     console.log("Load Meal in Complete orders in History");
@@ -208,54 +214,80 @@ myHub.client.getMealsInSubmitedOrder = function (result) {
 myHub.client.loadActivePubOrders = function (result) {
     console.log("Load Active Orders");
     listoRDER = result;
-    var activeOrdersTable = $("#ActiveOrderTable");
-    $.each(result,
-        function (index, value) {
-            InJoinedOrderID = value.OrderId;
-            var divToAppend = '<tr id="ActiveOrderTableRow" data-orderid="' + value.OrderId + '" data-PubOrderId="' + value.PubOrderId + '">' +
-                "<td>" + value.OrderName + "</td>" +
-                "<td>" + value.PubName + "</td>" +
-                "<td>" + value.OwnerName + "</td>" +
-                "<td>" + value.CreatedOn + "</td>" +
-                "<td id='EndTimeInActive' data-value='" + value.EndDateTimeData + "'>" + value.EndDateTime + "</td>" +
-                "<td id='ActionsInActive'>";
-            if (value.ToSubmitet === false) {
-                if (value.OwnerId === userId) {
-                    if (value.IsJoined === false) {
-                        divToAppend += '<a class="ui button" onClick="deletePubOrder(\'' +
-                            value.PubOrderId +
-                            '\')" >Remove</a>' +
-                            '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
-                            value.OrderId +
-                            '">Join</a>';
+    if (result.length === 0) {
+        var jaka = $("#ActiveOrderVievs");
+        var added = "<i class='massive black ban icon' style='height: 400px; padding-top:100px;'></i>";
+        jaka.append(added);
+    } else {
+        var activeOrdersTable = $("#ActiveOrderTable");
+        $.each(result,
+            function(index, value) {
+                InJoinedOrderID = value.OrderId;
+                var divToAppend = '<tr id="ActiveOrderTableRow" data-orderid="' +
+                    value.OrderId +
+                    '" data-PubOrderId="' +
+                    value.PubOrderId +
+                    '">' +
+                    "<td>" +
+                    value.OrderName +
+                    "</td>" +
+                    "<td>" +
+                    value.PubName +
+                    "</td>" +
+                    "<td>" +
+                    value.OwnerName +
+                    "</td>" +
+                    "<td>" +
+                    value.CreatedOn +
+                    "</td>" +
+                    "<td id='EndTimeInActive' data-value='" +
+                    value.EndDateTimeData +
+                    "'>" +
+                    value.EndDateTime +
+                    "</td>" +
+                    "<td id='ActionsInActive'>";
+                if (value.ToSubmitet === false) {
+                    if (value.OwnerId === userId) {
+                        if (value.IsJoined === false) {
+                            divToAppend += '<a class="ui button" onClick="deletePubOrder(\'' +
+                                value.PubOrderId +
+                                '\')" >Remove</a>' +
+                                '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                                value.OrderId +
+                                '">Join</a>';
+                        } else {
+                            divToAppend += '<a class="ui button" onClick="deletePubOrder(\'' +
+                                value.PubOrderId +
+                                '\')" >Remove</a>' +
+                                '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                                value.OrderId +
+                                '">Continue</a>';
+                        }
                     } else {
-                        divToAppend += '<a class="ui button" onClick="deletePubOrder(\'' +
-                            value.PubOrderId +
-                            '\')" >Remove</a>' +
-                            '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
-                            value.OrderId +
-                            '">Continue</a>';
+                        if (value.IsJoined === false) {
+                            divToAppend +=
+                                '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                                value.OrderId +
+                                '">Join</a>';
+                        } else {
+                            divToAppend +=
+                                '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
+                                value.OrderId +
+                                '">Continue</a>';
+                        }
                     }
                 } else {
-                    if (value.IsJoined === false) {
-                        divToAppend +=
-                            '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' +
-                            value.OrderId +
-                            '">Join</a>';
-                    } else {
-                        divToAppend +=
-                            '<a id ="JoinToOrderButton" class="ui positive button" href="/Order/JoinToPubOrders/ ' + value.OrderId + '">Continue</a>';
-                    }
+                    divToAppend +=
+                        '<a id ="GoToSummaryView" class="ui orange button" href="/Order/SummaryOrder/ ' +
+                        value.OrderId +
+                        '">Summary</a>';
                 }
-            } else {
-                divToAppend +=
-                    '<a id ="GoToSummaryView" class="ui orange button" href="/Order/SummaryOrder/ ' + value.OrderId + '">Summary</a>';
-            }
 
-            divToAppend += "</td>" +
-                "</tr>";
-            activeOrdersTable.append(divToAppend);
-        });
+                divToAppend += "</td>" +
+                    "</tr>";
+                activeOrdersTable.append(divToAppend);
+            });
+    }
 };
 setInterval(doSomething, 5000);
 
@@ -539,45 +571,51 @@ myHub.client.getMealsinCompleteOrder = function (result, id, orderId) {
 
     var mealsInOrderTable = $("#MealsInCompleteTable");
     var userExpense = 0;
-    $.each(result,
-        function (index, value) {
-            var divToAppend = "<tr id ='orderMealid' data-usermealid='" +
-                value.Id +
-                "'>" +
-                "<td>" +
-                value.UserName +
-                "</td>" +
-                "<td>" +
-                value.MealName +
-                "</td>" +
-                "<td>" +
-                value.Quantity +
-                "</td>" +
-                "<td>" +
-                value.Expense.toFixed(2) +
-                " zł</td>" +
-                "</tr>";
-            mealsInOrderTable.append(divToAppend);
 
-            if (userId === value.UserId) {
-                userExpense = userExpense += value.Expense;
-            }
-        });
+    if (result.length === 0) {
+        var jaka = $("#CompleteOrderViews");
+        var added = "<i class='massive black ban icon' style='height: 400px; padding-top:100px;'></i>";
+        jaka.append(added);
+    }
+    else {
+        $.each(result,
+            function (index, value) {
+                var divToAppend = "<tr id ='orderMealid' data-usermealid='" +
+                    value.Id +
+                    "'>" +
+                    "<td>" +
+                    value.UserName +
+                    "</td>" +
+                    "<td>" +
+                    value.MealName +
+                    "</td>" +
+                    "<td>" +
+                    value.Quantity +
+                    "</td>" +
+                    "<td>" +
+                    value.Expense.toFixed(2) +
+                    " zł</td>" +
+                    "</tr>";
+                mealsInOrderTable.append(divToAppend);
 
-    var divSecendToAppend = "<tr id ='orderMealid' >" +
-        "<td></td>" +
-        "<td></td>" +
-        "<td></td>" +
-        "<td style='color: red;'> User cost: " + userExpense.toFixed(2) + " zł</td>" +
-        "</tr>";
-    mealsInOrderTable.append(divSecendToAppend);
+                if (userId === value.UserId) {
+                    userExpense = userExpense += value.Expense;
+                }
+            });
 
-    if (userId === id) {
-        var orderCompleteView = $("#OrderMealList");
-        var divToAppend2 = '<a onClick="openSubmittSideBar(\'' + orderId + '\');" class="ui green button"><i class="call icon"></i> Submit Order</a>';
-        orderCompleteView.append(divToAppend2);
-        var divToAppend3 = '<a  onClick="openAditionalSidebar();"class="ui blue button"><i class="call icon">  </i> Additional cost</a>';
-        orderCompleteView.append(divToAppend3);
+        var divSecendToAppend = "<tr id ='orderMealid' >" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td style='color: red;'> User cost: " + userExpense.toFixed(2) + " zł</td>" +
+            "</tr>";
+        mealsInOrderTable.append(divSecendToAppend);
+
+        if (userId === id) {
+            var orderCompleteView = $("#OrderMealList");
+            var divToAppend2 = '<a onClick="openSubmittSideBar(\'' + orderId + '\');" class="ui green button"><i class="call icon"></i> Submit Order</a>';
+            orderCompleteView.append(divToAppend2);
+        }
     }
 };
 /*

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ITMeat.DataAccess.Models;
+using ITMeat.DataAccess.Models.Aditionals;
 using ITMeat.DataAccess.Repositories.Implementations;
 
 namespace ITMeat.DataAccess.Repositories.Interfaces
@@ -16,5 +17,7 @@ namespace ITMeat.DataAccess.Repositories.Interfaces
         IQueryable<MealType> GetMealTypesInUserOrder(Guid userId);
 
         IQueryable<MealExpenseSum> GetMealTypeSumeExpense(Guid userId);
+
+        IQueryable<MealCountForAllUsers> GetMealCountByTypeForAllUsers();
     }
 }

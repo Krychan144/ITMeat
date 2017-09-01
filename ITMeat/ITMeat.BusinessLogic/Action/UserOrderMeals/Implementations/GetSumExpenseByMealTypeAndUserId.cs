@@ -4,6 +4,7 @@ using System.Text;
 using ITMeat.BusinessLogic.Action.PubOrder.Interfaces;
 using ITMeat.BusinessLogic.Action.UserOrderMeals.Interfaces;
 using ITMeat.BusinessLogic.Models;
+using ITMeat.BusinessLogic.Models.AditionalsModels;
 using ITMeat.DataAccess.Repositories.Interfaces;
 
 namespace ITMeat.BusinessLogic.Action.UserOrderMeals.Implementations

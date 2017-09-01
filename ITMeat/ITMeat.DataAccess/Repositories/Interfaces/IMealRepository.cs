@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ITMeat.DataAccess.Models;
+using ITMeat.DataAccess.Models.Aditionals;
 
 namespace ITMeat.DataAccess.Repositories.Interfaces
 {
@@ -15,5 +16,7 @@ namespace ITMeat.DataAccess.Repositories.Interfaces
         Meal GetMealbyId(Guid mealId);
 
         IQueryable<Meal> GetMealInMealType(Guid mealTypeId);
+
+        IQueryable<MostlySelectedMealInOrder> GetMealCountForAllUsers();
     }
 }

@@ -2,7 +2,7 @@
     Layout = "_AppLayout";
 
 }
-@model List<ITMeat.WEB.Models.MealType.SumExpenseByMealType>
+@model ITMeat.WEB.Models.MealType.GroupSatysticViewModel
 <environment names="Development">
     <script src="~/lib/chart.js/dist/Chart.js"></script>
 </environment>
@@ -11,15 +11,26 @@
     <script src="~/lib/chart.js/dist/Chart.min.js"></script>
 </environment>
 
-<div class="statisticView">
+<div id="statisticView">
     <div class="titlename ">User Statistic</div>
-    <h2>Expenditure by Meal Type </h2>
-    <canvas id="myChart"></canvas>
-
+    <div class=" ui three column grid">
+        <div class="column">
+            <h2>Your Expense by Meal Type </h2>
+            <canvas id="SumExpenseChart"></canvas>
+        </div>
+        <div class="column">
+            <h2>Mostly selected Meal </h2>
+            <canvas id="MostlySelectedMealChart"></canvas>
+        </div>
+        <div class="column">
+            <h2>Meal Count by Meal Type </h2>
+            <canvas id="CountChart"></canvas>
+        </div>
+    </div>
 </div>
 
 <script>
-    
+
     function getRandomColor() {
         var letters = '0123456789ABCDEF';
         var color = '#';
@@ -28,32 +39,76 @@
         }
         return color;
     }
-    console.log(getRandomColor());
 
-    var labelArray = [];
-    var dateArray = [];
-    var colorArray = [];
+    var labelSumArray = [];
+    var dateSumArray = [];
+    var colorSumArray = [];
+
     var expense;
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.SumExpenseByMealTypesModels)
     {
-        @:labelArray.push("@item.MealTypeName");
+        @:labelSumArray.push("@item.MealTypeName");
         @:expense = @item.SumExpense;
-        @:dateArray.push(expense.toFixed());
-        @:colorArray.push(getRandomColor());
+        @:dateSumArray.push(expense.toFixed());
+        @:colorSumArray.push(getRandomColor());
     }
-    console.log(labelArray);
-    console.log(dateArray);
-    var ctx = document.getElementById("myChart").getContext('2d');
-    var myChart = new Chart(ctx, {
+    var ctx = document.getElementById("SumExpenseChart").getContext('2d');
+    var SumExpenseChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: labelArray,
+            labels: labelSumArray,
             datasets: [{
                 label: "zł",
-                backgroundColor: colorArray,
-                data: dateArray,
-                
+                backgroundColor: colorSumArray,
+                data: dateSumArray,
+
+            }]
+        },
+    });
+
+    var labelCounntArray = [];
+    var dateCounntArray = [];
+    var colorCounntArray = [];
+    @foreach (var item in Model.MealsCountByMealTypeModels)
+    {
+        @:labelCounntArray.push("@item.MealTypeName");
+        @:dateCounntArray.push("@item.CountValue");
+        @:colorCounntArray.push(getRandomColor());
+    }
+    var ctr = document.getElementById("CountChart").getContext('2d');
+    var CountChart = new Chart(ctr, {
+        type: 'doughnut',
+        data: {
+            labels: labelCounntArray,
+            datasets: [{
+                label: "zł",
+                backgroundColor: colorCounntArray,
+                data: dateCounntArray,
+
+            }]
+        },
+    });
+
+    var labelMostlyArray = [];
+    var dateMostlyArray = [];
+    var colorMostlyArray = [];
+    @foreach (var item in Model.MostlySelectedMealInOrder)
+    {
+        @:labelMostlyArray.push("@item.MealName");
+        @:dateMostlyArray.push("@item.CountValue");
+        @:colorMostlyArray.push(getRandomColor());
+    }
+    var ct = document.getElementById("MostlySelectedMealChart").getContext('2d');
+    var MostlySelectedMealChart = new Chart(ct, {
+        type: 'doughnut',
+        data: {
+            labels: labelMostlyArray,
+            datasets: [{
+                label: "zł",
+                backgroundColor: colorMostlyArray,
+                data: dateMostlyArray,
+
             }]
         },
     });

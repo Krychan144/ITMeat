@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using ITMeat.DataAccess.Context;
 using ITMeat.DataAccess.Models;
+using ITMeat.DataAccess.Models.Aditionals;
 using ITMeat.DataAccess.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -74,6 +75,18 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                     Expense = g.Sum(d => d.Meal.Expense * d.Quantity),
                 });
             return !(idQuery.Count() > 0) ? Enumerable.Empty<MealExpenseSum>().AsQueryable() : idQuery;
+        }
+
+        public IQueryable<MealCountForAllUsers> GetMealCountByTypeForAllUsers()
+        {
+            var idQuery = context.Set<UserOrderMeal>()
+                .GroupBy(e => e.Meal.MealType.Name)
+                .Select(g => new MealCountForAllUsers
+                {
+                    MealTypeName = g.Key,
+                    CountValue = g.Sum(e => e.Quantity)
+                });
+            return !(idQuery.Count() > 0) ? Enumerable.Empty<MealCountForAllUsers>().AsQueryable() : idQuery;
         }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ITMeat.BusinessLogic.Action.Meal.Interfaces;
 using ITMeat.BusinessLogic.Action.MealType.Interfaces;
 using ITMeat.BusinessLogic.Action.Order.Interfaces;
 using ITMeat.BusinessLogic.Action.PubOrder.Interfaces;
@@ -29,18 +30,24 @@ namespace ITMeat.WEB.Controllers
         private readonly IConvertDateTime _convertDateTime;
         private readonly IGetOrderById _getOrderById;
         private readonly IGetSumExpenseByMealTypeAndUserId _sumExpenseByMealTypeAndUserId;
+        private readonly IGetMealCountByMealType _getMealCountByMealType;
+        private readonly IGetMealCountForAllUsers _getMealCountForAllUsers;
 
         public OrderController(IGetAllPubs getAllPubs,
             ICreateUserOrder createUserOrder,
             IConvertDateTime convertDateTime,
             IGetOrderById getOrderById,
-            IGetSumExpenseByMealTypeAndUserId sumExpenseByMealTypeAndUserId)
+            IGetSumExpenseByMealTypeAndUserId sumExpenseByMealTypeAndUserId,
+            IGetMealCountByMealType getMealCountByMealType,
+            IGetMealCountForAllUsers getMealCountForAllUsers)
         {
             _getAllPubs = getAllPubs;
             _createUserOrder = createUserOrder;
             _convertDateTime = convertDateTime;
             _getOrderById = getOrderById;
             _sumExpenseByMealTypeAndUserId = sumExpenseByMealTypeAndUserId;
+            _getMealCountByMealType = getMealCountByMealType;
+            _getMealCountForAllUsers = getMealCountForAllUsers;
         }
 
         public IActionResult Index()
@@ -111,11 +118,32 @@ namespace ITMeat.WEB.Controllers
         public IActionResult Statistic()
         {
             var sumExpenseByMealType = _sumExpenseByMealTypeAndUserId.Invoke(ControllerContext.HttpContext.Actor());
-            var model = sumExpenseByMealType.Select(item => new SumExpenseByMealType
+            var sumExpense = sumExpenseByMealType.Select(item => new SumExpenseByMealType
             {
                 MealTypeName = item.ItemName,
                 SumExpense = item.Expense
             }).ToList();
+
+            var countMealByMealType = _getMealCountByMealType.Invoke();
+            var CountList = countMealByMealType.Select(item => new MealsCountByMealTypeViewModel
+            {
+                MealTypeName = item.MealTypeName,
+                CountValue = item.CountValue
+            }).ToList();
+
+            var countMeal = _getMealCountForAllUsers.Invoke();
+            var CountMealList = countMeal.Select(item => new MostlySelectedMealInOrderViewModel()
+            {
+                MealName = item.MealName,
+                CountValue = item.CountValue
+            }).ToList();
+
+            var model = new GroupSatysticViewModel
+            {
+                MealsCountByMealTypeModels = CountList,
+                SumExpenseByMealTypesModels = sumExpense,
+                MostlySelectedMealInOrder = CountMealList
+            };
             return View(model);
         }
 

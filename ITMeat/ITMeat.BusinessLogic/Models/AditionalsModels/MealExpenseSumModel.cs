@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ITMeat.BusinessLogic.Models
+﻿namespace ITMeat.BusinessLogic.Models.AditionalsModels
 {
     public class MealExpenseSumModel
     {

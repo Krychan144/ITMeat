@@ -25,12 +25,13 @@ namespace ITMeat.WEB.Controllers
         private readonly IGetAllMealtype _getAllMealtype;
         private readonly IGetPubOferts _getPubOferts;
         private readonly IDeleteMeal _deleteMeal;
+        private readonly IAddNewMeal _addNewMeal;
 
         public MealController(IGetMealTypeByPubId getMealTypeByPubId,
             IGetMealById getMealById,
             IGetPubByMealId getPubByMealId,
             IEditMeal editMeal,
-            IGetAllMealtype getAllMealtype, IGetPubOferts getPubOferts, IDeleteMeal deleteMeal)
+            IGetAllMealtype getAllMealtype, IGetPubOferts getPubOferts, IDeleteMeal deleteMeal, IAddNewMeal addNewMeal)
         {
             _getMealTypeByPubId = getMealTypeByPubId;
             _getMealById = getMealById;
@@ -39,6 +40,7 @@ namespace ITMeat.WEB.Controllers
             _getAllMealtype = getAllMealtype;
             _getPubOferts = getPubOferts;
             _deleteMeal = deleteMeal;
+            _addNewMeal = addNewMeal;
         }
 
         [HttpGet("AddNewMealToPub/{PubId}")]
@@ -57,8 +59,19 @@ namespace ITMeat.WEB.Controllers
         [HttpPost("AddNewMealToPub/{PubId}")]
         public IActionResult AddNewMealToPub(MealToAddViewModel model, Guid pubId)
         {
+            var mealModel = new MealModel
+            {
+                Name = model.MealName,
+                Expense = model.MealExpense,
+            };
+            var addNewMealAction = _addNewMeal.Invoke(mealModel, pubId, model.MealTypeId);
+            if (addNewMealAction == Guid.Empty)
+            {
+                Alert.Danger("Error! Meal are't added.");
+                return RedirectToAction("Meals", "Meal");
+            }
             Alert.Success("Success! Meal are added.");
-            return RedirectToAction("PubOferts", "Pub");
+            return RedirectToAction("Meals", "Meal");
         }
 
         [HttpGet("EditSelectedMeal/{MealId}")]
