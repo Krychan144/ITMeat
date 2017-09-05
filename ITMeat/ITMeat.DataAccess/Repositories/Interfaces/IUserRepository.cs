@@ -6,6 +6,5 @@ namespace ITMeat.DataAccess.Repositories.Interfaces
 {
     public interface IUserRepository : IGenericRepository<User>, IRepository
     {
-        IQueryable<Order> GetUserOrders(Guid userId);
     }
 }

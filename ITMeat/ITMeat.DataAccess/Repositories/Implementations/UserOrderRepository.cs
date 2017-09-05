@@ -14,24 +14,6 @@ namespace ITMeat.DataAccess.Repositories.Implementations
         {
         }
 
-        public IQueryable<Order> GetActiveUserOrders(Guid userid)
-        {
-            var query = from userOrder in context.Set<UserOrder>()
-                        join order in context.Set<Order>() on userOrder.Order.Id equals order.Id
-                        where order.EndDateTime > DateTime.UtcNow
-                        where userOrder.User.Id == userid
-                        select new Order
-                        {
-                            Id = order.Id,
-                            Expense = order.Expense,
-                            Owner = order.Owner,
-                            SubmitDateTime = order.SubmitDateTime,
-                            EndDateTime = order.EndDateTime,
-                            CreatedOn = order.CreatedOn
-                        };
-            return !(query.Count() > 0) ? Enumerable.Empty<Order>().AsQueryable() : query;
-        }
-
         public IQueryable<UserOrder> GetUserOrders(Guid orderId, Guid userid)
         {
             var query = from user in context.Set<User>()

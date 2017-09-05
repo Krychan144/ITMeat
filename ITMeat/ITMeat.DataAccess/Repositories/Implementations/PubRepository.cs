@@ -14,34 +14,6 @@ namespace ITMeat.DataAccess.Repositories.Implementations
         {
         }
 
-        public IQueryable<Meal> GetPubOferts(Guid pubId)
-        {
-            var query = from meal in context.Set<Meal>()
-                        join mealtype in context.Set<MealType>() on meal.MealType.Id equals mealtype.Id
-                        join pub in context.Set<Pub>() on meal.Pub.Id equals pub.Id
-                        where pubId == pub.Id
-                        where meal.DeletedOn == null
-                        where meal.DeletedOn == null
-                        select new Meal
-                        {
-                            Id = meal.Id,
-                            Expense = meal.Expense,
-                            MealType = new MealType
-                            {
-                                Id = mealtype.Id,
-                                Name = mealtype.Name
-                            },
-                            Name = meal.Name,
-                            Pub = new Pub
-                            {
-                                Id = pub.Id,
-                                Name = pub.Name
-                            }
-                        };
-
-            return !(query.Count() > 0) ? Enumerable.Empty<Meal>().AsQueryable() : query;
-        }
-
         public Pub GetPubByOrderId(Guid orderId)
         {
             var query = (from pub in context.Set<Pub>()
@@ -82,6 +54,7 @@ namespace ITMeat.DataAccess.Repositories.Implementations
             var query = (from meal in context.Set<Meal>()
                          join pub in context.Set<Pub>() on meal.Pub.Id equals pub.Id
                          where mealId == meal.Id
+                         where meal.DeletedOn == null
                          select new Pub
                          {
                              Id = pub.Id,

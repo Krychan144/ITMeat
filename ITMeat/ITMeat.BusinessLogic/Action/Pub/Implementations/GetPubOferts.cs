@@ -9,11 +9,11 @@ namespace ITMeat.BusinessLogic.Action.Pub.Implementations
 {
     public class GetPubOferts : IGetPubOferts
     {
-        private readonly IPubRepository _pubRepository;
+        private readonly IMealRepository _mealRepository;
 
-        public GetPubOferts(IPubRepository pubRepository)
+        public GetPubOferts(IMealRepository mealRepository)
         {
-            _pubRepository = pubRepository;
+            _mealRepository = mealRepository;
         }
 
         public List<MealModel> Invoke(Guid pubId)
@@ -22,7 +22,7 @@ namespace ITMeat.BusinessLogic.Action.Pub.Implementations
             {
                 return null;
             }
-            var dbOferts = _pubRepository.GetPubOferts(pubId);
+            var dbOferts = _mealRepository.GetPubMeals(pubId);
             if (dbOferts == null)
             {
                 return null;

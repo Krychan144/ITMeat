@@ -13,6 +13,7 @@
         <div class="right floated column">
             <div class="ui inverted segment" id="ActionPubOferts">
                 <a href="@Url.Action("EditPubInformations", "Pub", new {Model.FirstOrDefault().PubId})"><button class="ui grey button floated right"><i class="edit icon"></i> Edit Pub Informations </button></a>
+                <br />
                 <a href="@Url.Action("AddNewMealToPub", "Meal", new {Model.FirstOrDefault().PubId})"><button class="ui grey button floated right"><i class="add icon"></i> Add new Meal </button></a>
             </div>
         </div>

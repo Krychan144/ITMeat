@@ -26,7 +26,7 @@ namespace ITMeat.WEB.Hubs
     {
         private readonly IGetActivePubOrders _getActiveOrders;
         private readonly IGetPubMealByOrderId _getPubMealByOrderId;
-        private readonly IGetActiveUserOrders _getUserOrders;
+        private readonly IGetActiveOrders _getUserOrders;
         private readonly IGetUserOrderMeals _getUserOrderMeals;
         private readonly IAddNewMealsToUserOrders _addNewMealsToUserOrders;
         private readonly IDeleteUserOrderMeal _deleteUserOrderMeal;
@@ -48,7 +48,7 @@ namespace ITMeat.WEB.Hubs
 
         public AppHub(IGetActivePubOrders getActiveOrders,
             IGetPubMealByOrderId pubMealByPubOrderId,
-            IGetActiveUserOrders getUserOrders,
+            IGetActiveOrders getUserOrders,
             IGetUserOrderMeals getUserOrderMeals,
             IDeleteUserOrderMeal deleteUserOrderMeal,
             IGetUserOrderByUserAndOrderId getUserOrderByUserAndOrderId,

@@ -152,7 +152,7 @@ myHub.client.getUserSubmittedOrders = function (result) {
     } else {
         var historyOrdersTable = $("#HistoryOrderTable");
         $.each(result,
-            function(index, value) {
+            function (index, value) {
                 InJoinedOrderID = value.OrderId;
                 if (value.OwnerId === userId) {
                     var divToAppend = "<tr id='HistoryOrderTable' data-PubOrderId='" +
@@ -221,7 +221,7 @@ myHub.client.loadActivePubOrders = function (result) {
     } else {
         var activeOrdersTable = $("#ActiveOrderTable");
         $.each(result,
-            function(index, value) {
+            function (index, value) {
                 InJoinedOrderID = value.OrderId;
                 var divToAppend = '<tr id="ActiveOrderTableRow" data-orderid="' +
                     value.OrderId +
@@ -290,7 +290,6 @@ myHub.client.loadActivePubOrders = function (result) {
     }
 };
 setInterval(doSomething, 5000);
-
 function doSomething() {
     var dateTimeNow = new Date();
     $('#ActiveOrdersTableRow tr').each(function () {

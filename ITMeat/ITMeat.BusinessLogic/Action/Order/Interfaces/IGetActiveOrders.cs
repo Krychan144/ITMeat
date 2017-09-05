@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using ITMeat.BusinessLogic.Action.Base;
 using ITMeat.BusinessLogic.Models;
-using ITMeat.DataAccess.Models;
 
-namespace ITMeat.BusinessLogic.Action.UserOrder.Interfaces
+namespace ITMeat.BusinessLogic.Action.Order.Interfaces
 {
-    public interface IGetActiveUserOrders : IAction
+    public interface IGetActiveOrders : IAction
     {
         List<OrderModel> Invoke(Guid userId);
     }

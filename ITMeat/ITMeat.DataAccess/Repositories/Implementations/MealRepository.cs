@@ -30,28 +30,6 @@ namespace ITMeat.DataAccess.Repositories.Implementations
             return !(query.Count() > 0) ? Enumerable.Empty<Meal>().AsQueryable() : query;
         }
 
-        public IQueryable<Meal> GetPubMeals(Guid pubId)
-        {
-            var query = from meal in context.Set<Meal>()
-                        join pub in context.Set<Pub>() on meal.Pub.Id equals pub.Id
-                        where meal.Pub.Id == pubId
-                        where meal.DeletedOn == null
-                        select new Meal
-                        {
-                            Id = meal.Id,
-                            Pub = new Pub
-                            {
-                                Id = pub.Id,
-                                Adress = pub.Adress,
-                                FreeDelivery = pub.FreeDelivery
-                            },
-                            Expense = meal.Expense,
-                            Name = meal.Name,
-                        };
-
-            return !(query.Count() > 0) ? Enumerable.Empty<Meal>().AsQueryable() : query;
-        }
-
         public IQueryable<Meal> GetPubMealByOrderId(Guid orderId)
         {
             var query = from meal in context.Set<Meal>()
@@ -109,6 +87,7 @@ namespace ITMeat.DataAccess.Repositories.Implementations
         public IQueryable<MostlySelectedMealInOrder> GetMealCountForAllUsers()
         {
             var idQuery = context.Set<UserOrderMeal>()
+                .Where(r => r.UserOrder.Order.SubmitDateTime != null)
                 .GroupBy(e => e.Meal.Name)
                 .Select(g => new MostlySelectedMealInOrder
                 {
@@ -118,6 +97,59 @@ namespace ITMeat.DataAccess.Repositories.Implementations
                 .OrderByDescending(g => g.CountValue)
                 .Take(6);
             return !(idQuery.Count() > 0) ? Enumerable.Empty<MostlySelectedMealInOrder>().AsQueryable() : idQuery;
+        }
+
+        public IQueryable<Meal> GetPubMeals(Guid pubId)
+        {
+            var query = from meal in context.Set<Meal>()
+                        join mealtype in context.Set<MealType>() on meal.MealType.Id equals mealtype.Id
+                        join pub in context.Set<Pub>() on meal.Pub.Id equals pub.Id
+                        where pubId == pub.Id
+                        where meal.DeletedOn == null
+                        select new Meal
+                        {
+                            Id = meal.Id,
+                            Expense = meal.Expense,
+                            MealType = new MealType
+                            {
+                                Id = mealtype.Id,
+                                Name = mealtype.Name
+                            },
+                            Name = meal.Name,
+                            Pub = new Pub
+                            {
+                                Id = pub.Id,
+                                Name = pub.Name
+                            }
+                        };
+
+            return !(query.Count() > 0) ? Enumerable.Empty<Meal>().AsQueryable() : query;
+        }
+
+        public IQueryable<Meal> GetAllUserOrderMeals(Guid userId)
+        {
+            var query = from userOrderMeal in context.Set<UserOrderMeal>()
+                        join userOrder in context.Set<UserOrder>() on userOrderMeal.UserOrder.Id equals userOrder.Id
+                        join user in context.Set<User>() on userOrder.User.Id equals user.Id
+                        join meal in context.Set<Meal>() on userOrderMeal.Meal.Id equals meal.Id
+                        join mealType in context.Set<MealType>() on meal.MealType.Id equals mealType.Id
+                        where userOrderMeal.DeletedOn == null
+                        where userOrder.DeletedOn == null
+                        where user.Id == userId
+
+                        select new Meal
+                        {
+                            Id = meal.Id,
+                            Expense = meal.Expense,
+                            MealType = new MealType()
+                            {
+                                Id = mealType.Id,
+                                Name = mealType.Name
+                            },
+                            Name = meal.Name
+                        };
+
+            return !(query.Count() > 0) ? Enumerable.Empty<Meal>().AsQueryable() : query;
         }
     }
 }
