@@ -4,7 +4,6 @@ using ITMeat.BusinessLogic.Models;
 using ITMeat.DataAccess.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using ITMeat.BusinessLogic.Action.UserToken.Implementations;
 
 namespace ITMeat.BusinessLogic.Action.Pub.Implementations
 {
@@ -21,7 +20,7 @@ namespace ITMeat.BusinessLogic.Action.Pub.Implementations
         {
             var dbPubs = _pubRepository.GetAll().ToList();
 
-            if (dbPubs == null)
+            if (dbPubs.Count == 0)
             {
                 return null;
             }

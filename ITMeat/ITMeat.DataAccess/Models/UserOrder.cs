@@ -9,11 +9,9 @@ namespace ITMeat.DataAccess.Models
         public UserOrder()
         {
             OrdersMeals = new HashSet<UserOrderMeal>();
-            OrdersAdds = new HashSet<UserOrderAdds>();
         }
 
         public virtual ICollection<UserOrderMeal> OrdersMeals { get; set; }
-        public virtual ICollection<UserOrderAdds> OrdersAdds { get; set; }
 
         [Required]
         public User User { get; set; }

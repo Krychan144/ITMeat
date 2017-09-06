@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
-using ITMeat.BusinessLogic.Action.Adds.Interfaces;
 using ITMeat.BusinessLogic.Action.Meal.Interfaces;
 using ITMeat.BusinessLogic.Action.MealType.Interfaces;
 using ITMeat.BusinessLogic.Action.Pub.Interfaces;
@@ -19,30 +18,24 @@ namespace ITMeat.BusinessLogic.Configuration.Implementations
     public class DbContextSeeder : IDbContextSeeder
     {
         private readonly IAddNewPub _addNewPub;
-        private readonly IConfirmUserEmailByToken _confirmUserEmailByToken;
         private readonly IAddNewUser _addNewUser;
         private readonly IAddNewMeal _addNewMeal;
         private readonly IAddNewMealType _addNewMealType;
-        private readonly IAddNewAdds _addNewAdds;
 
         public DbContextSeeder(IAddNewPub addNewPub,
-            IConfirmUserEmailByToken confirmUserEmailByToken,
             IAddNewUser addNewUser,
             IAddNewMeal addNewMeal,
-            IAddNewMealType addNewMealType,
-            IAddNewAdds addNewAdds)
+            IAddNewMealType addNewMealType)
         {
-            _addNewPub = addNewPub;
-            _confirmUserEmailByToken = confirmUserEmailByToken;
+            _addNewPub = addNewPub; ;
             _addNewUser = addNewUser;
             _addNewMeal = addNewMeal;
-            _addNewMealType = addNewMealType;
-            _addNewAdds = addNewAdds;
+            _addNewMealType = addNewMealType; ;
         }
 
         public void Seed()
         {
-            SeedUser(_addNewUser, _confirmUserEmailByToken);
+            SeedUser(_addNewUser);
             SeedPub(_addNewPub, _addNewMeal, _addNewMealType);
         }
 
@@ -52,7 +45,6 @@ namespace ITMeat.BusinessLogic.Configuration.Implementations
         private readonly string[] _mealsBreakfast = { "Jajecznica", "Naleśniki", "Omlet", "Kełbaski", "Parówki" };
         private readonly string[] _mealsSupper = { "Jajecznica", "Tosty", "Racuchy", "Kanapki", "Naleśniki" };
         private readonly string[] _types = { "Obiad", "Sniadanie", "Kolacja" };
-        private readonly string[] _adds = { "Ketchup", "ser", "jajko", "pojemniki" };
 
         public void SeedPub(IAddNewPub _addNewPub, IAddNewMeal _addNewMeal, IAddNewMealType _addNewMealType)
         {
@@ -133,26 +125,10 @@ namespace ITMeat.BusinessLogic.Configuration.Implementations
                         _addNewMeal.Invoke(mealsBreakfastModel, pubModell.Id, breakfastMealType);
                     }
                 }
-
-                foreach (var add in _adds)
-                {
-                    var addsModel = new AddsModel
-                    {
-                        Name = $"{add}",
-                        Expense = addsExpense,
-                    };
-                    addsExpense += 0.3m;
-
-                    if (breakfastMealType != Guid.Empty)
-                    {
-                        _addNewAdds.Invoke(addsModel, pubModell.Id);
-                    }
-                }
             }
         }
 
-        public void SeedUser(IAddNewUser _addNewUser,
-            IConfirmUserEmailByToken _confirmUserEmailByToken)
+        public void SeedUser(IAddNewUser _addNewUser)
         {
             foreach (var user in _users)
             {
@@ -163,13 +139,7 @@ namespace ITMeat.BusinessLogic.Configuration.Implementations
                     Name = user,
                 };
 
-                var dbuser = _addNewUser.Invoke(model);
-
-                if (dbuser != null)
-                {
-                    var token = dbuser.Tokens.FirstOrDefault().SecretToken;
-                    _confirmUserEmailByToken.Invoke(token);
-                }
+                _addNewUser.Invoke(model);
             }
         }
     }

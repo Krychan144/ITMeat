@@ -259,14 +259,12 @@ namespace ITMeat.WEB.Hubs
             {
                 return;
             }
-            //ToDo
             var pubOrder = _getPubOrderByPubOrderId.Invoke(pubOrderId);
 
             if (pubOrder == null)
             {
                 return;
             }
-            //
             var deleted = _deletePubOrderByPubOrderId.Invoke(pubOrderId);
 
             if (deleted)

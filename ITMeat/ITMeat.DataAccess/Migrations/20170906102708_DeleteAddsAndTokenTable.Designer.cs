@@ -8,9 +8,10 @@ using ITMeat.DataAccess.Context;
 namespace ITMeat.DataAccess.Migrations
 {
     [DbContext(typeof(ITMeatDbContext))]
-    partial class ITMeatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170906102708_DeleteAddsAndTokenTable")]
+    partial class DeleteAddsAndTokenTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")

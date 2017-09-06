@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using ITMeat.BusinessLogic.Action.Base;
-using ITMeat.BusinessLogic.Models;
 
 namespace ITMeat.BusinessLogic.Action.User.Interfaces
 {
-    public interface IGetUserByToken : IAction
+    public interface IChangePassword : IAction
     {
-        UserModel Invoke(string token);
+        bool Invoke(string email, string passwordOld, string newPassword, Guid userId);
     }
 }

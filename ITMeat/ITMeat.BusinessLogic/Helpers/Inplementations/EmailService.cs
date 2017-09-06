@@ -84,7 +84,6 @@ namespace ITMeat.BusinessLogic.Helpers.Inplementations
 
                 return true;
             }
-            // TODO: LOG failures
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);

@@ -9,16 +9,13 @@ namespace ITMeat.BusinessLogic.Action.User.Implementations
     public class AddNewUser : IAddNewUser
     {
         private readonly IUserRepository _userRepository;
-        private readonly IUserTokenRepository _userTokenRepository;
         private readonly IHasher _hasher;
 
         public AddNewUser(IUserRepository userRepository,
-            IUserTokenRepository userTokenRepository,
             IHasher hasher
         )
         {
             _userRepository = userRepository;
-            _userTokenRepository = userTokenRepository;
             _hasher = hasher;
         }
 
@@ -34,14 +31,6 @@ namespace ITMeat.BusinessLogic.Action.User.Implementations
             newUser.PasswordHash = _hasher.CreatePasswordHash(user.Password, newUser.PasswordSalt);
 
             _userRepository.Add(newUser);
-
-            var newUserToken = new DataAccess.Models.UserToken
-            {
-                User = newUser,
-                SecretToken = _hasher.GenerateRandomGuid()
-            };
-
-            _userTokenRepository.Add(newUserToken);
             _userRepository.Save();
 
             return newUser;

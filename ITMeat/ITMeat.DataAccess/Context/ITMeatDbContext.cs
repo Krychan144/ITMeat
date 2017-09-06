@@ -51,7 +51,6 @@ namespace ITMeat.DataAccess.Context
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserOrder> UserOrders { get; set; }
-        public DbSet<UserToken> UserTokens { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<UserOrderMeal> UserOrderMeal { get; set; }
         public DbSet<MealType> MealType { get; set; }
@@ -59,8 +58,6 @@ namespace ITMeat.DataAccess.Context
         public DbSet<EmailMessage> EmailMessages { get; set; }
         public DbSet<Pub> Pub { get; set; }
         public DbSet<PubOrder> PubOrder { get; set; }
-        public DbSet<Adds> Adds { get; set; }
-        public DbSet<UserOrderAdds> UserOrderAdds { get; set; }
 
         #endregion DbSet
     }
