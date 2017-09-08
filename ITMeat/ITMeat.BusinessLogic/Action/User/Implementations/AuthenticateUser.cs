@@ -31,7 +31,6 @@ namespace ITMeat.BusinessLogic.Action.User.Implementations
             }
 
             var dbUser = userRepository.FindBy(x => x.Email == email).FirstOrDefault();
-            // TODO: MOVE TO CONST STRING x.EmailConfirmedOn != null
             if (dbUser == null)
             {
                 return null;

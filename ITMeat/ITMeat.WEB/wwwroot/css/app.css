@@ -106,7 +106,7 @@ body {
 
 .menubutton {
     min-width: 220px;
-    text-align: left;
+    text-align: left !important;
 }
 
 .contentside {
@@ -164,6 +164,10 @@ form {
     background-color: #E2FFBF;
 }
 
+.your-clock.flip-clock-wrapper {
+    display: flex !important;
+    justify-content: center;
+}
 #ActiveOrderVievs, #MealsInOrderViews, #HistoryOrderVievs, #CompleteOrderViews, #SummaryOrderinHistoryViews, #statisticView, #MealInPubOferts, #MealTypeView {
     background-color: #E2FFBF;
     min-height: 100%;

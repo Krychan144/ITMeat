@@ -30,7 +30,6 @@
     <label>Choose your food, then the number, by default one. It will appear in the team order. </label>
     <br />
     <hr />
-  
     @using (Html.BeginForm(FormMethod.Post, false, new { id = "addMealToOrderForm", @class = "ui form center aligned" }))
     {
         <div class="content">
@@ -55,11 +54,11 @@
                     new SelectList(
                         new List<Object>
                         {
-                            new {value = 1, text = "x1"},
-                            new {value = 2, text = "x2"},
-                            new {value = 3, text = "x3"},
-                            new {value = 4, text = "x4"},
-                            new {value = 5, text = "x5"}
+                            new {value = 1, text = "x 1"},
+                            new {value = 2, text = "x 2"},
+                            new {value = 3, text = "x 3"},
+                            new {value = 4, text = "x 4"},
+                            new {value = 5, text = "x 5"}
                         }, "value", "text", 1))
             </div>
         </div>

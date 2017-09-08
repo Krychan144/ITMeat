@@ -160,7 +160,7 @@ namespace ITMeat.WEB.Controllers
                 return View();
             }
 
-            Alert.Success(); ("Success. Paswort change.");
+            Alert.Success("Success. Paswort change.");
             return View();
         }
     }

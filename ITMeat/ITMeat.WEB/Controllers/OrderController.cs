@@ -125,14 +125,14 @@ namespace ITMeat.WEB.Controllers
             }).ToList();
 
             var countMealByMealType = _getMealCountByMealType.Invoke();
-            var CountList = countMealByMealType.Select(item => new MealsCountByMealTypeViewModel
+            var countList = countMealByMealType.Select(item => new MealsCountByMealTypeViewModel
             {
                 MealTypeName = item.MealTypeName,
                 CountValue = item.CountValue
             }).ToList();
 
             var countMeal = _getMealCountForAllUsers.Invoke();
-            var CountMealList = countMeal.Select(item => new MostlySelectedMealInOrderViewModel()
+            var countMealList = countMeal.Select(item => new MostlySelectedMealInOrderViewModel()
             {
                 MealName = item.MealName,
                 CountValue = item.CountValue
@@ -140,9 +140,9 @@ namespace ITMeat.WEB.Controllers
 
             var model = new GroupSatysticViewModel
             {
-                MealsCountByMealTypeModels = CountList,
+                MealsCountByMealTypeModels = countList,
                 SumExpenseByMealTypesModels = sumExpense,
-                MostlySelectedMealInOrder = CountMealList
+                MostlySelectedMealInOrder = countMealList
             };
             return View(model);
         }

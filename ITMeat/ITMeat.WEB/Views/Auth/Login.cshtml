@@ -3,7 +3,7 @@
 }
 @model ITMeat.WEB.Models.Auth.LoginViewModel
 
-<div class="ui two column centered grid">
+<div class="ui three column centered grid ">
     <div class="column">
         <br />
         <h2 class="ui green header">Login to ITMeat Account</h2>
@@ -20,7 +20,7 @@
                 <div class="field">
                     <div class="ui left icon input">
                         @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password", required = "required" })
-                        <i class="lock icon"></i>
+                        <i class="privacy icon"></i>
                     </div>
                 </div>
                 <div class="field">

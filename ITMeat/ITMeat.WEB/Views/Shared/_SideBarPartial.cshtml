@@ -11,26 +11,23 @@
             </a>
         </div>
     </div>
-
     <div class="menu">
         <a class="item" href="@Url.Action("NewOrder", "Order")"> <button class="ui button green menubutton"><i class="plus square outline icon"></i> Create new Orders</button></a>
         <a class="item" href="@Url.Action("ActiveOrders", "Order")"> <button class="ui button green menubutton"><i class="hourglass empty icon"></i> Active Order</button></a>
         <a class="item" href="@Url.Action("OrdersHistory", "Order")"> <button class="ui button green menubutton" id="OrderHistoryButton"><i class="history icon"></i> Order History</button></a>
         <a class="item" href="@Url.Action("Statistic", "Order")"> <button class="ui button green menubutton"><i class="bar chart icon"></i> Statistics</button></a>
-            <div class="ui accordion">
-                <div class="title">
-                    <button class="ui button green menubutton"><i class="settings icon"></i>Management</button>
-                </div>
-                <div class="content">
-                    <a href="@Url.Action("AddNewPub", "Pub")"><button class="ui button green menubutton twist"><i class="add icon"></i>Add Pub</button></a>
-                    <a href="@Url.Action("SelectPubToEdit", "Pub")"><button class="ui button green menubutton twist"><i class="edit icon"></i>Edit Pub</button></a>
-                    <a href="@Url.Action("MealType", "MealType")"><button class="ui button green menubutton twist"><i class="edit icon"></i>Meal Type</button></a>        
-                    <a href="@Url.Action("ChangePassword", "Auth")"><button class="ui button green menubutton twist"><i class="edit icon"></i>Change password</button></a>
-                </div>
+        <div class="ui accordion">
+            <div class="title">
+                <button class="ui button green menubutton"><i class="settings icon"></i>Management</button>
             </div>
-    
+            <div class="content">
+                <a href="@Url.Action("AddNewPub", "Pub")"> <button class="ui button green menubutton twist"><i class="add icon"></i>Add Pub</button></a>
+                <a href="@Url.Action("SelectPubToEdit", "Pub")"><button class="ui button green menubutton twist"><i class="edit icon"></i>Edit Pub</button></a>
+                <a href="@Url.Action("MealType", "MealType")"><button class="ui button green menubutton twist"><i class="edit icon"></i>Meal Type</button></a>
+                <a href="@Url.Action("ChangePassword", "Auth")"><button class="ui button green menubutton twist"><i class="edit icon"></i>Change password</button></a>
+            </div>
+        </div>
     </div>
-
     <div id="logout" class="bottom aligned item">
         @using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new { id = "logoutForm" }))
         {

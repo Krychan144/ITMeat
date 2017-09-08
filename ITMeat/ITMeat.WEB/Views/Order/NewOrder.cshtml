@@ -11,14 +11,14 @@
     <div class="titlename">Create new Order </div>
     <div class="ui two column centered grid ">
         <div class="column ">
-            @using (Html.BeginForm(FormMethod.Post, false, new { id = "createOrderForm", @class = "ui form center aligned" }))
+            @using (Html.BeginForm(FormMethod.Post, false, new {id = "createOrderForm", @class = "ui form center aligned"}))
             {
                 <div class="field " style="left: 40%;">
                     <div class="your-clock"></div>
                 </div>
                 <div class="field">
                     <div class="ui left icon input">
-                        @Html.TextBoxFor(m => m.OrderName, new { @class = "form-control", placeholder = "Name", type = "name", required = "required" })
+                        @Html.TextBoxFor(m => m.OrderName, new {@class = "form-control", placeholder = "Name", type = "name", required = "required"})
                         <i class="sticky note icon"></i>
                     </div>
                 </div>
@@ -29,16 +29,19 @@
                     <div class="ui calendar">
                         <div class="ui input left icon">
                             <i class="calendar icon"></i>
-                            @Html.TextBoxFor(m => m.EndOrders, new { type = "text", placeholder = "Date/Time" })
+                            @Html.TextBoxFor(m => m.EndOrders, new {type = "text", placeholder = "Date/Time"})
                         </div>
                     </div>
                 </div>
-                <div class="ui buttons">
-                    <button id="CancelInCreateButton" class="ui button">Cancel</button>
-                    <div class="or"></div>
-                    <button id="CreateButton" class="ui positive button" type="submit">Create</button>
-                </div>
             }
         </div>
+        <div class=" column centered row">
+            <div class="ui buttons">
+                <a href="@Url.Action("Index", "Order")"><button class="ui button">Cancel</button></a>
+                <div class="or"></div>
+                <button id="CreateButton" class="ui positive button" form="createOrderForm" type="submit">Create</button>
+            </div>
+        </div>
+
     </div>
 </div>

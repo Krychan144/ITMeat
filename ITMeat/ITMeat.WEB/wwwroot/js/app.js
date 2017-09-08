@@ -123,7 +123,6 @@ function onLoadView() {
 /*
  * Create connection SignalR,
  */
-//$.connection.hub.url = "http://localhost:49538/signalr";
 var myHub = $.connection.appHub;
 
 /*
