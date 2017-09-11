@@ -37,7 +37,7 @@
                         <tr>
                             <td>@Html.DisplayFor(m => item.MealTypeName)</td>
                             <td>@Html.DisplayFor(m => item.MealName)</td>
-                            <td>@Html.DisplayFor(m => item.MealExpense)</td>
+                            <td>@Html.DisplayFor(m => item.MealExpense) zł</td>
                             <td>
                                 <a><button class="deleteItem ui grey button" data-id="@item.MealId"><i class="remove icon"> </i>Remove</button></a>
                                 <a href="@Url.Action("EditSelectedMeal", "Meal", new { item.MealId })"><button class="ui grey button" data-id="item.MealId"><i class="edit icon"> </i>Edit</button></a>
